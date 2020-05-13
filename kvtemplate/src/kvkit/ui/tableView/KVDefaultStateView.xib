@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="KVDefaultStateView">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="U2H-Ob-7Uv">
+                    <rect key="frame" x="197" y="438" width="20" height="20"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="20" id="3ls-Z0-S3P"/>
+                        <constraint firstAttribute="height" constant="20" id="swR-9w-gsW"/>
+                    </constraints>
+                </activityIndicatorView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sju-De-ZnW">
+                    <rect key="frame" x="0.0" y="439.5" width="414" height="17"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="Sju-De-ZnW" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="ANp-kC-cHX"/>
+                <constraint firstItem="U2H-Ob-7Uv" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="KJY-IN-fa0"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="Sju-De-ZnW" secondAttribute="trailing" id="dne-Bm-rfx"/>
+                <constraint firstItem="Sju-De-ZnW" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="mYo-3l-gkb"/>
+                <constraint firstItem="U2H-Ob-7Uv" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="rle-lR-uPd"/>
+                <constraint firstItem="Sju-De-ZnW" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="sWP-5C-Ckx"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <connections>
+                <outlet property="hud" destination="U2H-Ob-7Uv" id="xZw-Jo-ikX"/>
+                <outlet property="infoLab" destination="Sju-De-ZnW" id="iEd-fY-KBl"/>
+            </connections>
+            <point key="canvasLocation" x="132" y="154"/>
+        </view>
+    </objects>
+</document>

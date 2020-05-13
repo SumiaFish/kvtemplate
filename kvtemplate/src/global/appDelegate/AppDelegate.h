@@ -1,8 +1,8 @@
 //
 //  AppDelegate.h
-//  kvtemplate
+//  KVTableView
 //
-//  Created by kevin on 2020/5/13.
+//  Created by kevin on 2020/5/11.
 //  Copyright © 2020 kevin. All rights reserved.
 //
 
@@ -10,6 +10,7 @@
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
+@property (strong, nonatomic) UIWindow * window;
 
 @end
 
