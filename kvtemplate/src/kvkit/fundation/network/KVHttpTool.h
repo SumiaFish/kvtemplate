@@ -9,9 +9,11 @@
 #import <Foundation/Foundation.h>
 
 #import "KVHttpToolHeader.h"
+#import "KVHttpToolCache.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
+/// 网络请求类
 @interface KVHttpTool : NSObject
 
 /// 外界可以通过task 控制 暂停/取消 操作
@@ -64,20 +66,27 @@ NS_ASSUME_NONNULL_BEGIN
 + (instancetype)new NS_UNAVAILABLE;
 - (instancetype)init NS_UNAVAILABLE;
 
-+ (void)clearCache;
-+ (void)removeCache:(KVHttpToolCacheMate)type url:(NSString *)url headers:(NSDictionary *_Nullable)headers params:(NSDictionary *_Nullable)params;
-
 @end
 
 /// 上传任务
-@interface KVHttpUploadTool : KVHttpTool
+@interface KVHttpTool (Upload)
 
-@property (copy, nonatomic, readonly) NSString *filePath;
+@property (copy, nonatomic, readonly, nullable) NSString *filePath;
 
-+ (instancetype)request:(NSString *)url __attribute__((unavailable("请使用request:filePath")));
+//+ (instancetype)request:(NSString *)url __attribute__((unavailable("请使用upload:filePath")));
 
-+ (instancetype)request:(NSString *)url filePath:(NSString *)filePath;
++ (instancetype)upload:(NSString *)url filePath:(NSString *)filePath;
 
 @end
+
+/// 下载任务
+//@interface KVHttpTool (Download)
+//
+///// 请求成功回调：默认 nil
+//@property (copy, nonatomic, readonly) KVHttpTool* _Nullable (^ success) (void (^ _Nullable successBlock)(NSURL * _Nullable fileURL));
+//
+//+ (instancetype)download:(NSString *)url;
+//
+//@end
 
 NS_ASSUME_NONNULL_END

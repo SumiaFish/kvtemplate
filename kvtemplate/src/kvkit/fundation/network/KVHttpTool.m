@@ -9,6 +9,8 @@
 #import <objc/runtime.h>
 #import <AFNetworking/AFNetworking.h>
 
+#import "NSObject+WeakObserve.h"
+
 #import "KVHttpTool.h"
 #import "KVHttpTool+Business.h"
 #import "KVHttpTool+MISC.h"
@@ -85,17 +87,13 @@
 @end
 
 @implementation KVHttpTool
+{
+    dispatch_semaphore_t _semaphore;
+    BOOL _isLocked;
+}
 
 - (void)dealloc {
     
-}
-
-+ (void)clearCache {
-    [self.class.cacheDelegate removeAll];
-}
-
-+ (void)removeCache:(KVHttpToolCacheMate)type url:(NSString *)url headers:(NSDictionary *)headers params:(NSDictionary *)params {
-    [self.class.cacheDelegate removeCache:type url:url headers:headers params:params];
 }
 
 + (instancetype)request:(NSString *)url {
@@ -112,6 +110,9 @@
 
 /// 给默认值
 - (void)commonInit {
+    _semaphore = dispatch_semaphore_create(1);
+    self.info = [KVHttpToolInfos new];
+    //
     self.method(KVHttpTool_GET);
     self.headers(nil);
     self.params(nil);
@@ -127,11 +128,32 @@
     //
     __weak typeof(self) ws = self;
     self.send = ^{
-        [ws impSend];
+        [ws lock];
+        [ws.class todoInGlobalDefaultQueue:^{
+            [ws impSend:^{
+                [ws unlock];
+            }];
+        }];
     };
 }
 
-- (void)impSend {
+- (void)lock {
+    dispatch_semaphore_wait(_semaphore, DISPATCH_TIME_FOREVER);
+    _isLocked = YES;
+    KVHttpToolLog(@"===lock");
+}
+
+- (void)unlock {
+    dispatch_semaphore_signal(_semaphore);
+    _isLocked = NO;
+    KVHttpToolLog(@"===unlock");
+}
+
+- (BOOL)isLocked {
+    return _isLocked;
+}
+
+- (void)impSend:(void (^) (void))complete {
     /// 开始发起请求
     
     NSString *url = self.url;
@@ -159,6 +181,10 @@
         res;
     });
     
+    // 完成
+    void (^ completeBlock) (void) = ^ {
+        complete? complete(): nil;
+    };
     
     /// 从缓存加载数据
     void (^ loadCacheDataBlock) (void) = ^ {
@@ -177,6 +203,7 @@
             //
             [self.class todoInMainQueue:^{
                 cacheBlock? cacheBlock(res): nil;
+                completeBlock();
             }];
         }];
     };
@@ -205,6 +232,9 @@
                 if (data) {
                     [cacheDelegate cache:(cacheMate) url:url headers:headers params:params data:data];
                 }
+                completeBlock();
+            } else {
+                completeBlock();
             }
             
         } failure:^(NSError *error) {
@@ -214,6 +244,8 @@
             }];
             if (cacheMate != KVHttpToolCacheMate_Undefine) {
                 loadCacheDataBlock();
+            } else {
+                completeBlock();
             }
         }];
     };
@@ -228,6 +260,8 @@
         }];
         if (cacheMate != KVHttpToolCacheMate_Undefine) {
             loadCacheDataBlock();
+        } else {
+            completeBlock();
         }
     };
     
@@ -327,13 +361,6 @@
     }
 }
 
-- (KVHttpToolInfos *)info {
-    if (!_info) {
-        _info = [KVHttpToolInfos new];
-    }
-    return _info;
-}
-
 - (AFHTTPSessionManager *)manager {
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     return manager;
@@ -343,7 +370,9 @@
     if (!_method) {
         __weak typeof(self) ws = self;
         _method = ^KVHttpTool * _Nullable(KVHttpToolMethod obj) {
+            [ws lock];
             ws.info.method = obj;
+            [ws unlock];
             return ws;
         };
     }
@@ -354,7 +383,9 @@
     if (!_params) {
         __weak typeof(self) ws = self;
         _params = ^KVHttpTool * _Nonnull(NSDictionary * _Nullable obj) {
+            [ws lock];
             ws.info.params = obj;
+            [ws unlock];
             return ws;
         };
     }
@@ -365,7 +396,9 @@
     if (!_headers) {
         __weak typeof(self) ws = self;
         _headers = ^KVHttpTool * _Nonnull(NSDictionary<NSString *,NSString *> * _Nullable obj) {
+            [ws lock];
             ws.info.headers = obj;
+            [ws unlock];
             return ws;
         };
     }
@@ -376,7 +409,9 @@
     if (!_responseSerialization) {
         __weak typeof(self) ws = self;
         _responseSerialization = ^KVHttpTool * _Nullable(KVHttpToolResponseSerialization obj) {
+            [ws lock];
             ws.info.responseSerialization = obj;
+            [ws unlock];
             return ws;
         };
     }
@@ -387,7 +422,9 @@
     if (!_serializationToJSON) {
         __weak typeof(self) ws = self;
         _serializationToJSON = ^KVHttpTool * _Nullable(BOOL obj) {
+            [ws lock];
             ws.info.serializationToJSON = obj;
+            [ws unlock];
             return ws;
         };
     }
@@ -398,7 +435,9 @@
     if (!_cacheMate) {
         __weak typeof(self) ws = self;
         _cacheMate = ^KVHttpTool * _Nullable(KVHttpToolCacheMate obj) {
+            [ws lock];
             ws.info.cacheMate = obj;
+            [ws unlock];
             return ws;
         };
     }
@@ -409,7 +448,9 @@
     if (!_cacheDelegate) {
         __weak typeof(self) ws = self;
         _cacheDelegate = ^ (id<KVHttpToolCacheProtocol>  _Nonnull obj) {
+            [ws lock];
             ws.info.cacheDelegate = obj;
+            [ws unlock];
             return ws;
         };
     }
@@ -420,7 +461,9 @@
     if (!_businessDelegate) {
         __weak typeof(self) ws = self;
         _businessDelegate = ^ (id<KVHttpToolBusinessProtocol>  _Nonnull obj) {
+            [ws lock];
             ws.info.businessDelegate = obj;
+            [ws unlock];
             return ws;
         };
     }
@@ -431,7 +474,9 @@
     if (!_progress) {
         __weak typeof(self) ws = self;
         _progress = ^KVHttpTool * _Nullable(void (^ _Nonnull obj)(NSProgress * _Nonnull progress)) {
+            [ws lock];
             ws.info.progressBlock = obj;
+            [ws unlock];
             return ws;
         };
     }
@@ -442,7 +487,9 @@
     if (!_success) {
         __weak typeof(self) ws = self;
         _success = ^KVHttpTool * _Nullable(void (^ _Nonnull obj)(id responseObject)) {
+            [ws lock];
             ws.info.successBlock = obj;
+            [ws unlock];
             return ws;
         };
     }
@@ -453,7 +500,9 @@
     if (!_failure) {
         __weak typeof(self) ws = self;
         _failure = ^KVHttpTool * _Nullable(void (^ _Nonnull obj)(NSError * error)) {
+            [ws lock];
             ws.info.failureBlock = obj;
+            [ws unlock];
             return ws;
         };
     }
@@ -464,7 +513,9 @@
     if (!_cache) {
         __weak typeof(self) ws = self;
         _cache = ^KVHttpTool * _Nullable(void (^ _Nonnull obj)(id responseObject)) {
+            [ws lock];
             ws.info.cacheBlock = obj;
+            [ws unlock];
             return ws;
         };
     }
@@ -473,21 +524,26 @@
 
 @end
 
-@interface KVHttpUploadTool ()
+@interface _KVHttpUpload : KVHttpTool
 
 @property (copy, nonatomic, readwrite) NSString *filePath;
 
 @end
 
-@implementation KVHttpUploadTool
+@implementation _KVHttpUpload
 
-+ (instancetype)request:(NSString *)url filePath:(NSString *)filePath {
-    KVHttpUploadTool *tool = [super request:url];
-    tool.filePath = filePath;
-    return tool;
+@dynamic filePath;
+
++ (instancetype)upload:(NSString *)url filePath:(NSString *)filePath {
+    _KVHttpUpload *upload = [super request:url];
+    upload.filePath = filePath;
+    return upload;
 }
 
 - (void)impSend {
+    
+    [self lock];
+    
     /// 开始发起请求
     
     NSString *url = self.url;
@@ -503,17 +559,28 @@
     void (^ successBlock)(id _Nullable responseObject) = info.successBlock;
     void (^ failureBlock)(NSError * _Nullable error) = info.failureBlock;
     
+    // 解锁
+    void (^ unlockBlock) (void) = ^ {
+        [self unlock];
+    };
+    
     /// 检测文件是否存在
     BOOL isDirectory = NO;
     BOOL isExecutableFileAtPath = [[NSFileManager defaultManager] fileExistsAtPath:filePath isDirectory:&isDirectory];
     if (!isExecutableFileAtPath) {
         NSError *error = [NSError errorWithDomain:url code:-1 userInfo:@{NSLocalizedDescriptionKey: @"文件不存在"}];
         failureBlock? failureBlock(error): nil;
+        unlockBlock();
         return;
     }
     
     /// 拷贝到一个新目录
-    
+    if (![self createTmpFile:filePath]) {
+        NSError *error = [NSError errorWithDomain:url code:-1 userInfo:@{NSLocalizedDescriptionKey: @"无法拷贝待上传文件"}];
+        failureBlock? failureBlock(error): nil;
+        unlockBlock();
+        return;
+    }
     
     AFHTTPSessionManager *manager = [self manager];
     manager.responseSerializer = ({
@@ -539,6 +606,28 @@
         [self log:url headers:headers params:params responseSerialization:responseSerialization responseObject:nil error:error];
         
     }];
+    
+    
+    [self.task kv_addWeakObserve:self keyPath:NSStringFromSelector(@selector(state)) options:(NSKeyValueObservingOptionNew) context:nil];
+}
+
+- (void)kv_receiveWeakObserveValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
+    if ([object isKindOfClass:NSURLSessionTask.class] &&
+        object == self.task) {
+        if (self.task.state == NSURLSessionTaskStateCanceling) {
+            [self clearTmpFile];
+        } else if (self.task.state == NSURLSessionTaskStateCompleted) {
+            [self clearTmpFile];
+        }
+    }
+}
+
+- (void)clearTmpFile {
+    
+}
+
+- (BOOL)createTmpFile:(NSString *)fromPath {
+    return YES;
 }
 
 + (NSString *)uploadDirectory {
@@ -546,3 +635,169 @@
 }
 
 @end
+
+@implementation KVHttpTool (Upload)
+
+@dynamic filePath;
+
++ (instancetype)upload:(NSString *)url filePath:(NSString *)filePath {
+    return [_KVHttpUpload upload:url filePath:filePath];
+}
+
+- (NSString *)filePath {
+    return nil;
+}
+
+@end
+
+//@interface KVHttpDownload ()
+//
+//@property (copy, nonatomic) void (^ _Nullable successBlock)(NSURL * _Nullable fileURL);
+//
+///// 请求成功回调：默认 nil
+//@property (copy, nonatomic, readwrite) KVHttpTool* _Nullable (^ success) (void (^ _Nullable successBlock)(NSURL * _Nullable fileURL));
+//
+//@end
+//
+//@implementation KVHttpDownload
+//
+//@dynamic success;
+//
+//+ (instancetype)download:(NSString *)url {
+//    KVHttpDownload *tool = [super request:url];
+//    return tool;
+//}
+//
+//- (void)commonInit {
+//    [super commonInit];
+//    
+//    self.success(nil);
+//}
+//
+//- (void)impSend {
+//    /// 开始发起请求
+//    
+//    NSString *url = self.url;
+//    
+//    KVHttpToolInfos *info = self.info;
+//    KVHttpToolMethod method = info.method;
+//    NSDictionary *params = info.params;
+//    NSDictionary *headers = info.headers;
+//    KVHttpToolResponseSerialization responseSerialization = info.responseSerialization;
+//    BOOL serializationToJSON = info.serializationToJSON;
+//    KVHttpToolCacheMate cacheMate = info.cacheMate;
+//    id<KVHttpToolCacheProtocol> cacheDelegate = info.cacheDelegate;
+////    id<KVHttpToolBusinessProtocol> businessDelegate = info.businessDelegate;
+//    void (^ progressBlock)(NSProgress *progress) = info.progressBlock;
+//    void (^ successBlock)(id _Nullable responseObject) = info.successBlock;
+//    void (^ failureBlock)(NSError * _Nullable error) = info.failureBlock;
+//    void (^ cacheBlock)(id _Nullable responseObject) = info.cacheBlock;
+//    
+//    AFHTTPSessionManager *manager = [self manager];
+//    manager.responseSerializer = ({
+//        AFHTTPResponseSerializer *res = [AFHTTPResponseSerializer serializer];
+//        if (responseSerialization == KVHttpToolResponseSerialization_JSON) {
+//            res = [AFJSONResponseSerializer serializer];
+//        }
+//        res;
+//    });
+//    
+//    
+//    /// 从缓存加载数据
+//    void (^ loadCacheDataBlock) (void) = ^ {
+//        [cacheDelegate responseObjectWithCacheType:(cacheMate) url:url headers:headers params:params complete:^(NSData * _Nullable data) {
+//            id res = nil;
+//            if (data &&
+//                serializationToJSON) {
+//                NSError *jsonSerializationErr = nil;
+//                res = [NSJSONSerialization JSONObjectWithData:data options:(NSJSONReadingAllowFragments) error:&jsonSerializationErr];
+//                if (jsonSerializationErr) {
+//                    res = data;
+//                }
+//            } else {
+//                res = data;
+//            }
+//            //
+//            [self.class todoInMainQueue:^{
+//                cacheBlock? cacheBlock(res): nil;
+//            }];
+//        }];
+//    };
+//    
+//    /// 请求成功执行的任务
+//    void (^ successTask) (id responseObject) = ^ (id responseObject) {
+//        /// 打印结果
+//        [self log:url headers:headers params:params responseSerialization:responseSerialization responseObject:responseObject error:nil];
+//        /// 过滤结果
+//        id originalResponse = responseObject;
+//        [self filtterWithUrl:url responseSerialization:responseSerialization serializationToJSON:serializationToJSON responseObject:responseObject success:^(id responseObject, BOOL ignore) {
+//            /// 过滤成功, 回调
+//            [self.class todoInMainQueue:^{
+//                successBlock? successBlock(responseObject): nil;
+//            }];
+//            
+//            /// 过滤成功后尝试缓存
+//            if (cacheMate != KVHttpToolCacheMate_Undefine) {
+//                /// 做缓存
+//                NSData *data = nil;
+//                if (responseSerialization == KVHttpToolResponseSerialization_Data) {
+//                    data = originalResponse;
+//                } else {
+//                    data = [NSJSONSerialization dataWithJSONObject:originalResponse options:(NSJSONWritingPrettyPrinted) error:nil];
+//                }
+//                if (data) {
+//                    [cacheDelegate cache:(cacheMate) url:url headers:headers params:params data:data];
+//                }
+//            }
+//            
+//        } failure:^(NSError *error) {
+//            /// 过滤失败回调
+//            [self.class todoInMainQueue:^{
+//                failureBlock? failureBlock(error): nil;
+//            }];
+//            if (cacheMate != KVHttpToolCacheMate_Undefine) {
+//                loadCacheDataBlock();
+//            }
+//        }];
+//    };
+//    
+//    /// 请求失败执行的任务
+//    void (^ failureTask) (NSError *error) = ^ (NSError *error) {
+//        /// 打印
+//        [self log:url headers:headers params:params responseSerialization:responseSerialization responseObject:nil error:error];
+//        /// 请求失败回调
+//        [self.class todoInMainQueue:^{
+//            failureBlock? failureBlock(error): nil;
+//        }];
+//        if (cacheMate != KVHttpToolCacheMate_Undefine) {
+//            loadCacheDataBlock();
+//        }
+//    };
+//    
+//    /// 调用manager
+//    if (method == KVHttpTool_GET) {
+//        self.task = [manager GET:url parameters:params headers:headers progress:progressBlock success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+//            [self.class todoInGlobalDefaultQueue:^{
+//                successTask(responseObject);
+//            }];
+//        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+//            [self.class todoInGlobalDefaultQueue:^{
+//                failureTask(error);
+//            }];
+//        }];
+//        
+//    } else if (method == KVHttpTool_POST) {
+//        self.task = [manager POST:url parameters:params headers:headers progress:progressBlock success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+//            [self.class todoInGlobalDefaultQueue:^{
+//                successTask(responseObject);
+//            }];
+//        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+//            [self.class todoInGlobalDefaultQueue:^{
+//                failureTask(error);
+//            }];
+//        }];
+//        
+//    }
+//}
+//
+//@end
