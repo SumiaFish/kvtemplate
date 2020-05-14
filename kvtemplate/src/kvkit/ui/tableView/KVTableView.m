@@ -58,7 +58,7 @@
 - (void)setMj_header:(MJRefreshHeader *)mj_header {
     __weak typeof(self) ws = self;
     mj_header.refreshingBlock = ^{
-        [ws refreshData:YES];
+        [ws loadData:YES];
     };
     
     [super setMj_header:mj_header];
@@ -67,7 +67,7 @@
 - (void)setMj_footer:(MJRefreshFooter *)mj_footer {
     __weak typeof(self) ws = self;
     mj_footer.refreshingBlock = ^{
-        [ws loadMoreData:YES];
+        [ws loadData:NO];
     };
     
     [mj_footer endRefreshingWithNoMoreData];
@@ -89,17 +89,26 @@
 }
 
 - (void)refreshData:(BOOL)isShowHeaderLoadding {
-    [self loadData:isShowHeaderLoadding isRefresh:YES];
+    BOOL isRefresh = YES;
+    if (isShowHeaderLoadding) {
+        [self displayRefreshCompoent:isShowHeaderLoadding isRefresh:isRefresh];
+    } else {
+        [self loadData:isRefresh];
+    }
 }
 
 - (void)loadMoreData:(BOOL)isShowFooterLoadding {
-    [self loadData:isShowFooterLoadding isRefresh:NO];
+    BOOL isRefresh = NO;
+    if (isShowFooterLoadding) {
+        [self displayRefreshCompoent:isShowFooterLoadding isRefresh:isRefresh];
+    } else {
+        [self loadData:isRefresh];
+    }
 }
 
-/// 注意防止被调用两次：header(no refreshing)  ->  -loadData  ->  showLoaddingState(header refreshing)  ->  loadData;
-- (void)loadData:(BOOL)isShowRefreshCompoent isRefresh:(BOOL)isRefresh {
+/// 注意防止被调用两次：header(no refreshing)  ->  -loadData  ->  beginRefreshing  ->  loadData;
+- (void)loadData:(BOOL)isRefresh {
     
-    [self displayRefreshCompoent:isShowRefreshCompoent isRefresh:isRefresh];
     [self showLoaddingState];
         
     [[[[self.present kv_loadDataWithTableView:self isRefresh:isRefresh] then:^id _Nullable(id  _Nullable value) {
