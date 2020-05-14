@@ -10,6 +10,6 @@
 #define Strings_h
 
 #define NetConnectError (@"网络连接出错")
-
+#define RequestSucc (@"请求成功")
 
 #endif /* Strings_h */

@@ -7,7 +7,6 @@
 //
 
 #import <objc/runtime.h>
-#import <AFNetworking/AFNetworking.h>
 
 #import "NSObject+WeakObserve.h"
 
@@ -17,31 +16,12 @@
 
 #import "KVHttpToolCache.h"
 
-@interface KVHttpToolInfos : NSObject
-
-@property (assign, nonatomic) KVHttpToolMethod method;
-@property (strong, nonatomic) NSDictionary *params;
-@property (strong, nonatomic) NSDictionary<NSString *, NSString *> *headers;
-@property (assign, nonatomic) KVHttpToolResponseSerialization responseSerialization;
-@property (assign, nonatomic) BOOL serializationToJSON;
-@property (assign, nonatomic) KVHttpToolCacheMate cacheMate;
-@property (strong, nonatomic) id<KVHttpToolCacheProtocol> cacheDelegate;
-@property (strong, nonatomic) id<KVHttpToolBusinessProtocol> businessDelegate;
-@property (copy, nonatomic) void (^ progressBlock)(NSProgress *progress);
-@property (copy, nonatomic) void (^ successBlock)(id _Nullable responseObject);
-@property (copy, nonatomic) void (^ failureBlock)(NSError * _Nullable error);
-@property (copy, nonatomic) void (^ cacheBlock)(id _Nullable responseObject);
-
-@end
-
-@implementation KVHttpToolInfos
-
-@end
+#import "KVHttpOpration.h"
 
 @interface KVHttpTool ()
 
-@property (strong, nonatomic) KVHttpToolInfos *info;
-
+@property (strong, nonatomic, readwrite) KVHttpToolInfos *info;
+/// 最新的 task
 @property (strong, nonatomic, readwrite) NSURLSessionTask *task;
 @property (copy, nonatomic, readwrite) NSString *url;
 
@@ -89,11 +69,12 @@
 @implementation KVHttpTool
 {
     dispatch_semaphore_t _semaphore;
+    NSOperationQueue *_queue;
     BOOL _isLocked;
 }
 
 - (void)dealloc {
-    
+    KVHttpToolLog(@"%@ dealloc~", NSStringFromClass(self.class));
 }
 
 + (instancetype)request:(NSString *)url {
@@ -111,6 +92,8 @@
 /// 给默认值
 - (void)commonInit {
     _semaphore = dispatch_semaphore_create(1);
+    _queue = [[NSOperationQueue alloc] init];
+    _queue.maxConcurrentOperationCount = 1;
     self.info = [KVHttpToolInfos new];
     //
     self.method(KVHttpTool_GET);
@@ -128,11 +111,9 @@
     //
     __weak typeof(self) ws = self;
     self.send = ^{
-        [ws lock];
-        [ws.class todoInGlobalDefaultQueue:^{
-            [ws impSend:^{
-                [ws unlock];
-            }];
+        __strong typeof(ws) ss = ws;
+        [ss.class todoInGlobalDefaultQueue:^{
+            [ss impSend];
         }];
     };
 }
@@ -153,217 +134,41 @@
     return _isLocked;
 }
 
-- (void)impSend:(void (^) (void))complete {
-    /// 开始发起请求
-    
-    NSString *url = self.url;
-    
-    KVHttpToolInfos *info = self.info;
-    KVHttpToolMethod method = info.method;
-    NSDictionary *params = info.params;
-    NSDictionary *headers = info.headers;
-    KVHttpToolResponseSerialization responseSerialization = info.responseSerialization;
-    BOOL serializationToJSON = info.serializationToJSON;
-    KVHttpToolCacheMate cacheMate = info.cacheMate;
-    id<KVHttpToolCacheProtocol> cacheDelegate = info.cacheDelegate;
-//    id<KVHttpToolBusinessProtocol> businessDelegate = info.businessDelegate;
-    void (^ progressBlock)(NSProgress *progress) = info.progressBlock;
-    void (^ successBlock)(id _Nullable responseObject) = info.successBlock;
-    void (^ failureBlock)(NSError * _Nullable error) = info.failureBlock;
-    void (^ cacheBlock)(id _Nullable responseObject) = info.cacheBlock;
-    
-    AFHTTPSessionManager *manager = [self manager];
-    manager.responseSerializer = ({
-        AFHTTPResponseSerializer *res = [AFHTTPResponseSerializer serializer];
-        if (responseSerialization == KVHttpToolResponseSerialization_JSON) {
-            res = [AFJSONResponseSerializer serializer];
-        }
-        res;
-    });
-    
-    // 完成
-    void (^ completeBlock) (void) = ^ {
-        complete? complete(): nil;
-    };
-    
-    /// 从缓存加载数据
-    void (^ loadCacheDataBlock) (void) = ^ {
-        [cacheDelegate responseObjectWithCacheType:(cacheMate) url:url headers:headers params:params complete:^(NSData * _Nullable data) {
-            id res = nil;
-            if (data &&
-                serializationToJSON) {
-                NSError *jsonSerializationErr = nil;
-                res = [NSJSONSerialization JSONObjectWithData:data options:(NSJSONReadingAllowFragments) error:&jsonSerializationErr];
-                if (jsonSerializationErr) {
-                    res = data;
-                }
-            } else {
-                res = data;
-            }
-            //
-            [self.class todoInMainQueue:^{
-                cacheBlock? cacheBlock(res): nil;
-                completeBlock();
-            }];
-        }];
-    };
-    
-    /// 请求成功执行的任务
-    void (^ successTask) (id responseObject) = ^ (id responseObject) {
-        /// 打印结果
-        [self log:url headers:headers params:params responseSerialization:responseSerialization responseObject:responseObject error:nil];
-        /// 过滤结果
-        id originalResponse = responseObject;
-        [self filtterWithUrl:url responseSerialization:responseSerialization serializationToJSON:serializationToJSON responseObject:responseObject success:^(id responseObject, BOOL ignore) {
-            /// 过滤成功, 回调
-            [self.class todoInMainQueue:^{
-                successBlock? successBlock(responseObject): nil;
-            }];
-            
-            /// 过滤成功后尝试缓存
-            if (cacheMate != KVHttpToolCacheMate_Undefine) {
-                /// 做缓存
-                NSData *data = nil;
-                if (responseSerialization == KVHttpToolResponseSerialization_Data) {
-                    data = originalResponse;
-                } else {
-                    data = [NSJSONSerialization dataWithJSONObject:originalResponse options:(NSJSONWritingPrettyPrinted) error:nil];
-                }
-                if (data) {
-                    [cacheDelegate cache:(cacheMate) url:url headers:headers params:params data:data];
-                }
-                completeBlock();
-            } else {
-                completeBlock();
-            }
-            
-        } failure:^(NSError *error) {
-            /// 过滤失败回调
-            [self.class todoInMainQueue:^{
-                failureBlock? failureBlock(error): nil;
-            }];
-            if (cacheMate != KVHttpToolCacheMate_Undefine) {
-                loadCacheDataBlock();
-            } else {
-                completeBlock();
-            }
-        }];
-    };
-    
-    /// 请求失败执行的任务
-    void (^ failureTask) (NSError *error) = ^ (NSError *error) {
-        /// 打印
-        [self log:url headers:headers params:params responseSerialization:responseSerialization responseObject:nil error:error];
-        /// 请求失败回调
-        [self.class todoInMainQueue:^{
-            failureBlock? failureBlock(error): nil;
-        }];
-        if (cacheMate != KVHttpToolCacheMate_Undefine) {
-            loadCacheDataBlock();
-        } else {
-            completeBlock();
-        }
-    };
-    
-    /// 调用manager
-    if (method == KVHttpTool_GET) {
-        self.task = [manager GET:url parameters:params headers:headers progress:progressBlock success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-            [self.class todoInGlobalDefaultQueue:^{
-                successTask(responseObject);
-            }];
-        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-            [self.class todoInGlobalDefaultQueue:^{
-                failureTask(error);
-            }];
-        }];
-        
-    } else if (method == KVHttpTool_POST) {
-        self.task = [manager POST:url parameters:params headers:headers progress:progressBlock success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-            [self.class todoInGlobalDefaultQueue:^{
-                successTask(responseObject);
-            }];
-        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-            [self.class todoInGlobalDefaultQueue:^{
-                failureTask(error);
-            }];
-        }];
-        
+- (void)impSend {
+    [self lock];
+    // 默认只允许同时一个在请求
+    if (_queue.operations.count) {
+        KVHttpToolLog(@"有任务正在进行中，若要开始新的任务，先取消");
+        [self unlock];
+        return;
     }
+    
+    KVHttpOpration *op = [[KVHttpOpration alloc] initWithUrl:self.url info:self.info];
+    [_queue addOperation:op];
+    _task = op.task;
+    [self unlock];
 }
 
-/// log 并把 responseObject 转为json
-- (void)log:(NSString *)url headers:(NSDictionary *)headers params:(NSDictionary * _Nullable)params responseSerialization:(KVHttpToolResponseSerialization)responseSerialization responseObject:(id)responseObject error:(NSError *)error {
-#if DEBUG
-    printf("\n%s #%d: \n", __func__, __LINE__);
-    printf("begin ############################################################\n");
-    printf("url: %s\n", [NSString stringWithFormat:@"%@", url].UTF8String);
-    printf("headers: %s\n", (headers != nil) ? [[NSString alloc] initWithData:[NSJSONSerialization dataWithJSONObject:headers options:(NSJSONWritingPrettyPrinted) error:nil] encoding:(NSUTF8StringEncoding)].UTF8String : "null");
-    printf("params: %s\n", (params != nil) ? [[NSString alloc] initWithData:[NSJSONSerialization dataWithJSONObject:params options:(NSJSONWritingPrettyPrinted) error:nil] encoding:(NSUTF8StringEncoding)].UTF8String : "null");
-    if (error) {
-        printf("error: %s\n", [NSString stringWithFormat:@"%@", error].UTF8String);
-    } else {
-        if (responseSerialization == KVHttpToolResponseSerialization_JSON) {
-            printf("responseObject: %s\n", (responseObject != nil) ? [[NSString alloc] initWithData:[NSJSONSerialization dataWithJSONObject:responseObject options:(NSJSONWritingPrettyPrinted) error:nil] encoding:(NSUTF8StringEncoding)].UTF8String : "null");
-        } else {
-            NSError *jsonSerializationErr = nil;
-            id json = [NSJSONSerialization JSONObjectWithData:responseObject options:(NSJSONReadingAllowFragments) error:&jsonSerializationErr];
-            if (jsonSerializationErr) {
-                printf("responseObject is not json: %s\n", [NSString stringWithFormat:@"%@", jsonSerializationErr].UTF8String);
-                printf("responseObject: %s\n", (responseObject != nil) ? [[NSString alloc] initWithData:responseObject encoding:(NSUTF8StringEncoding)].UTF8String : "null");
-            } else {
-                printf("responseObject: %s\n", [[NSString alloc] initWithData:[NSJSONSerialization dataWithJSONObject:json options:(NSJSONWritingPrettyPrinted) error:nil] encoding:(NSUTF8StringEncoding)].UTF8String);
-            }
-        }
-    }
-    printf("end ############################################################\n \n");
-#endif
+- (void)cancelAll {
+    [self lock];
+    [_queue cancelAllOperations];
+    [self unlock];
 }
 
-- (void)filtterWithUrl:(NSString *)url responseSerialization:(KVHttpToolResponseSerialization)responseSerialization serializationToJSON:(BOOL)serializationToJSON  responseObject:(id)responseObject success:(void (^) (id responseObject, BOOL ignore))success failure:(void (^) (NSError *error))failure {
-    
-    id res = nil;
-    BOOL ignore = NO;
-    if (serializationToJSON) {
-        if (responseSerialization == KVHttpToolResponseSerialization_JSON) {
-            res = responseObject;
-        } else {
-            /// 尝试转为JSON
-            NSError *jsonSerializationErr = nil;
-            res = [NSJSONSerialization JSONObjectWithData:responseObject options:(NSJSONReadingAllowFragments) error:&jsonSerializationErr];
-            if (jsonSerializationErr) {
-                /// 没转成功不做过滤
-                ignore = YES;
-                res = responseObject;
-#if DEBUG
-                KVHttpToolLog(@"jsonSerializationErr: %@", jsonSerializationErr);
-#endif
-            }
-        }
-    } else {
-        /// 不做过滤
-        ignore = YES;
-        res = responseObject;
-        
-    }
-    
-    if (ignore == NO) {
-        NSError *error = [self.info.businessDelegate getBusinessErrorWithUrl:url responseObject:res];
-        if (error) {
-            /// 有业务错误
-            failure? failure(error): nil;
-        } else {
-            /// 业务通过
-            success? success(res, ignore): nil;
-        }
-    } else {
-        /// 已经忽略了过滤，直接返回吧
-        success? success(res, ignore): nil;
-    }
+- (void)pauseAll {
+    [self lock];
+    [_queue.operations enumerateObjectsUsingBlock:^(__kindof KVHttpOpration * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [obj pause];
+    }];
+    [self unlock];
 }
 
-- (AFHTTPSessionManager *)manager {
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    return manager;
+- (NSURLSessionTask *)task {
+    return _task;
+}
+
+- (NSOperationQueue *)queue {
+    return _queue;
 }
 
 - (KVHttpTool * _Nullable (^)(KVHttpToolMethod))method {
@@ -444,10 +249,10 @@
     return _cacheMate;
 }
 
-- (KVHttpTool * _Nullable (^)(id<KVHttpToolCacheProtocol> _Nonnull))cacheDelegate {
+- (KVHttpTool * _Nullable (^)(id<KVHttpToolCacheProtocol> _Nullable))cacheDelegate {
     if (!_cacheDelegate) {
         __weak typeof(self) ws = self;
-        _cacheDelegate = ^ (id<KVHttpToolCacheProtocol>  _Nonnull obj) {
+        _cacheDelegate = ^ (id<KVHttpToolCacheProtocol>  _Nullable obj) {
             [ws lock];
             ws.info.cacheDelegate = obj;
             [ws unlock];
@@ -457,10 +262,10 @@
     return _cacheDelegate;
 }
 
-- (KVHttpTool * _Nullable (^)(id<KVHttpToolBusinessProtocol> _Nonnull))businessDelegate {
+- (KVHttpTool * _Nullable (^)(id<KVHttpToolBusinessProtocol> _Nullable))businessDelegate {
     if (!_businessDelegate) {
         __weak typeof(self) ws = self;
-        _businessDelegate = ^ (id<KVHttpToolBusinessProtocol>  _Nonnull obj) {
+        _businessDelegate = ^ (id<KVHttpToolBusinessProtocol>  _Nullable obj) {
             [ws lock];
             ws.info.businessDelegate = obj;
             [ws unlock];
@@ -470,10 +275,10 @@
     return _businessDelegate;
 }
 
-- (KVHttpTool * _Nullable (^)(void (^ _Nonnull)(NSProgress * _Nonnull)))progress {
+- (KVHttpTool * _Nullable (^)(void (^ _Nullable)(NSProgress * _Nullable)))progress {
     if (!_progress) {
         __weak typeof(self) ws = self;
-        _progress = ^KVHttpTool * _Nullable(void (^ _Nonnull obj)(NSProgress * _Nonnull progress)) {
+        _progress = ^KVHttpTool * _Nullable(void (^ _Nullable obj)(NSProgress * _Nonnull progress)) {
             [ws lock];
             ws.info.progressBlock = obj;
             [ws unlock];
@@ -483,10 +288,10 @@
     return _progress;
 }
 
-- (KVHttpTool * _Nullable (^)(void (^ _Nonnull)(id _Nullable)))success {
+- (KVHttpTool * _Nullable (^)(void (^ _Nullable)(id _Nullable)))success {
     if (!_success) {
         __weak typeof(self) ws = self;
-        _success = ^KVHttpTool * _Nullable(void (^ _Nonnull obj)(id responseObject)) {
+        _success = ^KVHttpTool * _Nullable(void (^ _Nullable obj)(id responseObject)) {
             [ws lock];
             ws.info.successBlock = obj;
             [ws unlock];
@@ -496,10 +301,10 @@
     return _success;
 }
 
-- (KVHttpTool * _Nullable (^)(void (^ _Nonnull)(NSError * _Nullable)))failure {
+- (KVHttpTool * _Nullable (^)(void (^ _Nullable)(NSError * _Nullable)))failure {
     if (!_failure) {
         __weak typeof(self) ws = self;
-        _failure = ^KVHttpTool * _Nullable(void (^ _Nonnull obj)(NSError * error)) {
+        _failure = ^KVHttpTool * _Nullable(void (^ _Nullable obj)(NSError * error)) {
             [ws lock];
             ws.info.failureBlock = obj;
             [ws unlock];
@@ -509,10 +314,10 @@
     return _failure;
 }
 
-- (KVHttpTool * _Nullable (^)(void (^ _Nonnull)(id _Nullable)))cache {
+- (KVHttpTool * _Nullable (^)(void (^ _Nullable)(id _Nullable)))cache {
     if (!_cache) {
         __weak typeof(self) ws = self;
-        _cache = ^KVHttpTool * _Nullable(void (^ _Nonnull obj)(id responseObject)) {
+        _cache = ^KVHttpTool * _Nullable(void (^ _Nullable obj)(id responseObject)) {
             [ws lock];
             ws.info.cacheBlock = obj;
             [ws unlock];
@@ -542,73 +347,43 @@
 
 - (void)impSend {
     
-    [self lock];
+//    [self lock];
+//
+//    /// 开始发起请求
+//
+//    NSString *url = self.url;
+//    NSString *filePath = self.filePath;
+//
+//    KVHttpToolInfos *info = self.info;
+////    KVHttpToolMethod method = KVHttpTool_POST; //info.method; // 上传只能POST
+//    NSDictionary *params = info.params;
+//    NSDictionary *headers = info.headers;
+//    KVHttpToolResponseSerialization responseSerialization = info.responseSerialization;
+//    BOOL serializationToJSON = info.serializationToJSON;
+//    void (^ progressBlock)(NSProgress *progress) = info.progressBlock;
+//    void (^ successBlock)(id _Nullable responseObject) = info.successBlock;
+//    void (^ failureBlock)(NSError * _Nullable error) = info.failureBlock;
+//
+//
+//    /// 检测文件是否存在
+//    BOOL isDirectory = NO;
+//    BOOL isExecutableFileAtPath = [[NSFileManager defaultManager] fileExistsAtPath:filePath isDirectory:&isDirectory];
+//    if (!isExecutableFileAtPath) {
+//        NSError *error = [NSError errorWithDomain:url code:-1 userInfo:@{NSLocalizedDescriptionKey: @"文件不存在"}];
+//        failureBlock? failureBlock(error): nil;
+//        unlockBlock();
+//        return;
+//    }
     
-    /// 开始发起请求
+//    /// 拷贝到一个新目录
+//    if (![self createTmpFile:filePath]) {
+//        NSError *error = [NSError errorWithDomain:url code:-1 userInfo:@{NSLocalizedDescriptionKey: @"无法拷贝待上传文件"}];
+//        failureBlock? failureBlock(error): nil;
+//        unlockBlock();
+//        return;
+//    }
     
-    NSString *url = self.url;
-    NSString *filePath = self.filePath;
-
-    KVHttpToolInfos *info = self.info;
-//    KVHttpToolMethod method = KVHttpTool_POST; //info.method; // 上传只能POST
-    NSDictionary *params = info.params;
-    NSDictionary *headers = info.headers;
-    KVHttpToolResponseSerialization responseSerialization = info.responseSerialization;
-    BOOL serializationToJSON = info.serializationToJSON;
-    void (^ progressBlock)(NSProgress *progress) = info.progressBlock;
-    void (^ successBlock)(id _Nullable responseObject) = info.successBlock;
-    void (^ failureBlock)(NSError * _Nullable error) = info.failureBlock;
-    
-    // 解锁
-    void (^ unlockBlock) (void) = ^ {
-        [self unlock];
-    };
-    
-    /// 检测文件是否存在
-    BOOL isDirectory = NO;
-    BOOL isExecutableFileAtPath = [[NSFileManager defaultManager] fileExistsAtPath:filePath isDirectory:&isDirectory];
-    if (!isExecutableFileAtPath) {
-        NSError *error = [NSError errorWithDomain:url code:-1 userInfo:@{NSLocalizedDescriptionKey: @"文件不存在"}];
-        failureBlock? failureBlock(error): nil;
-        unlockBlock();
-        return;
-    }
-    
-    /// 拷贝到一个新目录
-    if (![self createTmpFile:filePath]) {
-        NSError *error = [NSError errorWithDomain:url code:-1 userInfo:@{NSLocalizedDescriptionKey: @"无法拷贝待上传文件"}];
-        failureBlock? failureBlock(error): nil;
-        unlockBlock();
-        return;
-    }
-    
-    AFHTTPSessionManager *manager = [self manager];
-    manager.responseSerializer = ({
-        AFHTTPResponseSerializer *res = [AFHTTPResponseSerializer serializer];
-        if (responseSerialization == KVHttpToolResponseSerialization_JSON) {
-            res = [AFJSONResponseSerializer serializer];
-        }
-        res;
-    });
-    
-    self.task = [manager POST:url parameters:params headers:headers progress:progressBlock success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        
-        [self log:url headers:headers params:params responseSerialization:responseSerialization responseObject:responseObject error:nil];
-        
-        [self filtterWithUrl:url responseSerialization:responseSerialization serializationToJSON:serializationToJSON responseObject:responseObject success:^(id responseObject, BOOL ignore) {
-            successBlock? successBlock(responseObject): nil;
-        } failure:^(NSError *error) {
-            failureBlock? failureBlock(error): nil;
-        }];
-        
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        
-        [self log:url headers:headers params:params responseSerialization:responseSerialization responseObject:nil error:error];
-        
-    }];
-    
-    
-    [self.task kv_addWeakObserve:self keyPath:NSStringFromSelector(@selector(state)) options:(NSKeyValueObservingOptionNew) context:nil];
+   
 }
 
 - (void)kv_receiveWeakObserveValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
@@ -650,154 +425,70 @@
 
 @end
 
-//@interface KVHttpDownload ()
-//
-//@property (copy, nonatomic) void (^ _Nullable successBlock)(NSURL * _Nullable fileURL);
-//
-///// 请求成功回调：默认 nil
-//@property (copy, nonatomic, readwrite) KVHttpTool* _Nullable (^ success) (void (^ _Nullable successBlock)(NSURL * _Nullable fileURL));
-//
-//@end
-//
-//@implementation KVHttpDownload
-//
-//@dynamic success;
-//
-//+ (instancetype)download:(NSString *)url {
-//    KVHttpDownload *tool = [super request:url];
-//    return tool;
-//}
-//
-//- (void)commonInit {
-//    [super commonInit];
-//    
-//    self.success(nil);
-//}
-//
-//- (void)impSend {
-//    /// 开始发起请求
-//    
-//    NSString *url = self.url;
-//    
-//    KVHttpToolInfos *info = self.info;
-//    KVHttpToolMethod method = info.method;
-//    NSDictionary *params = info.params;
-//    NSDictionary *headers = info.headers;
-//    KVHttpToolResponseSerialization responseSerialization = info.responseSerialization;
-//    BOOL serializationToJSON = info.serializationToJSON;
-//    KVHttpToolCacheMate cacheMate = info.cacheMate;
-//    id<KVHttpToolCacheProtocol> cacheDelegate = info.cacheDelegate;
-////    id<KVHttpToolBusinessProtocol> businessDelegate = info.businessDelegate;
-//    void (^ progressBlock)(NSProgress *progress) = info.progressBlock;
-//    void (^ successBlock)(id _Nullable responseObject) = info.successBlock;
-//    void (^ failureBlock)(NSError * _Nullable error) = info.failureBlock;
-//    void (^ cacheBlock)(id _Nullable responseObject) = info.cacheBlock;
-//    
-//    AFHTTPSessionManager *manager = [self manager];
-//    manager.responseSerializer = ({
-//        AFHTTPResponseSerializer *res = [AFHTTPResponseSerializer serializer];
-//        if (responseSerialization == KVHttpToolResponseSerialization_JSON) {
-//            res = [AFJSONResponseSerializer serializer];
-//        }
-//        res;
-//    });
-//    
-//    
-//    /// 从缓存加载数据
-//    void (^ loadCacheDataBlock) (void) = ^ {
-//        [cacheDelegate responseObjectWithCacheType:(cacheMate) url:url headers:headers params:params complete:^(NSData * _Nullable data) {
-//            id res = nil;
-//            if (data &&
-//                serializationToJSON) {
-//                NSError *jsonSerializationErr = nil;
-//                res = [NSJSONSerialization JSONObjectWithData:data options:(NSJSONReadingAllowFragments) error:&jsonSerializationErr];
-//                if (jsonSerializationErr) {
-//                    res = data;
-//                }
-//            } else {
-//                res = data;
-//            }
-//            //
-//            [self.class todoInMainQueue:^{
-//                cacheBlock? cacheBlock(res): nil;
-//            }];
-//        }];
-//    };
-//    
-//    /// 请求成功执行的任务
-//    void (^ successTask) (id responseObject) = ^ (id responseObject) {
-//        /// 打印结果
-//        [self log:url headers:headers params:params responseSerialization:responseSerialization responseObject:responseObject error:nil];
-//        /// 过滤结果
-//        id originalResponse = responseObject;
-//        [self filtterWithUrl:url responseSerialization:responseSerialization serializationToJSON:serializationToJSON responseObject:responseObject success:^(id responseObject, BOOL ignore) {
-//            /// 过滤成功, 回调
-//            [self.class todoInMainQueue:^{
-//                successBlock? successBlock(responseObject): nil;
-//            }];
-//            
-//            /// 过滤成功后尝试缓存
-//            if (cacheMate != KVHttpToolCacheMate_Undefine) {
-//                /// 做缓存
-//                NSData *data = nil;
-//                if (responseSerialization == KVHttpToolResponseSerialization_Data) {
-//                    data = originalResponse;
-//                } else {
-//                    data = [NSJSONSerialization dataWithJSONObject:originalResponse options:(NSJSONWritingPrettyPrinted) error:nil];
-//                }
-//                if (data) {
-//                    [cacheDelegate cache:(cacheMate) url:url headers:headers params:params data:data];
-//                }
-//            }
-//            
-//        } failure:^(NSError *error) {
-//            /// 过滤失败回调
-//            [self.class todoInMainQueue:^{
-//                failureBlock? failureBlock(error): nil;
-//            }];
-//            if (cacheMate != KVHttpToolCacheMate_Undefine) {
-//                loadCacheDataBlock();
-//            }
-//        }];
-//    };
-//    
-//    /// 请求失败执行的任务
-//    void (^ failureTask) (NSError *error) = ^ (NSError *error) {
-//        /// 打印
-//        [self log:url headers:headers params:params responseSerialization:responseSerialization responseObject:nil error:error];
-//        /// 请求失败回调
-//        [self.class todoInMainQueue:^{
-//            failureBlock? failureBlock(error): nil;
-//        }];
-//        if (cacheMate != KVHttpToolCacheMate_Undefine) {
-//            loadCacheDataBlock();
-//        }
-//    };
-//    
-//    /// 调用manager
-//    if (method == KVHttpTool_GET) {
-//        self.task = [manager GET:url parameters:params headers:headers progress:progressBlock success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-//            [self.class todoInGlobalDefaultQueue:^{
-//                successTask(responseObject);
-//            }];
-//        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-//            [self.class todoInGlobalDefaultQueue:^{
-//                failureTask(error);
-//            }];
-//        }];
-//        
-//    } else if (method == KVHttpTool_POST) {
-//        self.task = [manager POST:url parameters:params headers:headers progress:progressBlock success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-//            [self.class todoInGlobalDefaultQueue:^{
-//                successTask(responseObject);
-//            }];
-//        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-//            [self.class todoInGlobalDefaultQueue:^{
-//                failureTask(error);
-//            }];
-//        }];
-//        
-//    }
-//}
-//
-//@end
+@interface _KVHttpDownload : KVHttpTool
+
+@property (copy, nonatomic, readwrite) KVHttpTool* _Nullable (^ downloadSuccess) (void (^ _Nullable successBlock)(NSURL * _Nullable fileURL));
+
+@end
+
+@implementation _KVHttpDownload
+{
+    KVHttpTool* _Nullable (^ _success) (void (^ _Nullable successBlock)(id _Nullable responseObject));
+}
+
+@dynamic success;
+
++ (instancetype)download:(NSString *)url {
+    _KVHttpDownload *d = [super request:url];
+    return d;
+}
+
+- (void)impSend {
+    [self lock];
+    // 默认只允许同时一个在请求
+    if (self.queue.operations.count) {
+        KVHttpToolLog(@"有任务正在进行中，若要开始新的任务，先取消");
+        [self unlock];
+        return;
+    }
+    
+    KVHttpDownloadOpration *op = [[KVHttpDownloadOpration alloc] initWithUrl:self.url info:self.info];
+    [self.queue addOperation:op];
+    self.task = op.task;
+    [self unlock];
+}
+
+- (void)setSuccess:(KVHttpTool * _Nullable (^)(void (^ _Nullable)(id _Nullable)))success {
+    _downloadSuccess = success;
+}
+
+- (KVHttpTool * _Nullable (^)(void (^ _Nullable)(id _Nullable)))success {
+    return _downloadSuccess;
+}
+
+- (KVHttpTool * _Nullable (^)(void (^ _Nullable)(NSURL * _Nullable)))downloadSuccess {
+    if (!_downloadSuccess) {
+        __weak typeof(self) ws = self;
+        _downloadSuccess = ^KVHttpTool * _Nullable(void (^ _Nonnull obj)(NSURL * fileURL)) {
+            [ws lock];
+            ws.info.successBlock = obj;
+            [ws unlock];
+            return ws;
+        };
+    }
+    return _downloadSuccess;
+}
+
+@end
+
+@implementation KVHttpTool (Download)
+
++ (instancetype)download:(NSString *)url {
+    return [_KVHttpDownload download:url];
+}
+
+- (KVHttpTool * _Nullable (^)(void (^ _Nullable)(NSURL * _Nullable)))downloadSuccess {
+    return nil;
+}
+
+@end

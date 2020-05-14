@@ -11,13 +11,14 @@
 #import "KVHttpToolHeader.h"
 #import "KVHttpToolCache.h"
 
+#import "KVHttpToolInfos.h"
+
 NS_ASSUME_NONNULL_BEGIN
 
 /// 网络请求类
 @interface KVHttpTool : NSObject
 
-/// 外界可以通过task 控制 暂停/取消 操作
-@property (strong, nonatomic, readonly) NSURLSessionTask *task;
+@property (strong, nonatomic, readonly) KVHttpToolInfos *info;
 
 /// 请求的url
 @property (copy, nonatomic, readonly) NSString *url;
@@ -66,6 +67,15 @@ NS_ASSUME_NONNULL_BEGIN
 + (instancetype)new NS_UNAVAILABLE;
 - (instancetype)init NS_UNAVAILABLE;
 
+/// 通过task 可以控制暂停 取消；外部如要对某一个task 进行控制则要持有它，内部可能会释放掉
+- (NSURLSessionTask * _Nullable)task;
+- (void)cancelAll;
+- (void)pauseAll;
+
+
+- (void)lock;
+- (void)unlock;
+
 @end
 
 /// 上传任务
@@ -80,13 +90,12 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 /// 下载任务
-//@interface KVHttpTool (Download)
-//
-///// 请求成功回调：默认 nil
-//@property (copy, nonatomic, readonly) KVHttpTool* _Nullable (^ success) (void (^ _Nullable successBlock)(NSURL * _Nullable fileURL));
-//
-//+ (instancetype)download:(NSString *)url;
-//
-//@end
+@interface KVHttpTool (Download)
+
+@property (copy, nonatomic, readonly) KVHttpTool* _Nullable (^ success) (void (^ _Nullable successBlock)(NSURL * _Nullable fileURL));
+
++ (instancetype)download:(NSString *)url;
+
+@end
 
 NS_ASSUME_NONNULL_END

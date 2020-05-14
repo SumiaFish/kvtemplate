@@ -203,6 +203,7 @@
         _manager = [NSFileManager defaultManager];
         _overdueTimeval = overdueTimeval;
         
+        KVHttpToolLog(@"path: %@", path);
         BOOL isDirectory = NO;
         BOOL isExist = [_manager fileExistsAtPath:path isDirectory:&isDirectory];
         if (path.length) {

@@ -11,10 +11,13 @@
 #import "KVTableView.h"
 #import "HomePresent.h"
 
+#import "KVStorege.h"
+
 @interface HomeViewController ()
 <KVToastViewProtocol>
 
 @property (strong, nonatomic) AppTableView *tableView;
+@property (strong, nonatomic) UIButton *button;
 
 @end
 
@@ -28,11 +31,28 @@
     self.view.backgroundColor = UIColor.whiteColor;
 
 
-    [self.tableView loadData:YES];
+    [self.tableView refreshData:YES];
+    [self button];
 }
 
 - (void)kv_show:(NSString *)text {
     NSLog(@"%@", text);
+}
+
+- (void)clearAction {
+    [KVStorege clearCache:YES];
+}
+
+- (UIButton *)button {
+    if (!_button) {
+        _button = [UIButton buttonWithType:(UIButtonTypeSystem)];
+        [self.view addSubview:_button];
+        _button.frame = CGRectMake(0, 0, 100, 40);
+        _button.center = self.view.center;
+        [_button setTitle:@"clear" forState:0];
+        [_button addTarget:self action:@selector(clearAction) forControlEvents:(UIControlEventTouchUpInside)];
+    }
+    return _button;
 }
 
 - (KVTableView *)tableView {

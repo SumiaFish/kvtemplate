@@ -1,5 +1,5 @@
 //
-//  KVStoregeProtocl.h
+//  KVStoregeProtocol.h
 //  kvtemplate
 //
 //  Created by kevin on 2020/5/13.
@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol KVStoregeProtocl <NSObject>
+@protocol KVStoregeProtocol <NSObject>
 
 + (void)clearCache;
 

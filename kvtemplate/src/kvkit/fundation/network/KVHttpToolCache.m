@@ -14,108 +14,35 @@
 
 #import "KVHttpToolCacheImp.h"
 
-@interface KVHttpToolCacheOperation : NSOperation
+#import "KVStorege.h"
+#import "KVOperation.h"
 
-@property (copy, nonatomic, readonly) NSString *taskId;
+@interface KVHttpToolCacheOperation : KVOperation
+
 @property (copy, nonatomic, readonly) NSString *key;
-
 @property (copy, nonatomic, readonly) void (^ taskBlock) (void);
-
-@property (assign, nonatomic) BOOL kv_isExecuting;
-@property (assign, nonatomic) BOOL kv_isFinished;
 
 @end
 
 @implementation KVHttpToolCacheOperation
-{
-    dispatch_semaphore_t _semaphore;
-}
 
 - (instancetype)initWithKey:(NSString *)key taskBlock:(void (^) (void))taskBlock {
     if (self = [super init]) {
         _key = key;
-        _taskId = NSUUID.UUID.UUIDString;
         _taskBlock = taskBlock;
-        _semaphore = dispatch_semaphore_create(1);
     }
     return self;
 }
 
-- (void)start {
-    dispatch_semaphore_wait(_semaphore, DISPATCH_TIME_FOREVER);
-    
-    if (self.isCancelled) {
-        [self kv_finish:NO];
-        dispatch_semaphore_signal(_semaphore);
-        return;
-    }
-    
+- (void)todo {
     _taskBlock? _taskBlock(): nil;
-    [self kv_finish:YES];
-    dispatch_semaphore_signal(_semaphore);
+    [self complete];
 }
-
-- (void)cancel {
-    dispatch_semaphore_wait(_semaphore, DISPATCH_TIME_FOREVER);
-    
-    if (self.isFinished) {
-        dispatch_semaphore_signal(_semaphore);
-        return;
-    }
-    
-    [super cancel];
-    [self kv_finish:NO];
-    dispatch_semaphore_signal(_semaphore);
-}
-
-- (void)kv_finish:(BOOL)isComplete {
-    if (self.kv_isFinished == NO) {
-        self.kv_isFinished = YES;
-    }
-    if (self.kv_isExecuting == YES) {
-        self.kv_isExecuting = NO;
-    }
-}
-
-- (void)setKv_isExecuting:(BOOL)kv_isExecuting {
-    [self willChangeValueForKey:NSStringFromSelector(@selector(isExecuting))];
-    _kv_isExecuting = kv_isExecuting;
-    [self didChangeValueForKey:NSStringFromSelector(@selector(isExecuting))];
-}
-
-- (BOOL)isExecuting {
-    return _kv_isExecuting;
-}
-
-- (void)setKv_isFinished:(BOOL)kv_isFinished {
-    [self willChangeValueForKey:NSStringFromSelector(@selector(isFinished))];
-    _kv_isFinished = kv_isFinished;
-    [self didChangeValueForKey:NSStringFromSelector(@selector(isFinished))];
-}
-
-- (BOOL)isFinished {
-    return _kv_isFinished;
-}
-
-@end
-
-@protocol KVHttpToolCacheFileManagerProtocol <NSObject>
-
-- (void)clearOverdue:(NSString *)usingDirectoryPath rootDirectoryName:(NSString *)rootDirectoryName;
-
-- (void)addDirectory:(NSString *)usingDirectoryPath rootDirectoryName:(NSString *)rootDirectoryName complete:(void (^) (NSError *error, BOOL isNewPath, NSString *fullPath, NSString *mix))complete;
-
-- (NSError *)delete:(NSString *)path;
-
-- (BOOL)addFile:(NSString *)filePath data:(NSData *)data;
-
-- (NSData *)getFile:(NSString *)filePath;
-
-- (NSString *)getFilePath:(NSString *)usingDirectoryPath cache:(KVHttpToolCacheMate)type url:(nonnull NSString *)url headers:(NSDictionary * _Nullable)headers params:(NSDictionary * _Nullable)params;
 
 @end
 
 @interface KVHttpToolCache ()
+<KVStoregeProtocol>
 
 @end
 
@@ -165,8 +92,9 @@ static BOOL KVHttpToolCacheInitFlag = NO;
                 [ws queue].suspended = NO;
                 //
             }];
+            [_queue addOperation:op];
             
-            [self addOpration:op];
+            [KVStorege createStorege:(id<KVStoregeProtocol>)self.class];
         }
     }
     
@@ -181,27 +109,54 @@ static BOOL KVHttpToolCacheInitFlag = NO;
     return _cache;
 }
 
+#pragma mark - KVStoregeProtocol
+
+// TODO 这里可能有问题
++ (void)clearCache {
+    [[self.class share] removeAll];
+}
+
 #pragma mark - KVHttpToolCacheProtocol
 
 - (void)cache:(KVHttpToolCacheMate)type url:(nonnull NSString *)url headers:(NSDictionary * _Nullable)headers params:(NSDictionary * _Nullable)params data:(nonnull NSData *)data {
 
+    /// 参数检查!!!
+    if (!data.length) {
+        return;
+    }
+    NSString *key = [self getKeyWithCache:type url:url headers:headers params:params];
+    if (!key.length) {
+        return;
+    }
+    
+    [self lock];
+    
     __weak typeof(self) ws = self;
-    KVHttpToolCacheOperation *op = [[KVHttpToolCacheOperation alloc] initWithKey:[self getKeyWithCache:type url:url headers:headers params:params] taskBlock:^{
+    KVHttpToolCacheOperation *op = [[KVHttpToolCacheOperation alloc] initWithKey:key taskBlock:^{
         if (!data) {
             return;
         }
-        NSString *shortKey = [ws getKeyWithCache:type url:url headers:headers params:params];
-        [ws.cache add:shortKey data:data];
+        [ws.cache add:key data:data];
     }];
+    [_queue addOperation:op];
     
-    [self addOpration:op];
+    [self unlock];
     
 }
 
 - (void)responseObjectWithCacheType:(KVHttpToolCacheMate)type url:(NSString *)url headers:(NSDictionary *)headers params:(NSDictionary *)params complete:(nonnull void (^)(NSData * _Nullable))complete {
     
+    /// 参数检查!!!
+    NSString *key = [self getKeyWithCache:type url:url headers:headers params:params];
+    if (!key.length) {
+        complete? complete(nil): nil;
+        return;
+    }
+    
+    [self lock];
+    
     __weak typeof(self) ws = self;
-    KVHttpToolCacheOperation *op = [[KVHttpToolCacheOperation alloc] initWithKey:[self getKeyWithCache:type url:url headers:headers params:params] taskBlock:^{
+    KVHttpToolCacheOperation *op = [[KVHttpToolCacheOperation alloc] initWithKey:key taskBlock:^{
         void (^ mainQueueBlock) (id responseObject) = ^ (id responseObject) {
             if (!complete) {
                 return;
@@ -215,67 +170,24 @@ static BOOL KVHttpToolCacheInitFlag = NO;
                 });
             }
         };
-        NSString *shortKey = [ws getKeyWithCache:type url:url headers:headers params:params];
-        mainQueueBlock([ws.cache get:shortKey]);
+        mainQueueBlock([ws.cache get:key]);
     }];
     
-    [self addOpration:op];
+    [_queue addOperation:op];
+    
+    [self unlock];
     
 }
 
 - (void)removeCache:(KVHttpToolCacheMate)type url:(NSString *)url headers:(NSDictionary *)headers params:(NSDictionary *)params {
     
-    [self cancelOp:[self getKeyWithCache:type url:url headers:headers params:params]];
+    /// 参数检查!!!
+    NSString *key = [self getKeyWithCache:type url:url headers:headers params:params];
+    if (!key.length) {
+        return;
+    }
     
-    __weak typeof(self) ws = self;
-    KVHttpToolCacheOperation *op = [[KVHttpToolCacheOperation alloc] initWithKey:[self getKeyWithCache:type url:url headers:headers params:params] taskBlock:^{
-        NSString *shortKey = [ws getKeyWithCache:type url:url headers:headers params:params];
-        [ws.cache delete:shortKey];
-    }];
-    
-    [self addOpration:op];
-    
-}
-
-- (void)removeAll {
-    
-    /// 停止所有操作
-    [self cancelAllOprations];
-    
-    __weak typeof(self) ws = self;
-    KVHttpToolCacheOperation *op = [[KVHttpToolCacheOperation alloc] initWithKey:nil taskBlock:^{
-        [ws.cache removeAll];
-    }];
-    
-    [self addOpration:op];
-    
-}
-
-#pragma mark -
-
-- (void)addOpration:(KVHttpToolCacheOperation *)op {
-    
-    dispatch_semaphore_wait(_semaphore, DISPATCH_TIME_FOREVER);
-    
-    [_queue addOperation:op];
-    
-    dispatch_semaphore_signal(_semaphore);
-}
-
-- (void)cancelAllOprations {
-    
-    dispatch_semaphore_wait(_semaphore, DISPATCH_TIME_FOREVER);
-    
-    _queue.suspended = YES;
-    [_queue cancelAllOperations];
-    _queue.suspended = NO;
-    
-    dispatch_semaphore_signal(_semaphore);
-}
-
-- (void)cancelOp:(NSString *)key {
-    
-    dispatch_semaphore_wait(_semaphore, DISPATCH_TIME_FOREVER);
+    [self lock];
     
     [_queue.operations enumerateObjectsUsingBlock:^(__kindof KVHttpToolCacheOperation * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         if ([obj.key isEqualToString:key]) {
@@ -283,6 +195,42 @@ static BOOL KVHttpToolCacheInitFlag = NO;
         }
     }];
     
+    __weak typeof(self) ws = self;
+    KVHttpToolCacheOperation *op = [[KVHttpToolCacheOperation alloc] initWithKey:key taskBlock:^{
+        [ws.cache delete:key];
+    }];
+    [_queue addOperation:op];
+    
+    [self unlock];
+    
+}
+
+- (void)removeAll {
+    
+    /// 停止所有操作
+    [self lock];
+    
+//    _queue.suspended = NO;// 这里不能这么写，会有问题
+    [_queue cancelAllOperations];
+//    _queue.suspended = YES;
+    
+    __weak typeof(self) ws = self;
+    KVHttpToolCacheOperation *op = [[KVHttpToolCacheOperation alloc] initWithKey:nil taskBlock:^{
+        [ws.cache removeAll];
+    }];
+    [_queue addOperation:op];
+    
+    [self unlock];
+    
+}
+
+#pragma mark -
+
+- (void)lock {
+    dispatch_semaphore_wait(_semaphore, DISPATCH_TIME_FOREVER);
+}
+
+- (void)unlock {
     dispatch_semaphore_signal(_semaphore);
 }
 

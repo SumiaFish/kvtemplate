@@ -10,6 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+/// 网络请求类
 @interface KVHttpTool (Business)
 
 /// 配置全局请求头

@@ -61,7 +61,7 @@ typedef struct {
 @protocol KVHttpToolBusinessProtocol <NSObject>
 
 /// 这里做业务规则判断, 传到这里的 responseObject 都是 JSON类型
-+ (NSError *)getBusinessErrorWithUrl:(NSString *)url responseObject:(id)responseObject;
+- (NSError * _Nullable)getBusinessErrorWithUrl:(NSString *)url responseObject:(id _Nullable)responseObject;
 
 @end
 
