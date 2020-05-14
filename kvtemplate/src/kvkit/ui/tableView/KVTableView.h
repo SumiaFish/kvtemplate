@@ -33,7 +33,8 @@ typedef void (^ KVTableViewLayoutStateViewBlock) (void);
 @property (strong, nonatomic, nullable) UIView<KVStateViewProtocol> *stateView;
 @property (weak, nonatomic, nullable) id<KVToastViewProtocol> toast;
 
-- (void)loadData:(BOOL)isRefresh;
+- (void)refreshData:(BOOL)isShowHeaderLoadding;
+- (void)loadMoreData:(BOOL)isShowFooterLoadding;
 
 @end
 

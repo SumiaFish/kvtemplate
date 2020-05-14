@@ -58,7 +58,7 @@
 - (void)setMj_header:(MJRefreshHeader *)mj_header {
     __weak typeof(self) ws = self;
     mj_header.refreshingBlock = ^{
-        [ws loadData:YES];
+        [ws refreshData:YES];
     };
     
     [super setMj_header:mj_header];
@@ -67,7 +67,7 @@
 - (void)setMj_footer:(MJRefreshFooter *)mj_footer {
     __weak typeof(self) ws = self;
     mj_footer.refreshingBlock = ^{
-        [ws loadData:NO];
+        [ws loadMoreData:YES];
     };
     
     [mj_footer endRefreshingWithNoMoreData];
@@ -88,12 +88,21 @@
     self.dataSource = adapter;
 }
 
-- (void)loadData:(BOOL)isRefresh {
+- (void)refreshData:(BOOL)isShowHeaderLoadding {
+    [self loadData:isShowHeaderLoadding isRefresh:YES];
+}
+
+- (void)loadMoreData:(BOOL)isShowFooterLoadding {
+    [self loadData:isShowFooterLoadding isRefresh:NO];
+}
+
+/// 注意防止被调用两次：header(no refreshing)  ->  -loadData  ->  showLoaddingState(header refreshing)  ->  loadData;
+- (void)loadData:(BOOL)isShowRefreshCompoent isRefresh:(BOOL)isRefresh {
     
-    [self displayRefreshCompoent:YES isRefresh:isRefresh];
+    [self displayRefreshCompoent:isShowRefreshCompoent isRefresh:isRefresh];
     [self showLoaddingState];
         
-    [[[[self.present kv_loadData:self isRefresh:isRefresh] then:^id _Nullable(id  _Nullable value) {
+    [[[[self.present kv_loadDataWithTableView:self isRefresh:isRefresh] then:^id _Nullable(id  _Nullable value) {
 
         dispatch_async(dispatch_get_main_queue(), ^{
             [self showSuccessState];
@@ -117,9 +126,11 @@
             } else {
                 [self reloadData];
             }
+            
         } else {
             self.adapter.rows = self.adapter.data.count;
             [self reloadData];
+            
         }
 
         return value;
