@@ -22,7 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - 外部调用
 
-- (void)pause; // 暂停做取消处理，子类要在保存状态
+- (void)pause; // 暂停
 - (void)resume;
 
 #pragma mark - 子类调用

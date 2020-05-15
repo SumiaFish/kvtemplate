@@ -21,8 +21,7 @@
 @interface KVHttpTool ()
 
 @property (strong, nonatomic, readwrite) KVHttpToolInfos *info;
-/// 最新的 task
-@property (strong, nonatomic, readwrite) NSURLSessionTask *task;
+
 @property (copy, nonatomic, readwrite) NSString *url;
 
 /// 请求方法： 默认 GET
@@ -70,6 +69,7 @@
 {
     dispatch_semaphore_t _semaphore;
     NSOperationQueue *_queue;
+//    KVHttpOpration *_op;
     BOOL _isLocked;
 }
 
@@ -94,7 +94,7 @@
     _semaphore = dispatch_semaphore_create(1);
     _queue = [[NSOperationQueue alloc] init];
     _queue.maxConcurrentOperationCount = 1;
-    self.info = [KVHttpToolInfos new];
+//    self.info = [KVHttpToolInfos new];
     //
     self.method(KVHttpTool_GET);
     self.headers(nil);
@@ -111,23 +111,20 @@
     //
     __weak typeof(self) ws = self;
     self.send = ^{
-        __strong typeof(ws) ss = ws;
-        [ss.class todoInGlobalDefaultQueue:^{
-            [ss impSend];
-        }];
+        [ws impSend];
     };
 }
 
 - (void)lock {
     dispatch_semaphore_wait(_semaphore, DISPATCH_TIME_FOREVER);
     _isLocked = YES;
-    KVHttpToolLog(@"===lock");
+//    KVHttpToolLog(@"===lock");
 }
 
 - (void)unlock {
     dispatch_semaphore_signal(_semaphore);
     _isLocked = NO;
-    KVHttpToolLog(@"===unlock");
+//    KVHttpToolLog(@"===unlock");
 }
 
 - (BOOL)isLocked {
@@ -136,40 +133,49 @@
 
 - (void)impSend {
     [self lock];
-    // 默认只允许同时一个在请求
-    if (_queue.operations.count) {
-        KVHttpToolLog(@"有任务正在进行中，若要开始新的任务，先取消");
+    // 默认只允许send一次
+    if (self.queue) {
+        KVHttpToolLog(@"只允许send一次");
         [self unlock];
         return;
     }
-    
-    KVHttpOpration *op = [[KVHttpOpration alloc] initWithUrl:self.url info:self.info];
-    [_queue addOperation:op];
-    _task = op.task;
+    [self.queue addOperation:[[KVHttpOpration alloc] initWithUrl:self.url info:self.info]];
     [self unlock];
 }
 
-- (void)cancelAll {
+- (void)cancel {
     [self lock];
-    [_queue cancelAllOperations];
+    [self.queue cancelAllOperations];
     [self unlock];
 }
 
-- (void)pauseAll {
+- (void)pause {
     [self lock];
-    [_queue.operations enumerateObjectsUsingBlock:^(__kindof KVHttpOpration * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+    [self.queue.operations enumerateObjectsUsingBlock:^(__kindof KVHttpOpration * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         [obj pause];
     }];
     [self unlock];
 }
 
-- (NSURLSessionTask *)task {
-    return _task;
+- (void)resume {
+    [self lock];
+    [self.queue.operations enumerateObjectsUsingBlock:^(__kindof KVHttpOpration * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [obj resume];
+    }];
+    [self unlock];
 }
 
 - (NSOperationQueue *)queue {
     return _queue;
 }
+
+//- (void)setOp:(KVHttpOpration *)op {
+//    _op = op;
+//}
+//
+//- (KVHttpOpration *)op {
+//    return _op;
+//}
 
 - (KVHttpTool * _Nullable (^)(KVHttpToolMethod))method {
     if (!_method) {
@@ -386,16 +392,16 @@
    
 }
 
-- (void)kv_receiveWeakObserveValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
-    if ([object isKindOfClass:NSURLSessionTask.class] &&
-        object == self.task) {
-        if (self.task.state == NSURLSessionTaskStateCanceling) {
-            [self clearTmpFile];
-        } else if (self.task.state == NSURLSessionTaskStateCompleted) {
-            [self clearTmpFile];
-        }
-    }
-}
+//- (void)kv_receiveWeakObserveValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
+//    if ([object isKindOfClass:NSURLSessionTask.class] &&
+//        object == self.task) {
+//        if (self.task.state == NSURLSessionTaskStateCanceling) {
+//            [self clearTmpFile];
+//        } else if (self.task.state == NSURLSessionTaskStateCompleted) {
+//            [self clearTmpFile];
+//        }
+//    }
+//}
 
 - (void)clearTmpFile {
     
@@ -445,16 +451,13 @@
 
 - (void)impSend {
     [self lock];
-    // 默认只允许同时一个在请求
-    if (self.queue.operations.count) {
-        KVHttpToolLog(@"有任务正在进行中，若要开始新的任务，先取消");
+    // 默认只允许send一次
+    if (self.queue) {
+        KVHttpToolLog(@"只允许send一次");
         [self unlock];
         return;
     }
-    
-    KVHttpDownloadOpration *op = [[KVHttpDownloadOpration alloc] initWithUrl:self.url info:self.info];
-    [self.queue addOperation:op];
-    self.task = op.task;
+    [self.queue addOperation:[[KVHttpDownloadOpration alloc] initWithUrl:self.url info:self.info]];
     [self unlock];
 }
 

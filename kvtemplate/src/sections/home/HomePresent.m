@@ -39,23 +39,28 @@
     tool.send();
     [KVHttpTool todoInGlobalDefaultQueue:^{
         for (NSInteger i = 0; i < 1000; i ++) {
-            NSLog(@"aaaaaaa");
-//            tool.headers(@{@(i).stringValue: @(i).stringValue});
-            sleep(0.01);
-            tool.send();
-            [KVHttpTool todoInGlobalDefaultQueue:^{
-                if (i < 50) {
-                    tool.headers(@{@(i).stringValue: @(i).stringValue});
-                    NSLog(@"bbbbb");
-                    tool.send();
-                } else {
-                    [tool cancelAll];
-                }
-                sleep(0.01);
-            }];
+            @autoreleasepool {
+                NSLog(@"aaaaaaa");
+                //            tool.headers(@{@(i).stringValue: @(i).stringValue});
+                            sleep(0.01);
+                            tool.send();
+                            [KVHttpTool todoInGlobalDefaultQueue:^{
+                                if (i < 50) {
+                                    tool.headers(@{@(i).stringValue: @(i).stringValue});
+                                    NSLog(@"bbbbb");
+                                    tool.send();
+                                } else {
+                                    [tool cancel];
+                                }
+                                sleep(0.01);
+                            }];
+            }
+            
         }
 
     }];
+    
+    return nil;
     
     NSLog(@"哈哈哈");
     

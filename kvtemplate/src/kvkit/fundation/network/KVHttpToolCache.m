@@ -86,11 +86,6 @@ static BOOL KVHttpToolCacheInitFlag = NO;
             __weak typeof(self) ws = self;
             KVHttpToolCacheOperation *op = [[KVHttpToolCacheOperation alloc] initWithKey:nil taskBlock:^{
                 [ws.cache clearOverdue];
-                //
-                [ws queue].suspended = YES;
-                [ws queue].maxConcurrentOperationCount = KVHttpToolCacheMaxConcurrentOperationCount;
-                [ws queue].suspended = NO;
-                //
             }];
             [_queue addOperation:op];
             

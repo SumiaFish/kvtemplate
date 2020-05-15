@@ -210,13 +210,19 @@
             NSError *error = nil;
             if (!isExist) {
                 [_manager createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:&error];
-                error? (KVHttpToolLog(@"error: %@", error)): nil;
+                if (error) {
+                    KVHttpToolLog(@"error: %@", error);
+                }
             } else {
                 if (!isDirectory) {
                     [_manager removeItemAtPath:path error:&error];
-                    error? (KVHttpToolLog(@"error: %@", error)): nil;
+                    if (error) {
+                        KVHttpToolLog(@"error: %@", error);
+                    }
                     [_manager createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:&error];
-                    error? (KVHttpToolLog(@"error: %@", error)): nil;
+                    if (error) {
+                        KVHttpToolLog(@"error: %@", error);
+                    }
                 }
             }
         }

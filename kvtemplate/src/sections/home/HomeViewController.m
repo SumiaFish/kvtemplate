@@ -12,6 +12,7 @@
 #import "HomePresent.h"
 
 #import "KVStorege.h"
+#import "KVHttpTool+MISC.h"
 
 @interface HomeViewController ()
 <KVToastViewProtocol>
@@ -22,6 +23,9 @@
 @end
 
 @implementation HomeViewController
+{
+    AppNetworking *task;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -29,10 +33,29 @@
     self.title = @"Home";
     self.navigationController.navigationBar.hidden = NO;
     self.view.backgroundColor = UIColor.whiteColor;
+    
 
+    for (NSInteger i = 0; i<20; i++) {
+        [[HomePresent new] kv_loadDataWithTableView:nil isRefresh:YES];
+    }
+    
+//    [self.tableView refreshData:YES];
+//    [self button];
+    
+    
+//    AppNetworking.toast = [KVToast share];
+//    AppNetworking.toastShowMode = AppNetworkingToastShowMode_All;
+//    KVHttpTool *a = [KVHttpTool request:@"https://www.baidu.com"];
+////    task = a;
+//    a.failure(^(NSError * _Nullable error) {
+//        NSLog(@"失败了");
+//    })
+//    .success(^(id  _Nullable responseObject) {
+//        NSLog(@"成功了");
+//    })
+//    .send()
+//    ;
 
-    [self.tableView refreshData:YES];
-    [self button];
 }
 
 - (void)kv_show:(NSString *)text {
@@ -40,7 +63,21 @@
 }
 
 - (void)clearAction {
-    [KVStorege clearCache:YES];
+//    [KVStorege clearCache:YES];
+    [task resume];
+    
+//    AppNetworking.toast = [KVToast share];
+//    AppNetworking.toastShowMode = AppNetworkingToastShowMode_All;
+    KVHttpTool *a = [KVHttpTool request:@"https://www.baidu.com"];
+    task = a;
+    a.failure(^(NSError * _Nullable error) {
+        NSLog(@"失败了");
+    })
+    .success(^(id  _Nullable responseObject) {
+        NSLog(@"成功了");
+    })
+    .send()
+    ;
 }
 
 - (UIButton *)button {

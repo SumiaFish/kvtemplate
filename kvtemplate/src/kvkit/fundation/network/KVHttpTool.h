@@ -67,10 +67,9 @@ NS_ASSUME_NONNULL_BEGIN
 + (instancetype)new NS_UNAVAILABLE;
 - (instancetype)init NS_UNAVAILABLE;
 
-/// 通过task 可以控制暂停 取消；外部如要对某一个task 进行控制则要持有它，内部可能会释放掉
-- (NSURLSessionTask * _Nullable)task;
-- (void)cancelAll;
-- (void)pauseAll;
+- (void)cancel;
+- (void)pause;
+- (void)resume;
 
 
 - (void)lock;

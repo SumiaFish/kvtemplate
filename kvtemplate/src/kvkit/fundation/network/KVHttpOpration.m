@@ -36,6 +36,12 @@ typedef struct {
     dispatch_semaphore_t _semaphore;
 }
 
+- (void)dealloc {
+#if DEBUG
+    NSLog(@"%@ dealloc~", NSStringFromClass(self.class));
+#endif
+}
+
 - (instancetype)initWithUrl:(NSString *)url info:(KVHttpToolInfos *)info {
     if (self = [super init]) {
         _url = url;
@@ -69,7 +75,7 @@ typedef struct {
     
     /// 调用manager
     if (method == KVHttpTool_GET) {
-        _task = [manager GET:url parameters:params headers:headers progress:^(NSProgress * _Nonnull downloadProgress) {
+        self.task = [manager GET:url parameters:params headers:headers progress:^(NSProgress * _Nonnull downloadProgress) {
             [self sendProgressTask:downloadProgress];
         } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
             [KVHttpTool todoInGlobalDefaultQueue:^{
@@ -83,13 +89,11 @@ typedef struct {
                 if (error) {
                     [self sendFailedTask:error];
                     //
-                    [self complete];
+                    [self sendLoadCacheDataSuccessTask];
                     return;
                 }
                 //
                 [self sendSuccessTask:filtterResponseObject];
-                //
-                [self complete];
             }];
         } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
             [KVHttpTool todoInGlobalDefaultQueue:^{
@@ -99,13 +103,11 @@ typedef struct {
                 [self sendFailedTask:error];
                 //
                 [self sendLoadCacheDataSuccessTask];
-                //
-                [self complete];
             }];
         }];
         
     } else if (method == KVHttpTool_POST) {
-        _task = [manager POST:url parameters:params headers:headers progress:^(NSProgress * _Nonnull downloadProgress) {
+        self.task = [manager POST:url parameters:params headers:headers progress:^(NSProgress * _Nonnull downloadProgress) {
             [self sendProgressTask:downloadProgress];
         } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
             [KVHttpTool todoInGlobalDefaultQueue:^{
@@ -119,13 +121,11 @@ typedef struct {
                 if (error) {
                     [self sendFailedTask:error];
                     //
-                    [self complete];
+                    [self sendLoadCacheDataSuccessTask];
                     return;
                 }
                 //
                 [self sendSuccessTask:filtterResponseObject];
-                //
-                [self complete];
             }];
         } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
             [KVHttpTool todoInGlobalDefaultQueue:^{
@@ -135,26 +135,24 @@ typedef struct {
                 [self sendFailedTask:error];
                 //
                 [self sendLoadCacheDataSuccessTask];
-                //
-                [self complete];
             }];
         }];
         
     }
     
-    if (_task) {
-        [_task kv_addWeakObserve:self keyPath:NSStringFromSelector(@selector(state)) options:(NSKeyValueObservingOptionNew) context:nil];
+    if (self.task) {
+        [self.task kv_addWeakObserve:self keyPath:NSStringFromSelector(@selector(state)) options:(NSKeyValueObservingOptionNew) context:nil];
     }
 }
 
 - (void)kv_receiveWeakObserveValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
     if ([object isKindOfClass:NSURLSessionTask.class] &&
-        object == _task) {
-        if (_task.state == NSURLSessionTaskStateCanceling) {
+        object == self.task) {
+        if (self.task.state == NSURLSessionTaskStateCanceling) {
             [self cancel];
-        } else if (_task.state == NSURLSessionTaskStateSuspended) {
+        } else if (self.task.state == NSURLSessionTaskStateSuspended) {
             [self pause];
-        } else if (_task.state == NSURLSessionTaskStateRunning) {
+        } else if (self.task.state == NSURLSessionTaskStateRunning) {
             [self resume];
         }
     }
@@ -165,32 +163,26 @@ typedef struct {
 }
 
 - (void)onResume {
-    dispatch_semaphore_wait(_semaphore, DISPATCH_TIME_FOREVER);
     if (_progress) {
         [self sendProgressTask:_progress];
-        dispatch_semaphore_signal(_semaphore);
         return;
     }
     if (_responseObject) {
         [self sendSuccessTask:_responseObject];
-        dispatch_semaphore_signal(_semaphore);
         return;
     }
     if (_error) {
         [self sendFailedTask:_error];
-        dispatch_semaphore_signal(_semaphore);
         return;
     }
     if (_loaddingCacheFlag) {
         [self sendLoadCacheDataSuccessTask];
-        dispatch_semaphore_signal(_semaphore);
         return;
     }
-    dispatch_semaphore_signal(_semaphore);
 }
 
 - (void)onCancel {
-    
+    KVHttpToolLog(@"已取消");
 }
 
 - (BOOL)isAsynchronous {
@@ -201,17 +193,23 @@ typedef struct {
 
 /// 发送进度回调
 - (void)sendProgressTask:(NSProgress *)progress {
-    dispatch_semaphore_wait(_semaphore, DISPATCH_TIME_FOREVER);
-    // 操作前检查一遍有没有被取消 或 暂停
-    if (self.isCancelled) {
-        dispatch_semaphore_signal(_semaphore);
+    if (!self.info.progressBlock) {
         return;
     }
+    
+    // 操作前检查一遍有没有被取消 或 暂停
+    if (self.isFinished) {
+        [self complete];
+        return;
+    }
+    dispatch_semaphore_wait(_semaphore, DISPATCH_TIME_FOREVER);
     if (self.isPause) {
         _progress = progress;
-        dispatch_semaphore_signal(_semaphore);
+        dispatch_semaphore_signal(self->_semaphore);
         return;
     }
+
+    _progress = progress;
     [KVHttpTool todoInMainQueue:^{
         self.info.progressBlock? self.info.progressBlock(progress): nil;
         self->_progress = nil;
@@ -258,35 +256,49 @@ typedef struct {
 
 /// 发送成功的回调
 - (void)sendSuccessTask:(id)responseObject {
-    dispatch_semaphore_wait(_semaphore, DISPATCH_TIME_FOREVER);
-    if (self.isCancelled) {
-        dispatch_semaphore_signal(_semaphore);
+    if (!self.info.successBlock) {
         return;
     }
+    
+    if (self.isFinished) {
+        [self complete];
+        return;
+    }
+    dispatch_semaphore_wait(_semaphore, DISPATCH_TIME_FOREVER);
     if (self.isPause) {
         _responseObject = responseObject;
-        dispatch_semaphore_signal(_semaphore);
+        dispatch_semaphore_signal(self->_semaphore);
         return;
     }
+    
+    _responseObject = responseObject;
     [KVHttpTool todoInMainQueue:^{
         self.info.successBlock? self.info.successBlock(responseObject): nil;
         self->_responseObject = nil;
+        [self complete];
         dispatch_semaphore_signal(self->_semaphore);
     }];
 }
 
 /// 发送从缓存获取数据成功的回调
 - (void)sendLoadCacheDataSuccessTask {
+    if (!self.info.cacheBlock ||
+        self.info.cacheMate == KVHttpToolCacheMate_Undefine) {
+        return;
+    }
+    
+    if (self.isFinished) {
+        [self complete];
+        return;
+    }
     dispatch_semaphore_wait(_semaphore, DISPATCH_TIME_FOREVER);
-    if (self.isCancelled) {
-        _loaddingCacheFlag = NSObject.new;
-        dispatch_semaphore_signal(_semaphore);
-        return;
-    }
     if (self.isPause) {
-        dispatch_semaphore_signal(_semaphore);
+        _loaddingCacheFlag = NSObject.new;
+        dispatch_semaphore_signal(self->_semaphore);
         return;
     }
+       
+    _loaddingCacheFlag = NSObject.new;
     
     NSString *url = self.url;
     KVHttpToolInfos *info = self.info;
@@ -311,6 +323,7 @@ typedef struct {
         [KVHttpTool todoInMainQueue:^{
             self.info.cacheBlock? self.info.cacheBlock(res): nil;
             self->_loaddingCacheFlag = nil;
+            [self complete];
             dispatch_semaphore_signal(self->_semaphore);
         }];
     }];
@@ -318,20 +331,27 @@ typedef struct {
 
 /// 发送失败的回调
 - (void)sendFailedTask:(NSError *)error {
-    dispatch_semaphore_wait(_semaphore, DISPATCH_TIME_FOREVER);
-    if (self.isCancelled) {
-        dispatch_semaphore_signal(_semaphore);
+    if (!self.info.failureBlock) {
         return;
     }
+    
+    if (self.isFinished) {
+        [self complete];
+        return;
+    }
+    dispatch_semaphore_wait(_semaphore, DISPATCH_TIME_FOREVER);
     if (self.isPause) {
         _error = error;
-        dispatch_semaphore_signal(_semaphore);
+        dispatch_semaphore_signal(self->_semaphore);
         return;
     }
+    
+    _error = error;
     /// 请求失败回调
     [KVHttpTool todoInMainQueue:^{
         self.info.failureBlock? self.info.failureBlock(error): nil;
         self->_error = nil;
+        [self complete];
         dispatch_semaphore_signal(self->_semaphore);
     }];
 }
@@ -487,8 +507,6 @@ typedef struct {
                 [self logTask:nil error:error];
                 //
                 [self sendFailedTask:error];
-                //
-                [self complete];
             }];
             return;
         }
@@ -498,8 +516,6 @@ typedef struct {
             [self logTask:nil error:nil];
             //
             [self sendSuccessTask:self->_fileURL];
-            //
-            [self complete];
         }];
     }];
     

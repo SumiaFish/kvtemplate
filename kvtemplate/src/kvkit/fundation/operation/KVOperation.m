@@ -8,6 +8,35 @@
 
 #import "KVOperation.h"
 
+typedef NS_ENUM(NSInteger, KVOperationCtrolCmd) {
+    KVOperationCtrolCmd_Undefine,
+    KVOperationCtrolCmd_Cancel,
+    KVOperationCtrolCmd_Pause,
+    KVOperationCtrolCmd_Resume,
+};
+
+@interface _KVOperationCtrl : NSBlockOperation
+
+@end
+
+@implementation _KVOperationCtrl
+{
+    KVOperationCtrolCmd _ctrlcmd;
+}
+
+- (instancetype)initWithCmd:(KVOperationCtrolCmd)cmd {
+    if (self = [super init]) {
+        _ctrlcmd = cmd;
+    }
+    return self;
+}
+
+- (KVOperationCtrolCmd)ctrlcmd {
+    return _ctrlcmd;
+}
+
+@end
+
 @interface KVOperation ()
 
 @property (assign, nonatomic) BOOL kv_isExecuting;
@@ -17,11 +46,11 @@
 
 @implementation KVOperation
 {
-    NSCondition *_cond;
+    NSOperationQueue *_ctrlqueue;
+    dispatch_semaphore_t _ctrlcmdSemaphore;
 }
 
 - (void)dealloc {
-    _isPause = NO;
 #if DEBUG
     NSLog(@"%@ dealloc~", NSStringFromClass(self.class));
 #endif
@@ -33,7 +62,9 @@
         _taskSemaphore = dispatch_semaphore_create(1);
         _pauseSemaphore = dispatch_semaphore_create(1);
         _completeSemaphore = dispatch_semaphore_create(1);
-//        _cond = [[NSCondition alloc] init];
+        _ctrlcmdSemaphore = dispatch_semaphore_create(1);
+        _ctrlqueue = [[NSOperationQueue alloc] init];
+        _ctrlqueue.maxConcurrentOperationCount = 1;
     }
     return self;
 }
@@ -78,8 +109,8 @@
 - (void)cancel {
     dispatch_semaphore_wait(_completeSemaphore, DISPATCH_TIME_FOREVER);
     if (!self.kv_isFinished) {
+        [self addCtrlcmd:(KVOperationCtrolCmd_Cancel)];
         [super cancel];
-        [self onCancel];
         self.kv_isFinished = YES;
     }
     dispatch_semaphore_signal(_completeSemaphore);
@@ -101,7 +132,7 @@
         dispatch_semaphore_signal(_pauseSemaphore);
         return;
     }
-    [self onPause];
+    [self addCtrlcmd:(KVOperationCtrolCmd_Pause)];
     dispatch_semaphore_signal(_pauseSemaphore);
 }
 
@@ -121,7 +152,7 @@
         dispatch_semaphore_signal(_pauseSemaphore);
         return;
     }
-    [self onResume];
+    [self addCtrlcmd:(KVOperationCtrolCmd_Resume)];
     dispatch_semaphore_signal(_pauseSemaphore);
 }
 
@@ -131,6 +162,38 @@
 
 - (void)onCancel {
     
+}
+
+- (void)addCtrlcmd:(KVOperationCtrolCmd)cmd {
+    if (cmd == KVOperationCtrolCmd_Undefine) {
+        return;
+    }
+    dispatch_semaphore_wait(_ctrlcmdSemaphore, DISPATCH_TIME_FOREVER);
+    if (self.isFinished || self.isCancelled) {
+        dispatch_semaphore_signal(_ctrlcmdSemaphore);
+        return;
+    }
+    [_ctrlqueue cancelAllOperations];
+    _KVOperationCtrl *op = [[_KVOperationCtrl alloc] initWithCmd:(cmd)];
+    __weak typeof(self) ws = self;
+    if (cmd == KVOperationCtrolCmd_Cancel) {
+        [op addExecutionBlock:^{
+            [ws onCancel];
+        }];
+    } else {
+        [op addExecutionBlock:^{
+            if (ws.isFinished || ws.isCancelled) {
+                return;
+            }
+            if (cmd == KVOperationCtrolCmd_Pause) {
+                [ws onPause];
+            } else if (cmd == KVOperationCtrolCmd_Resume) {
+                [ws onResume];
+            }
+        }];
+    }
+    [_ctrlqueue addOperation:op];
+    dispatch_semaphore_signal(_ctrlcmdSemaphore);
 }
 
 - (void)setKv_isExecuting:(BOOL)kv_isExecuting {
