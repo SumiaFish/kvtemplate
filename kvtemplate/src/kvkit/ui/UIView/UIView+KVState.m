@@ -59,11 +59,7 @@ static void* UIViewStateViewFrameKey = &UIViewStateViewFrameKey;
     [stateView showInitialize];
     objc_setAssociatedObject(self, UIViewStateViewKey, stateView, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     //
-    if ([self isControllerRootView]) {
-        [self stateViewBind:self];
-    } else {
-        [self stateViewBind:self.superview];
-    }
+    [self stateViewBindSuperView];
     /// superView 是不能以kvo监听的??!!
     [self kv_addWeakObserve:self keyPath:@"frame" options:(NSKeyValueObservingOptionNew) context:(__bridge void * _Nullable)(self) isCallBackInMain:YES];
 }
@@ -108,11 +104,7 @@ static void* UIViewStateViewFrameKey = &UIViewStateViewFrameKey;
     if (object == self &&
         context == (__bridge void * _Nullable)(self)) {
         if ([keyPath isEqualToString:@"frame"]) {
-            if ([self isControllerRootView]) {
-                [self stateViewBind:self];
-            } else {
-                [self stateViewBind:self.superview];
-            }
+            [self stateViewBindSuperView];
             [self layoutStateView];
             return;
         }
@@ -121,7 +113,14 @@ static void* UIViewStateViewFrameKey = &UIViewStateViewFrameKey;
     [super kv_receiveWeakObserveValueForKeyPath:keyPath ofObject:object change:change context:context];
 }
 
-- (void)stateViewBind:(UIView *)superView {
+- (void)stateViewBindSuperView {
+    UIView *superView = nil;
+    if ([self isControllerRootView]) {
+        superView = self;
+    } else {
+        superView = self.superview;
+    }
+    
     if (!superView) {
         [self.stateView removeFromSuperview];
     } else {
