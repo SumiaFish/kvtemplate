@@ -26,8 +26,6 @@ typedef void (^ KVTableViewLayoutStateViewBlock) (void);
 @interface KVTableView : UITableView
 <KVTableViewProtocol>
 
-@property (weak, nonatomic, nullable) id<KVToastViewProtocol> toast;
-
 - (void)commonInit;
 
 - (void)refreshData:(BOOL)isShowHeaderLoadding;

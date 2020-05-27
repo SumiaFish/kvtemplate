@@ -10,9 +10,10 @@
 
 @interface WeakObserve : NSObject
 
-@property (weak, nonatomic) id beObserver;
-@property (weak, nonatomic) id observer;
+@property (weak, nonatomic) NSObject *beObserver;
+@property (weak, nonatomic) NSObject *observer;
 @property (copy, nonatomic) NSString *keyPath;
+@property (weak, nonatomic) id context;
 @property (assign, nonatomic) BOOL isCallBackInMain;
 
 @end
@@ -69,35 +70,34 @@ static BOOL WeakObserveManagerAllowInitFlags = false;
     
     NSPointerArray *observers = [_map objectForKey:object];
     if (observers) {
-        [observers.allObjects enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            if ([obj isKindOfClass:WeakObserve.class]) {
-                WeakObserve *wo = obj;
-                if (wo.beObserver == object
-                    && [wo.keyPath isEqualToString:keyPath]) {
+        [observers.allObjects enumerateObjectsUsingBlock:^(WeakObserve *  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            WeakObserve *wo = obj;
+            if (wo.beObserver == object &&
+                [wo.keyPath isEqualToString:keyPath] &&
+                wo.context == context) {
+                
+                // 观察者被释放了，就从记录里删除，不做通知
+                if (!wo.observer) {
                     
-                    // 观察者被释放了，就从记录里删除，不做通知
-                    if (!wo.observer) {
-                        
-                        [self kv_compactObject:wo.beObserver forKeyPath:keyPath];
-                        
-                    } else {
-                        
-                        // 正常发送
-                        if (wo.isCallBackInMain) {
-                            if (strcmp(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL), dispatch_queue_get_label(dispatch_get_main_queue())) == 0) {
-                                [wo.observer kv_receiveWeakObserveValueForKeyPath:keyPath ofObject:object change:change context:context];
-                            } else {
-                                dispatch_async(dispatch_get_main_queue(), ^{
-                                    [wo.observer kv_receiveWeakObserveValueForKeyPath:keyPath ofObject:object change:change context:context];
-                                });
-                            }
-                        } else {
+                    [self kv_compactObject:wo.beObserver forKeyPath:keyPath];
+                    
+                } else {
+                    
+                    // 正常发送
+                    if (wo.isCallBackInMain) {
+                        if (strcmp(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL), dispatch_queue_get_label(dispatch_get_main_queue())) == 0) {
                             [wo.observer kv_receiveWeakObserveValueForKeyPath:keyPath ofObject:object change:change context:context];
+                        } else {
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                [wo.observer kv_receiveWeakObserveValueForKeyPath:keyPath ofObject:object change:change context:context];
+                            });
                         }
-                        
+                    } else {
+                        [wo.observer kv_receiveWeakObserveValueForKeyPath:keyPath ofObject:object change:change context:context];
                     }
                     
                 }
+                
             }
         }];
     }
@@ -123,6 +123,7 @@ static BOOL WeakObserveManagerAllowInitFlags = false;
             if (wo.beObserver == object &&
                 wo.observer == observer &&
                 [wo.keyPath isEqualToString:keyPath] &&
+                wo.context == context &&
                 wo.isCallBackInMain == isCallBackInMain) {
                 isExist = YES;
                 *stop = YES;
@@ -135,6 +136,7 @@ static BOOL WeakObserveManagerAllowInitFlags = false;
         wo.beObserver = object;
         wo.observer = observer;
         wo.keyPath = keyPath;
+        wo.context = (__bridge id)(context);
         wo.isCallBackInMain = isCallBackInMain;
         [observers addPointer:(__bridge void * _Nullable)wo];
         

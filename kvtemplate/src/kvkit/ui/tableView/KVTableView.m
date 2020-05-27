@@ -105,12 +105,12 @@
 /// 注意防止被调用两次：header(no refreshing)  ->  -loadData  ->  beginRefreshing  ->  loadData;
 - (void)loadData:(BOOL)isRefresh {
     
-    [self showLoaddingState];
+    [self showLoadding:@"加载中"];
         
     [[[[self.present kv_loadDataWithTableView:self isRefresh:isRefresh] then:^id _Nullable(id  _Nullable value) {
 
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self showSuccessState];
+            [self showSuccess:@"加载成功"];
         });
         
         if (self.onReloadDataBlock) {
@@ -122,8 +122,7 @@
         return value;
         
     }] catch:^(NSError * _Nonnull error) {
-        [self showErrorState:error];
-        [self.toast kv_show:error.localizedDescription];
+        [self showError:error];
         
     }] always:^{
         [self displayRefreshCompoent:NO isRefresh:isRefresh];
@@ -149,25 +148,6 @@
         } else {
             [self.mj_footer endRefreshingWithNoMoreData];
         }
-    }
-}
-
-- (void)showLoaddingState {
-    if (self.adapter.data.count == 0) {
-        self.stateView.hidden = NO;
-        [self showLoadding:@"加载中"];
-    }
-}
-
-- (void)showSuccessState {
-    self.stateView.hidden = YES;
-    [self showSuccess:@"加载成功"];
-}
-
-- (void)showErrorState:(NSError *)error {
-    if (self.adapter.data.count == 0) {
-        self.stateView.hidden = NO;
-        [self showError:error];
     }
 }
 

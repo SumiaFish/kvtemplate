@@ -12,15 +12,10 @@
 @implementation UIView (KVState)
 
 - (void)setStateView:(UIView<KVStateViewProtocol> *)stateView {
+    /// nil 则表示只删除
     [self.stateView removeFromSuperview];
+    [stateView showInitialize];
     objc_setAssociatedObject(self, UIViewStateViewKey, stateView, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-    
-    if (stateView) {
-        [stateView showInitialize];
-        [self addSubview:stateView];
-    } else {
-        /// nil 则表示只删除
-    }
 }
 
 - (UIView<KVStateViewProtocol> *)stateView {

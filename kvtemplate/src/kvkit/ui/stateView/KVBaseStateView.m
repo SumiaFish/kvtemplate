@@ -20,6 +20,10 @@
 
 @implementation KVBaseStateView
 
+- (void)dealloc {
+    [self removeLink];
+}
+
 - (void)showInitialize {
     self.state = KVViewState_Initialize;
     [self onShowInfo:@"" duration:0];
@@ -54,20 +58,28 @@
     NSTimeInterval duration = self.textDuration? self.textDuration.floatValue: 3;
     _dismissTime = NSDate.date.timeIntervalSince1970 + duration;
     [self onShowInfo:text duration:duration];
+    [self addLink];
 }
 
-#pragma mark - 子类重写
+#pragma mark - 子类重写，但是要调用super
 
 - (void)onShowInfo:(NSString *)text duration:(NSTimeInterval)duration {
-    
+    [self.superview bringSubviewToFront:self];
+    self.userInteractionEnabled = self.preventMode == KVBaseStateViewPreventMode_WhioutLoadding ? NO : YES;
 }
 
 - (void)onHideToast {
-    
+    [self.superview sendSubviewToBack:self];
+    self.userInteractionEnabled = self.preventMode == KVBaseStateViewPreventMode_WhioutLoadding ? NO : YES;
 }
 
 - (void)onDisplayLoadding:(BOOL)isDisplay {
-    
+    if (isDisplay) {
+        [self.superview bringSubviewToFront:self];
+    } else {
+        [self.superview sendSubviewToBack:self];
+    }
+    self.userInteractionEnabled = self.preventMode == KVBaseStateViewPreventMode_WhioutLoadding ? NO : YES;
 }
 
 #pragma mark - Private
@@ -79,20 +91,27 @@
     
     if ([NSDate date].timeIntervalSince1970 >= _dismissTime) {
         [self onHideToast];
+        _dismissTime = 0;
     }
 }
 
-- (CADisplayLink *)displayLink {
+- (void)addLink {
     if (!_displayLink) {
         _displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(displayLinkRun)];
-        [_displayLink addToRunLoop:NSRunLoop.currentRunLoop forMode:NSRunLoopCommonModes];
+        [_displayLink addToRunLoop:NSRunLoop.mainRunLoop forMode:NSRunLoopCommonModes];
         if (@available (iOS 10.0, *)) {
             _displayLink.preferredFramesPerSecond = 4;
         } else {
             _displayLink.frameInterval = 4;
         }
     }
-    return _displayLink;
+}
+
+- (void)removeLink {
+    if (_displayLink) {
+        [_displayLink invalidate];
+        [_displayLink removeFromRunLoop:NSRunLoop.mainRunLoop forMode:NSRunLoopCommonModes];
+    }
 }
 
 @end

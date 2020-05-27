@@ -8,6 +8,8 @@
 
 #import "KVDefaultStateView.h"
 
+#import "NSObject+WeakObserve.h"
+
 @interface KVDefaultStateView ()
 
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *hud;
@@ -18,6 +20,10 @@
 
 @implementation KVDefaultStateView
 
++ (instancetype)view {
+    return [NSBundle.mainBundle loadNibNamed:@"KVDefaultStateView" owner:nil options:nil].lastObject;
+}
+
 - (void)awakeFromNib {
     [super awakeFromNib];
     
@@ -27,9 +33,19 @@
     self.bg.layer.cornerRadius = 4;
     self.bg.clipsToBounds = YES;
     self.bg.backgroundColor = [UIColor.blackColor colorWithAlphaComponent:0.5];
+    
+    [self.infoLab kv_addWeakObserve:self keyPath:@"alpha" options:(NSKeyValueObservingOptionNew) context:nil isCallBackInMain:YES];
+}
+
+- (void)kv_receiveWeakObserveValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
+    if (object == self.infoLab &&
+        [keyPath isEqualToString:@"alpha"]) {
+        self.bg.alpha = self.infoLab.alpha;
+    }
 }
 
 - (void)onShowInfo:(NSString *)text duration:(NSTimeInterval)duration {
+    [super onShowInfo:text duration:duration];
     if (duration == 0) {
         self.infoLab.alpha = 0;
         return;
@@ -43,10 +59,12 @@
 }
 
 - (void)onHideToast {
+    [super onHideToast];
     self.infoLab.alpha = 0;
 }
 
 - (void)onDisplayLoadding:(BOOL)isDisplay {
+    [super onDisplayLoadding:isDisplay];
     isDisplay? [self.hud startAnimating]: [self.hud stopAnimating];
 }
 

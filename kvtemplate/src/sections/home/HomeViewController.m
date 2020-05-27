@@ -38,10 +38,10 @@
     self.navigationController.navigationBar.hidden = NO;
     self.view.backgroundColor = UIColor.whiteColor;
     
-    [self.tableView display:NO];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self.tableView display:YES animate:YES];
-    });
+//    [self.tableView display:NO];
+//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//        [self.tableView display:YES animate:YES];
+//    });
     
     [self.tableView refreshData:YES];
 //    [self button];
@@ -98,7 +98,7 @@
         
         HomePresent *present = [HomePresent new];
                 
-        _tableView = [AppTableView defaultTableViewWithPresent:present adapter:adapter toast:[KVToast share]];
+        _tableView = [AppTableView defaultTableViewWithPresent:present adapter:adapter stateView:AppTableViewStateView.view];
         _tableView.context = self;
         _tableView.displayContext = self;
         [self.view addSubview:_tableView];

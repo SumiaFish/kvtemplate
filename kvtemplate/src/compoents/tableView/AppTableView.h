@@ -7,12 +7,23 @@
 //
 
 #import "KVTableView.h"
+#import "AppTableViewStateView.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef NS_ENUM(NSInteger, AppTableViewShowLoaddingMode) {
+    AppTableViewShowInfoMode_WhenEmptyContent, /// 列表为空的时候才显示
+    AppTableViewShowInfoMode_AnyTime, // 有就显示
+};
+
 @interface AppTableView : KVTableView
 
-+ (instancetype)defaultTableViewWithPresent:(id<KVTableViewPresentProtocol>)present adapter:(id<KVTableViewAdapterProtocol>)adapter toast:(id<KVToastViewProtocol>)toast;
+/// stateViewFrame == CGRectZero 则和 tableView 一样的 frame
+@property (assign, nonatomic) CGRect stateViewFrame;
+
+@property (assign, nonatomic) AppTableViewShowLoaddingMode showLoaddingMode;
+
++ (instancetype)defaultTableViewWithPresent:(id<KVTableViewPresentProtocol>)present adapter:(id<KVTableViewAdapterProtocol>)adapter stateView:(UIView<KVStateViewProtocol> * _Nullable)stateView;
 
 @end
 

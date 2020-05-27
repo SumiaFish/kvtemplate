@@ -10,26 +10,54 @@
 
 @implementation AppTableView
 
-+ (instancetype)defaultTableViewWithPresent:(id<KVTableViewPresentProtocol>)present adapter:(id<KVTableViewAdapterProtocol>)adapter toast:(id<KVToastViewProtocol>)toast {
++ (instancetype)defaultTableViewWithPresent:(id<KVTableViewPresentProtocol>)present adapter:(id<KVTableViewAdapterProtocol>)adapter stateView:(UIView<KVStateViewProtocol> *)stateView {
     AppTableView *tableView = [[AppTableView alloc] initWithFrame:CGRectZero style:(UITableViewStylePlain)];
 
     [tableView useDefaultHeader];
     [tableView useDefaultFooter];
-    [tableView useDefaultStateView];
+
+    tableView.stateView = stateView;
     
     tableView.adapter = adapter;
 
     tableView.present = present;
-    
-    tableView.toast = toast;
-    
+        
     return tableView;
 }
 
 - (void)layoutSubviews {
     [super layoutSubviews];
     
-    self.stateView.frame = self.bounds;
+    if (self.stateView) {
+        if (CGRectEqualToRect(self.stateViewFrame, CGRectZero)) {
+            self.stateView.frame = self.frame;
+        } else {
+            self.stateView.frame = self.stateViewFrame;
+        }
+    }
+    
+}
+
+- (void)willMoveToSuperview:(UIView *)newSuperview {
+    [super willMoveToSuperview:newSuperview];
+    
+    if (self.stateView) {
+        if (![newSuperview.subviews containsObject:self.stateView]) {
+            [newSuperview addSubview:self.stateView];
+        }
+    }
+}
+
+- (void)showLoadding:(NSString *)text {
+    if (self.showLoaddingMode == AppTableViewShowInfoMode_WhenEmptyContent) {
+        /// 没有cell 或 section 才显示
+        if (self.adapter.data.count == 0) {
+            /// 不显示 loadding text
+            [super showLoadding:@""];
+        }
+    } else {
+        [super showLoadding:text];
+    }
 }
 
 - (void)registerCellClazz:(NSDictionary<NSString *, Class> *)cellClazz {
@@ -52,9 +80,4 @@
     self.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{}];
 }
 
-- (void)useDefaultStateView {
-    if (!self.stateView) {
-        self.stateView = [[NSBundle mainBundle] loadNibNamed:@"KVDefaultStateView" owner:nil options:nil].lastObject;
-    }
-}
 @end
