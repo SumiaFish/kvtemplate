@@ -22,6 +22,7 @@
 
 - (void)dealloc {
     [self removeLink];
+    KVKitLog(@"KVBaseStateView dealloc~");
 }
 
 - (void)showInitialize {

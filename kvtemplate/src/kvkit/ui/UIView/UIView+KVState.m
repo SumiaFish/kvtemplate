@@ -100,11 +100,18 @@ static void* UIViewStateViewFrameKey = &UIViewStateViewFrameKey;
     return self.stateView.state;
 }
 
+- (void)willMoveToSuperview:(UIView *)newSuperview {
+    
+}
+
+- (void)willRemoveSubview:(UIView *)subview {
+    
+}
+
 - (void)kv_receiveWeakObserveValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
     if (object == self &&
         context == (__bridge void * _Nullable)(self)) {
         if ([keyPath isEqualToString:@"frame"]) {
-            [self stateViewBindSuperView];
             [self layoutStateView];
             return;
         }
@@ -114,29 +121,21 @@ static void* UIViewStateViewFrameKey = &UIViewStateViewFrameKey;
 }
 
 - (void)stateViewBindSuperView {
-    UIView *superView = nil;
-    if ([self isControllerRootView]) {
-        superView = self;
-    } else {
-        superView = self.superview;
-    }
     
-    if (!superView) {
-        [self.stateView removeFromSuperview];
-    } else {
-        if (self.stateView) {
-            if (![superView.subviews containsObject:self.stateView]) {
-                [superView addSubview:self.stateView];
-            }
+    if (self.stateView &&
+        self.stateView.superview == nil) {
+        UIView *superView = self;
+        if (![superView.subviews containsObject:self.stateView]) {
+            [superView addSubview:self.stateView];
         }
     }
 }
 
 - (void)layoutStateView {
     if (CGRectEqualToRect(self.stateViewFrame, CGRectZero)) {
-        self.stateView.frame = [self isControllerRootView] ? self.bounds : self.frame;
+        self.stateView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
     } else {
-        self.stateView.frame = self.stateViewFrame;
+        self.stateView.frame = CGRectMake(0, 0, self.stateViewFrame.size.width, self.stateViewFrame.size.height);;
     }
 }
 

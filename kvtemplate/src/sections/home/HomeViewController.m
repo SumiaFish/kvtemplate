@@ -41,9 +41,10 @@
     self.view.stateView = AppTableViewStateView.view;
     
 //    [self.tableView display:NO];
-//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self.tableView removeFromSuperview];
 //        [self.tableView display:YES animate:YES];
-//    });
+    });
     
     [self.tableView refreshData:YES];
 //    [self button];
