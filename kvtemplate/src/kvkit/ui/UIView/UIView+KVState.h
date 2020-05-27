@@ -11,12 +11,12 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-static void* UIViewStateViewKey = &UIViewStateViewKey;
-
 @interface UIView (KVState)
 <KVStateViewProtocol>
 
-/// 子视图负责维护 frame
+/// stateViewFrame == CGRectZero 则和 self 一样的 frame
+@property (assign, nonatomic) CGRect stateViewFrame;
+
 @property (strong, nonatomic) UIView<KVStateViewProtocol> *stateView;
 
 @end

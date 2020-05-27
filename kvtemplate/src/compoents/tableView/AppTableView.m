@@ -25,29 +25,6 @@
     return tableView;
 }
 
-- (void)layoutSubviews {
-    [super layoutSubviews];
-    
-    if (self.stateView) {
-        if (CGRectEqualToRect(self.stateViewFrame, CGRectZero)) {
-            self.stateView.frame = self.frame;
-        } else {
-            self.stateView.frame = self.stateViewFrame;
-        }
-    }
-    
-}
-
-- (void)willMoveToSuperview:(UIView *)newSuperview {
-    [super willMoveToSuperview:newSuperview];
-    
-    if (self.stateView) {
-        if (![newSuperview.subviews containsObject:self.stateView]) {
-            [newSuperview addSubview:self.stateView];
-        }
-    }
-}
-
 - (void)showLoadding:(NSString *)text {
     if (self.showLoaddingMode == AppTableViewShowInfoMode_WhenEmptyContent) {
         /// 没有cell 或 section 才显示

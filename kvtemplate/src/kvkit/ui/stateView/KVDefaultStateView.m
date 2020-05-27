@@ -34,13 +34,16 @@
     self.bg.clipsToBounds = YES;
     self.bg.backgroundColor = [UIColor.blackColor colorWithAlphaComponent:0.5];
     
-    [self.infoLab kv_addWeakObserve:self keyPath:@"alpha" options:(NSKeyValueObservingOptionNew) context:nil isCallBackInMain:YES];
+    [self.infoLab kv_addWeakObserve:self keyPath:@"alpha" options:(NSKeyValueObservingOptionNew) context:(__bridge void * _Nullable)(self) isCallBackInMain:YES];
 }
 
 - (void)kv_receiveWeakObserveValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
     if (object == self.infoLab &&
-        [keyPath isEqualToString:@"alpha"]) {
+        [keyPath isEqualToString:@"alpha"] &&
+        context == (__bridge void * _Nullable)(self)) {
         self.bg.alpha = self.infoLab.alpha;
+    } else {
+        [super kv_receiveWeakObserveValueForKeyPath:keyPath ofObject:object change:change context:context];
     }
 }
 

@@ -18,9 +18,6 @@ typedef NS_ENUM(NSInteger, AppTableViewShowLoaddingMode) {
 
 @interface AppTableView : KVTableView
 
-/// stateViewFrame == CGRectZero 则和 tableView 一样的 frame
-@property (assign, nonatomic) CGRect stateViewFrame;
-
 @property (assign, nonatomic) AppTableViewShowLoaddingMode showLoaddingMode;
 
 + (instancetype)defaultTableViewWithPresent:(id<KVTableViewPresentProtocol>)present adapter:(id<KVTableViewAdapterProtocol>)adapter stateView:(UIView<KVStateViewProtocol> * _Nullable)stateView;
