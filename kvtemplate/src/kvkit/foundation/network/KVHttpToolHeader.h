@@ -8,17 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
-NS_ASSUME_NONNULL_BEGIN
+#import "KVKitHeader.h"
 
-#ifdef DEBUG
-#define KVHttpToolLog(format,...) { \
-printf("\n%s #%d: \n", __func__, __LINE__); \
-printf("%s\n", [NSString stringWithFormat:(format), ##__VA_ARGS__].UTF8String); \
-NSLog(@"\n\n"); \
-}
-#else
-#define KVHttpToolLog(...)
-#endif
+NS_ASSUME_NONNULL_BEGIN
 
 typedef NS_ENUM(NSInteger, KVHttpToolCacheMate) {
     KVHttpToolCacheMate_Undefine = 0,

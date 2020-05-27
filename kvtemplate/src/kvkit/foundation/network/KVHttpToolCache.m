@@ -237,7 +237,7 @@ static BOOL KVHttpToolCacheInitFlag = NO;
     
     NSString *urlString = [NSString stringWithFormat:@"%@", url];
     if (urlString.length == 0) {
-        KVHttpToolLog(@"生成文件路径失败: string.length == 0");
+        KVKitLog(@"生成文件路径失败: string.length == 0");
         return nil;
     }
     
@@ -251,7 +251,7 @@ static BOOL KVHttpToolCacheInitFlag = NO;
             }
             NSData *data = [NSJSONSerialization dataWithJSONObject:headers options:opt error:&createHeadersStringError];
             if (createHeadersStringError) {
-                KVHttpToolLog(@"生成文件路径失败: %@", createHeadersStringError);
+                KVKitLog(@"生成文件路径失败: %@", createHeadersStringError);
             } else {
                 res = [[NSString alloc] initWithData:data encoding:(NSUTF8StringEncoding)];
             }
@@ -269,7 +269,7 @@ static BOOL KVHttpToolCacheInitFlag = NO;
             }
             NSData *data = [NSJSONSerialization dataWithJSONObject:params options:(opt) error:&createParamsStringError];
             if (createParamsStringError) {
-                KVHttpToolLog(@"生成文件路径失败: %@", createParamsStringError);
+                KVKitLog(@"生成文件路径失败: %@", createParamsStringError);
                 
             } else {
                 res = [[NSString alloc] initWithData:data encoding:(NSUTF8StringEncoding)];

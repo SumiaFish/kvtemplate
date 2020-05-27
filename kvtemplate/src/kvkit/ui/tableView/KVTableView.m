@@ -15,6 +15,10 @@
 
 @implementation KVTableView
 
+@synthesize present = _present;
+@synthesize adapter = _adapter;
+@synthesize onReloadDataBlock = _onReloadDataBlock;
+
 - (instancetype)init {
     if (self = [super init]) {
         [self commonInit];
@@ -37,22 +41,7 @@
 }
 
 - (void)commonInit {
-    __weak typeof(self) ws = self;
-    self.layoutStateViewBlock = ^{
-        if (ws.stateView) {
-            ws.stateView.frame = ws.bounds;
-        }
-    };
-    
     self.tableFooterView = UIView.new;
-}
-
-- (void)layoutSubviews {
-    [super layoutSubviews];
-    
-    if (self.stateView) {
-        self.layoutStateViewBlock? self.layoutStateViewBlock(): nil;
-    }
 }
 
 - (void)setMj_header:(MJRefreshHeader *)mj_header {
@@ -70,22 +59,29 @@
         [ws loadData:NO];
     };
     
-    [mj_footer endRefreshingWithNoMoreData];
-    mj_footer.hidden = self.adapter.rows == 0;
     [super setMj_footer:mj_footer];
+    
+    [self initMJFooter];
 }
 
-- (void)setStateView:(UIView<KVStateViewProtocol> *)stateView {
-    [_stateView removeFromSuperview];
-    _stateView = stateView;
-    
-    [stateView showInitialize];
-    stateView? [self addSubview:stateView]: nil;
+- (void)initMJFooter {
+    [self.mj_footer endRefreshingWithNoMoreData];
+    self.mj_footer.hidden = self.adapter.data.count == 0;
 }
 
 - (void)setAdapter:(id<KVTableViewAdapterProtocol>)adapter {
     _adapter = adapter;
+    adapter.tableView = self;
+    adapter.context = self.context;
     self.dataSource = adapter;
+    self.delegate = adapter;
+    
+    [self initMJFooter];
+}
+
+- (void)setContext:(id)context {
+    [super setContext:context];
+    self.adapter.context = context;
 }
 
 - (void)refreshData:(BOOL)isShowHeaderLoadding {
@@ -117,29 +113,10 @@
             [self showSuccessState];
         });
         
-        if (!isRefresh) {
-            NSInteger r1 = self.adapter.rows;
-            NSInteger r2 = self.adapter.data.count;
-            
-            NSMutableArray<NSIndexPath *> *ips = [NSMutableArray array];
-            for (NSInteger i = 0; i<r2-r1; i++) {
-                NSIndexPath *ip = [NSIndexPath indexPathForRow:r1+(r2>r1? i: -i) inSection:0];
-                [ips addObject:ip];
-            }
-            
-            self.adapter.rows = r2;
-            if (ips.count) {
-                [UIView performWithoutAnimation:^{
-                    [self insertRowsAtIndexPaths:ips withRowAnimation:(UITableViewRowAnimationNone)];
-                }];
-            } else {
-                [self reloadData];
-            }
-            
+        if (self.onReloadDataBlock) {
+            self.onReloadDataBlock(self);
         } else {
-            self.adapter.rows = self.adapter.data.count;
             [self reloadData];
-            
         }
 
         return value;
@@ -166,7 +143,7 @@
         [self.mj_header endRefreshing];
         [self.mj_footer endRefreshing];
         
-        self.mj_footer.hidden = self.adapter.rows == 0;
+        self.mj_footer.hidden = self.adapter.data.count == 0;
         if (self.adapter.hasMore) {
             [self.mj_footer resetNoMoreData];
         } else {
@@ -176,43 +153,27 @@
 }
 
 - (void)showLoaddingState {
-    if (self.adapter.rows == 0) {
+    if (self.adapter.data.count == 0) {
         self.stateView.hidden = NO;
-        [self.stateView showLoadding];
+        [self showLoadding:@"加载中"];
     }
 }
 
 - (void)showSuccessState {
     self.stateView.hidden = YES;
-    [self.stateView showSuccess];
+    [self showSuccess:@"加载成功"];
 }
 
 - (void)showErrorState:(NSError *)error {
-    if (self.adapter.rows == 0) {
+    if (self.adapter.data.count == 0) {
         self.stateView.hidden = NO;
-        [self.stateView showError:error];
+        [self showError:error];
     }
 }
 
 @end
 
 @implementation KVTableView (Factory)
-
-+ (instancetype)defaultTableViewWithPresent:(id<KVTableViewPresentProtocol>)present adapter:(id<KVTableViewAdapterProtocol>)adapter toast:(id<KVToastViewProtocol>)toast {
-    KVTableView *tableView = [[KVTableView alloc] initWithFrame:CGRectZero style:(UITableViewStylePlain)];
-
-    [tableView useDefaultHeader];
-    [tableView useDefaultFooter];
-    [tableView useDefaultStateView];
-    
-    tableView.adapter = adapter;
-
-    tableView.present = present;
-    
-    tableView.toast = toast;
-    
-    return tableView;
-}
 
 - (void)registerCellClazz:(NSDictionary<NSString *, Class> *)cellClazz {
     [cellClazz enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, Class  _Nonnull obj, BOOL * _Nonnull stop) {
@@ -224,20 +185,6 @@
     [cellNibs enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
         [self registerNib:[UINib nibWithNibName:obj bundle:nil] forCellReuseIdentifier:key];
     }];
-}
-
-- (void)useDefaultHeader {
-    self.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{}];
-}
-
-- (void)useDefaultFooter {
-    self.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{}];
-}
-
-- (void)useDefaultStateView {
-    if (!self.stateView) {
-        self.stateView = [[NSBundle mainBundle] loadNibNamed:@"KVDefaultStateView" owner:nil options:nil].lastObject;
-    }
 }
 
 @end

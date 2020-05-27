@@ -7,12 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "KVTableViewProtocol.h"
+#import "KVBaseStateView.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface KVDefaultStateView : UIView
-<KVStateViewProtocol>
+@interface KVDefaultStateView : KVBaseStateView
 
 @end
 

@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
+#import <FBLPromises/FBLPromises.h>
+
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol KVTableViewProtocol;
@@ -16,48 +18,39 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol KVStateViewProtocol;
 @protocol KVTableViewProtocol;
 
-typedef NS_ENUM(NSInteger, KVViewState) {
-    KVViewState_Initialize = 0,
-    KVViewState_Loadding,
-    KVViewState_Success,
-    KVViewState_Error,
-};
-
 @protocol KVTableViewPresentProtocol <NSObject>
 
 - (FBLPromise *)kv_loadDataWithTableView:(id<KVTableViewProtocol>)tableView isRefresh:(BOOL)isRefresh;
 
 @end
 
-@protocol KVTableViewAdapterProtocol <UITableViewDataSource>
+@protocol KVTableViewAdapterProtocol <UITableViewDelegate, UITableViewDataSource>
+
+@property (weak, nonatomic) id context;
+@property (weak, nonatomic) UITableView<KVTableViewProtocol>* tableView;
+
+@property (copy, nonatomic) NSInteger (^ onRenderSectionsBlock) (UITableView<KVTableViewProtocol> *tableView);
+
+@property (copy, nonatomic) NSInteger (^ onRenderRowsBlock) (UITableView<KVTableViewProtocol> *tableView, NSInteger section);
+
+@property (copy, nonatomic) UITableViewCell* (^ onRenderCellBlock) (UITableView<KVTableViewProtocol> *tableView, NSIndexPath *indexPath);
+
+@property (copy, nonatomic) CGFloat (^ onRenderRowHeightBlock) (UITableView<KVTableViewProtocol> *tableView, NSIndexPath *indexPath);
 
 - (void)updateWithData:(NSArray * __nullable)data page:(NSInteger)page hasMore:(BOOL)hasMore;
-
 - (NSInteger)getOffsetPageWithIsRefresh:(BOOL)isRefresh;
 - (NSInteger)page;
 - (NSArray * __nullable)data;
 - (BOOL)hasMore;
 
-- (void)setRows:(NSInteger)rows;
-- (NSInteger)rows;
-
-@end
-
-@protocol KVStateViewProtocol <NSObject>
-
-- (void)showInitialize;
-- (void)showLoadding;
-- (void)showSuccess;
-- (void)showError:(NSError * __nullable)error;
-
-- (KVViewState)state;
-
 @end
 
 @protocol KVTableViewProtocol <NSObject>
 
-- (id<KVTableViewPresentProtocol> __nullable)present;
-- (id<KVTableViewAdapterProtocol> __nullable)adapter;
+@property (copy, nonatomic) void (^ onReloadDataBlock) (UITableView<KVTableViewProtocol> *tableView);
+
+@property (strong, nonatomic) id<KVTableViewPresentProtocol> present;
+@property (strong, nonatomic) id<KVTableViewAdapterProtocol> adapter;
 
 @end
 

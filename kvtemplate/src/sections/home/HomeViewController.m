@@ -14,8 +14,12 @@
 #import "KVStorege.h"
 #import "KVHttpTool+MISC.h"
 
+@interface HomeTableViewAdapter : KVTableViewAdapter
+
+@end
+
 @interface HomeViewController ()
-<KVToastViewProtocol>
+<KVToastViewProtocol, KVUIViewDisplayDelegate>
 
 @property (strong, nonatomic) AppTableView *tableView;
 @property (strong, nonatomic) UIButton *button;
@@ -34,28 +38,18 @@
     self.navigationController.navigationBar.hidden = NO;
     self.view.backgroundColor = UIColor.whiteColor;
     
-
-    for (NSInteger i = 0; i<20; i++) {
-        [[HomePresent new] kv_loadDataWithTableView:nil isRefresh:YES];
-    }
+    [self.tableView display:NO];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self.tableView display:YES animate:YES];
+    });
     
-//    [self.tableView refreshData:YES];
+    [self.tableView refreshData:YES];
 //    [self button];
-    
-    
-//    AppNetworking.toast = [KVToast share];
-//    AppNetworking.toastShowMode = AppNetworkingToastShowMode_All;
-//    KVHttpTool *a = [KVHttpTool request:@"https://www.baidu.com"];
-////    task = a;
-//    a.failure(^(NSError * _Nullable error) {
-//        NSLog(@"失败了");
-//    })
-//    .success(^(id  _Nullable responseObject) {
-//        NSLog(@"成功了");
-//    })
-//    .send()
-//    ;
 
+}
+
+- (void)selecteIndex:(NSInteger)idx {
+    NSLog(@"选中了: %ld", idx);
 }
 
 - (void)kv_show:(NSString *)text {
@@ -63,21 +57,18 @@
 }
 
 - (void)clearAction {
-//    [KVStorege clearCache:YES];
-    [task resume];
-    
-//    AppNetworking.toast = [KVToast share];
-//    AppNetworking.toastShowMode = AppNetworkingToastShowMode_All;
-    KVHttpTool *a = [KVHttpTool request:@"https://www.baidu.com"];
-    task = a;
-    a.failure(^(NSError * _Nullable error) {
-        NSLog(@"失败了");
-    })
-    .success(^(id  _Nullable responseObject) {
-        NSLog(@"成功了");
-    })
-    .send()
-    ;
+
+}
+
+- (void)onView:(UIView *)view display:(BOOL)isDisplay animate:(BOOL)animate {
+    if (view == _tableView) {
+        [UIView animateWithDuration:animate ? 0.8 : 0 animations:^{
+            view.alpha = isDisplay ? 1 : 0;
+            CGRect frame = view.frame;
+            frame.origin.x = isDisplay ? 0 : -self.view.bounds.size.width;
+            view.frame = frame;
+        }];
+    }
 }
 
 - (UIButton *)button {
@@ -95,8 +86,11 @@
 - (KVTableView *)tableView {
     if (!_tableView) {
 
-        KVTableViewAdapter *adapter = [[KVTableViewAdapter alloc] init];
-        adapter.renderCellBlock = ^UITableViewCell * _Nonnull(KVTableView * _Nonnull tableView, NSIndexPath * _Nonnull indexPath) {
+        HomeTableViewAdapter *adapter = [[HomeTableViewAdapter alloc] init];
+        adapter.onRenderRowsBlock = ^NSInteger(UITableView<KVTableViewProtocol> * _Nonnull tableView, NSInteger section) {
+            return tableView.adapter.data.count;
+        };
+        adapter.onRenderCellBlock = ^UITableViewCell * _Nonnull(UITableView<KVTableViewProtocol> * _Nonnull tableView, NSIndexPath * _Nonnull indexPath) {
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell" forIndexPath:indexPath];
             cell.textLabel.text = @(indexPath.row).stringValue;
             return cell;
@@ -105,15 +99,29 @@
         HomePresent *present = [HomePresent new];
                 
         _tableView = [AppTableView defaultTableViewWithPresent:present adapter:adapter toast:[KVToast share]];
+        _tableView.context = self;
+        _tableView.displayContext = self;
         [self.view addSubview:_tableView];
         _tableView.frame = self.view.bounds;
 
         [_tableView registerCellClazz:@{@"cell": UITableViewCell.class}];
         
-        
     }
     
     return _tableView;
+}
+
+@end
+
+@implementation HomeTableViewAdapter
+
+- (HomeViewController *)context {
+    return [super context];
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [self.context selecteIndex:indexPath.row];
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 @end

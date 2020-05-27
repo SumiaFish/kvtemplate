@@ -70,7 +70,7 @@
     NSError * error;
     NSArray *array = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:directoryPath error:&error];
     if (error) {
-        KVHttpToolLog(@"查找并清理缓存文件是出错 %@\n%@", path, error);
+        KVKitLog(@"查找并清理缓存文件是出错 %@\n%@", path, error);
         return;
     }
     NSString *cacheName = [self cacheName];
@@ -203,7 +203,7 @@
         _manager = [NSFileManager defaultManager];
         _overdueTimeval = overdueTimeval;
         
-        KVHttpToolLog(@"path: %@", path);
+        KVKitLog(@"path: %@", path);
         BOOL isDirectory = NO;
         BOOL isExist = [_manager fileExistsAtPath:path isDirectory:&isDirectory];
         if (path.length) {
@@ -211,17 +211,17 @@
             if (!isExist) {
                 [_manager createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:&error];
                 if (error) {
-                    KVHttpToolLog(@"error: %@", error);
+                    KVKitLog(@"error: %@", error);
                 }
             } else {
                 if (!isDirectory) {
                     [_manager removeItemAtPath:path error:&error];
                     if (error) {
-                        KVHttpToolLog(@"error: %@", error);
+                        KVKitLog(@"error: %@", error);
                     }
                     [_manager createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:&error];
                     if (error) {
-                        KVHttpToolLog(@"error: %@", error);
+                        KVKitLog(@"error: %@", error);
                     }
                 }
             }
@@ -251,7 +251,7 @@
     NSError * error;
     NSArray *array = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:directoryPath error:&error];
     if (error) {
-        KVHttpToolLog(@"查找并清理缓存文件是出错 %@\n%@", path, error);
+        KVKitLog(@"查找并清理缓存文件是出错 %@\n%@", path, error);
         return;
     }
     NSString *cacheName = [self cacheName];
@@ -286,7 +286,7 @@
     NSError *error = nil;
     [data writeToFile:[self filePathWithKey:shortKey] options:(NSDataWritingAtomic) error:&error];
     if (error) {
-        KVHttpToolLog(@"error %@", error);
+        KVKitLog(@"error %@", error);
     }
 }
 

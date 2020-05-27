@@ -182,7 +182,7 @@ typedef struct {
 }
 
 - (void)onCancel {
-    KVHttpToolLog(@"已取消");
+    KVKitLog(@"已取消");
 }
 
 - (BOOL)isAsynchronous {
@@ -414,7 +414,7 @@ typedef struct {
                 ignore = YES;
                 res = responseObject;
 #if DEBUG
-                KVHttpToolLog(@"jsonSerializationErr: %@", jsonSerializationErr);
+                KVKitLog(@"jsonSerializationErr: %@", jsonSerializationErr);
 #endif
             }
         }

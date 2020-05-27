@@ -20,50 +20,6 @@
 
 - (FBLPromise *)kv_loadDataWithTableView:(id<KVTableViewProtocol>)tableView isRefresh:(BOOL)isRefresh {
     
-    [KVHttpTool test];
-    
-    AppNetworking.toast = [KVToast share];
-    AppNetworking.toastShowMode = AppNetworkingToastShowMode_All;
-    [AppNetworking request:@"https://www.baidu.com"]
-    .send();
-    
-    KVHttpTool *tool = [KVHttpTool request:@"https://www.baidu.com"];
-
-    tool.success(^(id  _Nullable responseObject) {
-        NSLog(@"succ == ==");
-    })
-    .failure(^(NSError * _Nullable error) {
-
-    });
-
-    tool.send();
-    [KVHttpTool todoInGlobalDefaultQueue:^{
-        for (NSInteger i = 0; i < 1000; i ++) {
-            @autoreleasepool {
-                NSLog(@"aaaaaaa");
-                //            tool.headers(@{@(i).stringValue: @(i).stringValue});
-                            sleep(0.01);
-                            tool.send();
-                            [KVHttpTool todoInGlobalDefaultQueue:^{
-                                if (i < 50) {
-                                    tool.headers(@{@(i).stringValue: @(i).stringValue});
-                                    NSLog(@"bbbbb");
-                                    tool.send();
-                                } else {
-                                    [tool cancel];
-                                }
-                                sleep(0.01);
-                            }];
-            }
-            
-        }
-
-    }];
-    
-    return nil;
-    
-    NSLog(@"哈哈哈");
-    
     return [FBLPromise async:^(FBLPromiseFulfillBlock  _Nonnull fulfill, FBLPromiseRejectBlock  _Nonnull reject) {
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{

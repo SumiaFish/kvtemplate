@@ -14,13 +14,17 @@
 @property (strong, nonatomic) NSArray *data;
 @property (assign, nonatomic) NSInteger page;
 @property (assign, nonatomic) BOOL hasMore;
-@property (assign, nonatomic) NSInteger rows;
 
 @end
 
 @implementation KVTableViewAdapter
 
-@synthesize rows = _rows;
+@synthesize context = _context;
+@synthesize tableView = _tableView;
+@synthesize onRenderSectionsBlock = _onRenderSectionsBlock;
+@synthesize onRenderRowsBlock = _onRenderRowsBlock;
+@synthesize onRenderCellBlock = _onRenderCellBlock;
+@synthesize onRenderRowHeightBlock = _onRenderRowHeightBlock;
 
 - (instancetype)init {
     if (self = [super init]) {
@@ -51,15 +55,19 @@
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
+    return _onRenderSectionsBlock ? _onRenderSectionsBlock(_tableView) : 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.rows;
+    return _onRenderRowsBlock ? _onRenderRowsBlock(_tableView, section) : 0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return self.renderCellBlock? self.renderCellBlock((KVTableView *)tableView, indexPath): UITableViewCell.new;
+    return _onRenderCellBlock ? _onRenderCellBlock(_tableView, indexPath) :UITableViewCell.new;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return _onRenderRowHeightBlock ? _onRenderRowHeightBlock(_tableView, indexPath) : UITableViewAutomaticDimension;
 }
 
 @end

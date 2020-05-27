@@ -69,12 +69,11 @@
 {
     dispatch_semaphore_t _semaphore;
     NSOperationQueue *_queue;
-//    KVHttpOpration *_op;
     BOOL _isLocked;
 }
 
 - (void)dealloc {
-    KVHttpToolLog(@"%@ dealloc~", NSStringFromClass(self.class));
+    KVKitLog(@"%@ dealloc~", NSStringFromClass(self.class));
 }
 
 + (instancetype)request:(NSString *)url {
@@ -94,7 +93,6 @@
     _semaphore = dispatch_semaphore_create(1);
     _queue = [[NSOperationQueue alloc] init];
     _queue.maxConcurrentOperationCount = 1;
-//    self.info = [KVHttpToolInfos new];
     //
     self.method(KVHttpTool_GET);
     self.headers(nil);
@@ -118,13 +116,13 @@
 - (void)lock {
     dispatch_semaphore_wait(_semaphore, DISPATCH_TIME_FOREVER);
     _isLocked = YES;
-//    KVHttpToolLog(@"===lock");
+//    KVKitLog(@"===lock");
 }
 
 - (void)unlock {
     dispatch_semaphore_signal(_semaphore);
     _isLocked = NO;
-//    KVHttpToolLog(@"===unlock");
+//    KVKitLog(@"===unlock");
 }
 
 - (BOOL)isLocked {
@@ -135,7 +133,7 @@
     [self lock];
     // 默认只允许send一次
     if (self.queue) {
-        KVHttpToolLog(@"只允许send一次");
+        KVKitLog(@"只允许send一次");
         [self unlock];
         return;
     }
@@ -168,14 +166,6 @@
 - (NSOperationQueue *)queue {
     return _queue;
 }
-
-//- (void)setOp:(KVHttpOpration *)op {
-//    _op = op;
-//}
-//
-//- (KVHttpOpration *)op {
-//    return _op;
-//}
 
 - (KVHttpTool * _Nullable (^)(KVHttpToolMethod))method {
     if (!_method) {
@@ -453,7 +443,7 @@
     [self lock];
     // 默认只允许send一次
     if (self.queue) {
-        KVHttpToolLog(@"只允许send一次");
+        KVKitLog(@"只允许send一次");
         [self unlock];
         return;
     }

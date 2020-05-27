@@ -10,12 +10,12 @@
 
 #import <MJRefresh/MJRefresh.h>
 
+#import "UIView+KVState.h"
+#import "UIView+Context.h"
+
 #import "KVToastViewProtocol.h"
 
 #import "KVTableViewProtocol.h"
-
-#import "KVDefaultStateView.h"
-#import "KVTableViewAdapter.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -26,12 +26,9 @@ typedef void (^ KVTableViewLayoutStateViewBlock) (void);
 @interface KVTableView : UITableView
 <KVTableViewProtocol>
 
-@property (strong, nonatomic, nullable) id<KVTableViewPresentProtocol> present;
-@property (strong, nonatomic, nullable) id<KVTableViewAdapterProtocol> adapter;
-
-@property (copy, nonatomic, nullable) KVTableViewLayoutStateViewBlock layoutStateViewBlock;
-@property (strong, nonatomic, nullable) UIView<KVStateViewProtocol> *stateView;
 @property (weak, nonatomic, nullable) id<KVToastViewProtocol> toast;
+
+- (void)commonInit;
 
 - (void)refreshData:(BOOL)isShowHeaderLoadding;
 - (void)loadMoreData:(BOOL)isShowFooterLoadding;
@@ -40,17 +37,17 @@ typedef void (^ KVTableViewLayoutStateViewBlock) (void);
 
 @interface KVTableView (Factory)
 
-+ (instancetype)defaultTableViewWithPresent:(id<KVTableViewPresentProtocol> __nullable)present adapter:(id<KVTableViewAdapterProtocol> __nullable)adapter toast:(id<KVToastViewProtocol> __nullable)toast;
+//+ (instancetype)defaultTableViewWithPresent:(id<KVTableViewPresentProtocol> __nullable)present adapter:(id<KVTableViewAdapterProtocol> __nullable)adapter toast:(id<KVToastViewProtocol> __nullable)toast;
 
 - (void)registerCellNib:(NSDictionary<NSString *, NSString *> *)cellNibs;
 
 - (void)registerCellClazz:(NSDictionary<NSString *, Class> *)cellClazz;
 
-- (void)useDefaultHeader;
-
-- (void)useDefaultFooter;
-
-- (void)useDefaultStateView;
+//- (void)useDefaultHeader;
+//
+//- (void)useDefaultFooter;
+//
+//- (void)useDefaultStateView;
 
 @end
 

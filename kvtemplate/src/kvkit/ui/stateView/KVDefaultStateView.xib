@@ -2,6 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -20,24 +21,34 @@
                         <constraint firstAttribute="height" constant="20" id="swR-9w-gsW"/>
                     </constraints>
                 </activityIndicatorView>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sju-De-ZnW">
-                    <rect key="frame" x="0.0" y="439.5" width="414" height="17"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cd2-x5-fWs">
+                    <rect key="frame" x="181.5" y="431.5" width="51.5" height="33"/>
+                    <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sju-De-ZnW">
+                    <rect key="frame" x="189.5" y="439.5" width="35.5" height="17"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <nil key="highlightedColor"/>
                 </label>
             </subviews>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
+                <constraint firstItem="cd2-x5-fWs" firstAttribute="leading" secondItem="Sju-De-ZnW" secondAttribute="leading" constant="-8" id="7Q0-Te-3p4"/>
                 <constraint firstItem="Sju-De-ZnW" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="ANp-kC-cHX"/>
                 <constraint firstItem="U2H-Ob-7Uv" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="KJY-IN-fa0"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="Sju-De-ZnW" secondAttribute="trailing" id="dne-Bm-rfx"/>
+                <constraint firstItem="cd2-x5-fWs" firstAttribute="top" secondItem="Sju-De-ZnW" secondAttribute="top" constant="-8" id="NXq-gw-o8d"/>
+                <constraint firstItem="cd2-x5-fWs" firstAttribute="bottom" secondItem="Sju-De-ZnW" secondAttribute="bottom" constant="8" id="Oeu-sb-gaf"/>
                 <constraint firstItem="Sju-De-ZnW" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="mYo-3l-gkb"/>
                 <constraint firstItem="U2H-Ob-7Uv" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="rle-lR-uPd"/>
-                <constraint firstItem="Sju-De-ZnW" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="sWP-5C-Ckx"/>
+                <constraint firstItem="cd2-x5-fWs" firstAttribute="trailing" secondItem="Sju-De-ZnW" secondAttribute="trailing" constant="8" id="vzz-qT-uLd"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <connections>
+                <outlet property="bg" destination="cd2-x5-fWs" id="hoa-Se-W3F"/>
                 <outlet property="hud" destination="U2H-Ob-7Uv" id="xZw-Jo-ikX"/>
                 <outlet property="infoLab" destination="Sju-De-ZnW" id="iEd-fY-KBl"/>
             </connections>

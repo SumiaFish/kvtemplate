@@ -11,14 +11,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class KVTableView;
-
-typedef UITableViewCell* _Nonnull (^ KVTableViewRenderCellBlock) (KVTableView *tableView, NSIndexPath *indexPath);
-
 @interface KVTableViewAdapter : NSObject
 <KVTableViewAdapterProtocol>
-
-@property (copy, nonatomic, nullable) KVTableViewRenderCellBlock renderCellBlock;
 
 @end
 

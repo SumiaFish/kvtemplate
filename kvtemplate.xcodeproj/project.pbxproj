@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		043A38EC2477CE7F00FFC960 /* UIView+KVState.m in Sources */ = {isa = PBXBuildFile; fileRef = 043A38EB2477CE7F00FFC960 /* UIView+KVState.m */; };
+		044EF8D82477D153007F2CB6 /* KVHud.m in Sources */ = {isa = PBXBuildFile; fileRef = 044EF8D72477D153007F2CB6 /* KVHud.m */; };
+		044EF8DB2477D1F0007F2CB6 /* KVBaseStateView.m in Sources */ = {isa = PBXBuildFile; fileRef = 044EF8DA2477D1F0007F2CB6 /* KVBaseStateView.m */; };
+		045D5D20247E7B9500C22452 /* UIView+Context.m in Sources */ = {isa = PBXBuildFile; fileRef = 045D5D1F247E7B9500C22452 /* UIView+Context.m */; };
 		04609792246C31A600BA6FD5 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04609791246C31A600BA6FD5 /* ViewController.m */; };
 		04609795246C31A600BA6FD5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 04609793246C31A600BA6FD5 /* Main.storyboard */; };
 		04609797246C31AB00BA6FD5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 04609796246C31AB00BA6FD5 /* Assets.xcassets */; };
@@ -58,6 +62,18 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		043A38EA2477CE7F00FFC960 /* UIView+KVState.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIView+KVState.h"; sourceTree = "<group>"; };
+		043A38EB2477CE7F00FFC960 /* UIView+KVState.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIView+KVState.m"; sourceTree = "<group>"; };
+		043A38EE2477CEB700FFC960 /* KVStateViewProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KVStateViewProtocol.h; sourceTree = "<group>"; };
+		044EF8D62477D153007F2CB6 /* KVHud.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KVHud.h; sourceTree = "<group>"; };
+		044EF8D72477D153007F2CB6 /* KVHud.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KVHud.m; sourceTree = "<group>"; };
+		044EF8D92477D1F0007F2CB6 /* KVBaseStateView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KVBaseStateView.h; sourceTree = "<group>"; };
+		044EF8DA2477D1F0007F2CB6 /* KVBaseStateView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KVBaseStateView.m; sourceTree = "<group>"; };
+		044EF8DE2477D759007F2CB6 /* define.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = define.h; sourceTree = "<group>"; };
+		044EF8DF2477D890007F2CB6 /* KVKitHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KVKitHeader.h; sourceTree = "<group>"; };
+		045D5D1E247E7B9500C22452 /* UIView+Context.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIView+Context.h"; sourceTree = "<group>"; };
+		045D5D1F247E7B9500C22452 /* UIView+Context.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIView+Context.m"; sourceTree = "<group>"; };
+		045D5D21247E7D2400C22452 /* KVKitExportHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KVKitExportHeader.h; sourceTree = "<group>"; };
 		04609787246C31A600BA6FD5 /* kvtemplate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = kvtemplate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		04609790246C31A600BA6FD5 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		04609791246C31A600BA6FD5 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
@@ -158,6 +174,32 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		043A38E92477CE5500FFC960 /* UIView */ = {
+			isa = PBXGroup;
+			children = (
+				043A38EA2477CE7F00FFC960 /* UIView+KVState.h */,
+				043A38EB2477CE7F00FFC960 /* UIView+KVState.m */,
+				045D5D1E247E7B9500C22452 /* UIView+Context.h */,
+				045D5D1F247E7B9500C22452 /* UIView+Context.m */,
+			);
+			path = UIView;
+			sourceTree = "<group>";
+		};
+		043A38ED2477CE8900FFC960 /* stateView */ = {
+			isa = PBXGroup;
+			children = (
+				043A38EE2477CEB700FFC960 /* KVStateViewProtocol.h */,
+				046097D7246C323E00BA6FD5 /* KVDefaultStateView.h */,
+				046097DA246C323E00BA6FD5 /* KVDefaultStateView.m */,
+				046097DC246C323E00BA6FD5 /* KVDefaultStateView.xib */,
+				044EF8D62477D153007F2CB6 /* KVHud.h */,
+				044EF8D72477D153007F2CB6 /* KVHud.m */,
+				044EF8D92477D1F0007F2CB6 /* KVBaseStateView.h */,
+				044EF8DA2477D1F0007F2CB6 /* KVBaseStateView.m */,
+			);
+			path = stateView;
+			sourceTree = "<group>";
+		};
 		0460977E246C31A600BA6FD5 = {
 			isa = PBXGroup;
 			children = (
@@ -236,6 +278,7 @@
 		046097C1246C31CB00BA6FD5 /* pch */ = {
 			isa = PBXGroup;
 			children = (
+				044EF8DE2477D759007F2CB6 /* define.h */,
 				046097C3246C31E400BA6FD5 /* pch.pch */,
 				046097C2246C31E400BA6FD5 /* Strings.h */,
 			);
@@ -291,8 +334,10 @@
 		046097D3246C323E00BA6FD5 /* kvkit */ = {
 			isa = PBXGroup;
 			children = (
+				045D5D21247E7D2400C22452 /* KVKitExportHeader.h */,
 				046097D4246C323E00BA6FD5 /* ui */,
-				046097E4246C323E00BA6FD5 /* fundation */,
+				046097E4246C323E00BA6FD5 /* foundation */,
+				044EF8DF2477D890007F2CB6 /* KVKitHeader.h */,
 			);
 			path = kvkit;
 			sourceTree = "<group>";
@@ -300,6 +345,8 @@
 		046097D4246C323E00BA6FD5 /* ui */ = {
 			isa = PBXGroup;
 			children = (
+				043A38ED2477CE8900FFC960 /* stateView */,
+				043A38E92477CE5500FFC960 /* UIView */,
 				046097D5246C323E00BA6FD5 /* tableView */,
 				046097E0246C323E00BA6FD5 /* toast */,
 			);
@@ -309,9 +356,6 @@
 		046097D5246C323E00BA6FD5 /* tableView */ = {
 			isa = PBXGroup;
 			children = (
-				046097D7246C323E00BA6FD5 /* KVDefaultStateView.h */,
-				046097DA246C323E00BA6FD5 /* KVDefaultStateView.m */,
-				046097DC246C323E00BA6FD5 /* KVDefaultStateView.xib */,
 				046097DD246C323E00BA6FD5 /* KVTableView.h */,
 				046097D9246C323E00BA6FD5 /* KVTableView.m */,
 				046097DB246C323E00BA6FD5 /* KVTableViewAdapter.h */,
@@ -331,7 +375,7 @@
 			path = toast;
 			sourceTree = "<group>";
 		};
-		046097E4246C323E00BA6FD5 /* fundation */ = {
+		046097E4246C323E00BA6FD5 /* foundation */ = {
 			isa = PBXGroup;
 			children = (
 				046097E5246C323E00BA6FD5 /* network */,
@@ -339,7 +383,7 @@
 				04609813246D273000BA6FD5 /* operation */,
 				046097F4246C323E00BA6FD5 /* NSObject */,
 			);
-			path = fundation;
+			path = foundation;
 			sourceTree = "<group>";
 		};
 		046097E5246C323E00BA6FD5 /* network */ = {
@@ -691,12 +735,16 @@
 				046097FC246C323E00BA6FD5 /* HomePresent.m in Sources */,
 				0460980B246C323F00BA6FD5 /* AppNetworking.m in Sources */,
 				04609792246C31A600BA6FD5 /* ViewController.m in Sources */,
+				045D5D20247E7B9500C22452 /* UIView+Context.m in Sources */,
 				04609807246C323F00BA6FD5 /* KVHttpTool.m in Sources */,
+				044EF8DB2477D1F0007F2CB6 /* KVBaseStateView.m in Sources */,
 				04609806246C323F00BA6FD5 /* KVHttpTool+MISC.m in Sources */,
+				044EF8D82477D153007F2CB6 /* KVHud.m in Sources */,
 				04609805246C323F00BA6FD5 /* KVHttpTool+Business.m in Sources */,
 				04609800246C323E00BA6FD5 /* KVTableView.m in Sources */,
 				0460981A246D49D800BA6FD5 /* KVHttpOpration.m in Sources */,
 				0460980A246C323F00BA6FD5 /* AppTableView.m in Sources */,
+				043A38EC2477CE7F00FFC960 /* UIView+KVState.m in Sources */,
 				04609812246C515400BA6FD5 /* NSObject+WeakObserve.m in Sources */,
 				046097CA246C321D00BA6FD5 /* AppDelegate.m in Sources */,
 				046097C9246C321D00BA6FD5 /* SceneDelegate.m in Sources */,
