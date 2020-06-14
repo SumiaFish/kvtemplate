@@ -26,6 +26,8 @@
 
 #define globalBackgroundColorPicker [ThemeColorPicker pickerWithColors:@[@"#292b38", @"#fff"]]
 
+#define globalSectionHeaderBackgroundColorPicker [ThemeColorPicker pickerWithColors:@[@"#8B0000", @"#f00"]]
+
 #define globalTextColorPicker [ThemeColorPicker pickerWithColors:@[@"#ECF0F1", @"#000"]]
 
 #define globalBarTextColors @[@"#000", @"#000"]

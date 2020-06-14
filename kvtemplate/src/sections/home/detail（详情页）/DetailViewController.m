@@ -103,8 +103,7 @@
             if (!view.backgroundView) {
                 view.backgroundView = UIView.new;
             }
-            UIColor *color = section % 2 == 0? UIColor.redColor: UIColor.blueColor;
-            view.backgroundView.backgroundColor = color;
+            view.backgroundView.theme_backgroundColor = globalSectionHeaderBackgroundColorPicker;
             return view;
         };
         
@@ -119,6 +118,8 @@
         adapter.onRenderCellBlock = ^UITableViewCell * _Nonnull(UITableView<KVTableViewProtocol> * _Nonnull tableView, NSIndexPath * _Nonnull indexPath) {
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell" forIndexPath:indexPath];
             cell.textLabel.text = @(indexPath.row).stringValue;
+            cell.contentView.theme_backgroundColor = globalBackgroundColorPicker;
+            cell.textLabel.theme_textColor = globalTextColorPicker;
             return cell;
         };
         
