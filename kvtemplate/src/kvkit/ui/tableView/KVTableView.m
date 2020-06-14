@@ -19,6 +19,10 @@
 @synthesize adapter = _adapter;
 @synthesize onReloadDataBlock = _onReloadDataBlock;
 
+- (void)dealloc {
+    KVKitLog(@"%@ dealloc~", NSStringFromClass(self.class));
+}
+
 - (void)setMj_header:(MJRefreshHeader *)mj_header {
     __weak typeof(self) ws = self;
     mj_header.refreshingBlock = ^{

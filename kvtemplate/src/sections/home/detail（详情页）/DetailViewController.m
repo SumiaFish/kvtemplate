@@ -34,14 +34,14 @@
     self.title = @"Detail";
     
 //
-//    [self.tableView display:NO];
-//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-////        [self.tableView removeFromSuperview];
-//        [self.tableView display:YES animate:YES];
-//        [self.tableView refreshData:YES];
-//    });
+    [self.tableView display:NO];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//        [self.tableView removeFromSuperview];
+        [self.tableView display:YES animate:YES];
+        [self.tableView refreshData:YES];
+    });
     
-    [self.tableView refreshData:YES];
+//    [self.tableView refreshData:YES];
 
 }
 
@@ -126,7 +126,7 @@
             [ws selecteIndex: indexPath.row];
         };
 
-        _tableView = [UITableView KVTableViewWithPresent:self adapter:adapter stateView:self.view.stateView];
+        _tableView = [UITableView KVTableViewWithPresent:self adapter:adapter];
         _tableView.displayContext = self;
         [self.view addSubview:_tableView];
         _tableView.frame = self.view.bounds;
@@ -137,6 +137,18 @@
         
         AppTableViewStateView *stateView = [AppTableViewStateView viewWithKVTableView:(UITableView<KVTableViewPresentProtocol> *)_tableView];
         [_tableView setStateView:stateView andMoveTo:AppDelegate.window];
+        
+        _tableView.theme_backgroundColor = globalBackgroundColorPicker;
+        
+        if ([_tableView.mj_header isKindOfClass:MJRefreshNormalHeader.class]) {
+            ((MJRefreshNormalHeader *)_tableView.mj_header).loadingView.theme_color = globalTextColorPicker;
+            ((MJRefreshNormalHeader *)_tableView.mj_header).stateLabel.theme_textColor = globalTextColorPicker;
+            ((MJRefreshNormalHeader *)_tableView.mj_header).lastUpdatedTimeLabel.theme_textColor = globalTextColorPicker;
+        }
+        if ([_tableView.mj_footer isKindOfClass:MJRefreshAutoNormalFooter.class]) {
+            ((MJRefreshAutoNormalFooter *)_tableView.mj_footer).loadingView.theme_color = globalTextColorPicker;
+            ((MJRefreshAutoNormalFooter *)_tableView.mj_footer).stateLabel.theme_textColor = globalTextColorPicker;
+        }
         
     }
     

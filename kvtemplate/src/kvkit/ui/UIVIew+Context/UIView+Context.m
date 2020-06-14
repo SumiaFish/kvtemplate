@@ -14,8 +14,6 @@ static NSString * const UIViewDisplayContextKey = @"UIViewDisplayContextKey";
 
 @implementation UIView (Context)
 
-static void* UIViewContextObjectKey = @"UIViewContextObjectKey";
-
 - (void)setContext:(id)context {
     [self.weakPropsMap setObject:context forKey:UIViewContextKey];
 }

@@ -13,6 +13,11 @@
 		0422A81D24962057004FE1D5 /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0422A81C24962057004FE1D5 /* DetailViewController.m */; };
 		0422A821249620DB004FE1D5 /* CTMediator+Router.m in Sources */ = {isa = PBXBuildFile; fileRef = 0422A820249620DB004FE1D5 /* CTMediator+Router.m */; };
 		0422A824249620EC004FE1D5 /* CTMediator+Detail.m in Sources */ = {isa = PBXBuildFile; fileRef = 0422A823249620EC004FE1D5 /* CTMediator+Detail.m */; };
+		0422A8292496492C004FE1D5 /* MyThemes.m in Sources */ = {isa = PBXBuildFile; fileRef = 0422A8282496492C004FE1D5 /* MyThemes.m */; };
+		0422A82D24964A75004FE1D5 /* KVThemeMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 0422A82C24964A75004FE1D5 /* KVThemeMap.m */; };
+		0422A8322496506E004FE1D5 /* Red.json in Resources */ = {isa = PBXBuildFile; fileRef = 0422A82F2496506E004FE1D5 /* Red.json */; };
+		0422A8332496506E004FE1D5 /* Night.json in Resources */ = {isa = PBXBuildFile; fileRef = 0422A8302496506E004FE1D5 /* Night.json */; };
+		0422A8342496506E004FE1D5 /* Yellow.json in Resources */ = {isa = PBXBuildFile; fileRef = 0422A8312496506E004FE1D5 /* Yellow.json */; };
 		043A38EC2477CE7F00FFC960 /* UIView+KVState.m in Sources */ = {isa = PBXBuildFile; fileRef = 043A38EB2477CE7F00FFC960 /* UIView+KVState.m */; };
 		044EF8D82477D153007F2CB6 /* KVHud.m in Sources */ = {isa = PBXBuildFile; fileRef = 044EF8D72477D153007F2CB6 /* KVHud.m */; };
 		044EF8DB2477D1F0007F2CB6 /* KVBaseStateView.m in Sources */ = {isa = PBXBuildFile; fileRef = 044EF8DA2477D1F0007F2CB6 /* KVBaseStateView.m */; };
@@ -87,6 +92,14 @@
 		0422A820249620DB004FE1D5 /* CTMediator+Router.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "CTMediator+Router.m"; sourceTree = "<group>"; };
 		0422A822249620EC004FE1D5 /* CTMediator+Detail.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CTMediator+Detail.h"; sourceTree = "<group>"; };
 		0422A823249620EC004FE1D5 /* CTMediator+Detail.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "CTMediator+Detail.m"; sourceTree = "<group>"; };
+		0422A8262496492B004FE1D5 /* Global.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Global.h; sourceTree = "<group>"; };
+		0422A8272496492B004FE1D5 /* MyThemes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyThemes.h; sourceTree = "<group>"; };
+		0422A8282496492C004FE1D5 /* MyThemes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyThemes.m; sourceTree = "<group>"; };
+		0422A82B24964A75004FE1D5 /* KVThemeMap.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KVThemeMap.h; sourceTree = "<group>"; };
+		0422A82C24964A75004FE1D5 /* KVThemeMap.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KVThemeMap.m; sourceTree = "<group>"; };
+		0422A82F2496506E004FE1D5 /* Red.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Red.json; sourceTree = "<group>"; };
+		0422A8302496506E004FE1D5 /* Night.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Night.json; sourceTree = "<group>"; };
+		0422A8312496506E004FE1D5 /* Yellow.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Yellow.json; sourceTree = "<group>"; };
 		043A38EA2477CE7F00FFC960 /* UIView+KVState.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIView+KVState.h"; sourceTree = "<group>"; };
 		043A38EB2477CE7F00FFC960 /* UIView+KVState.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIView+KVState.m"; sourceTree = "<group>"; };
 		043A38EE2477CEB700FFC960 /* KVStateViewProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KVStateViewProtocol.h; sourceTree = "<group>"; };
@@ -300,6 +313,36 @@
 			path = router;
 			sourceTree = "<group>";
 		};
+		0422A8252496490E004FE1D5 /* theme */ = {
+			isa = PBXGroup;
+			children = (
+				0422A82E2496506E004FE1D5 /* Json */,
+				0422A8262496492B004FE1D5 /* Global.h */,
+				0422A8272496492B004FE1D5 /* MyThemes.h */,
+				0422A8282496492C004FE1D5 /* MyThemes.m */,
+			);
+			path = theme;
+			sourceTree = "<group>";
+		};
+		0422A82A24964A3C004FE1D5 /* theme */ = {
+			isa = PBXGroup;
+			children = (
+				0422A82B24964A75004FE1D5 /* KVThemeMap.h */,
+				0422A82C24964A75004FE1D5 /* KVThemeMap.m */,
+			);
+			path = theme;
+			sourceTree = "<group>";
+		};
+		0422A82E2496506E004FE1D5 /* Json */ = {
+			isa = PBXGroup;
+			children = (
+				0422A82F2496506E004FE1D5 /* Red.json */,
+				0422A8302496506E004FE1D5 /* Night.json */,
+				0422A8312496506E004FE1D5 /* Yellow.json */,
+			);
+			path = Json;
+			sourceTree = "<group>";
+		};
 		043A38E92477CE5500FFC960 /* UIView+StateView */ = {
 			isa = PBXGroup;
 			children = (
@@ -447,6 +490,7 @@
 		046097D4246C323E00BA6FD5 /* ui */ = {
 			isa = PBXGroup;
 			children = (
+				0422A82A24964A3C004FE1D5 /* theme */,
 				045D5D2A247EAE5200C22452 /* alert */,
 				046097E0246C323E00BA6FD5 /* toast */,
 				0422A7B32495479F004FE1D5 /* stateView */,
@@ -536,6 +580,7 @@
 		046097F5246C323E00BA6FD5 /* compoents */ = {
 			isa = PBXGroup;
 			children = (
+				0422A8252496490E004FE1D5 /* theme */,
 				0422A81E249620C8004FE1D5 /* router */,
 				0422A81524961448004FE1D5 /* toast */,
 				0422A7BC24954DC0004FE1D5 /* mediator */,
@@ -748,8 +793,11 @@
 				0460979A246C31AB00BA6FD5 /* LaunchScreen.storyboard in Resources */,
 				04609802246C323E00BA6FD5 /* KVDefaultStateView.xib in Resources */,
 				04609797246C31AB00BA6FD5 /* Assets.xcassets in Resources */,
+				0422A8322496506E004FE1D5 /* Red.json in Resources */,
 				04609795246C31A600BA6FD5 /* Main.storyboard in Resources */,
+				0422A8332496506E004FE1D5 /* Night.json in Resources */,
 				045D5D29247E9DA000C22452 /* AppTableViewStateView.xib in Resources */,
+				0422A8342496506E004FE1D5 /* Yellow.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -886,6 +934,7 @@
 				045D5D27247E9D9700C22452 /* AppTableViewStateView.m in Sources */,
 				0422A7B824954CD4004FE1D5 /* UIViewController+SimpleAlert.m in Sources */,
 				049FA92A248BCE1C003B61BD /* ChannelViewController.m in Sources */,
+				0422A82D24964A75004FE1D5 /* KVThemeMap.m in Sources */,
 				04609803246C323E00BA6FD5 /* KVToast.m in Sources */,
 				04609801246C323E00BA6FD5 /* KVDefaultStateView.m in Sources */,
 				0422A821249620DB004FE1D5 /* CTMediator+Router.m in Sources */,
@@ -895,6 +944,7 @@
 				0460980B246C323F00BA6FD5 /* AppNetworking.m in Sources */,
 				04609792246C31A600BA6FD5 /* ViewController.m in Sources */,
 				045D5D20247E7B9500C22452 /* UIView+Context.m in Sources */,
+				0422A8292496492C004FE1D5 /* MyThemes.m in Sources */,
 				04609807246C323F00BA6FD5 /* KVHttpTool.m in Sources */,
 				044EF8DB2477D1F0007F2CB6 /* KVBaseStateView.m in Sources */,
 				04609806246C323F00BA6FD5 /* KVHttpTool+MISC.m in Sources */,

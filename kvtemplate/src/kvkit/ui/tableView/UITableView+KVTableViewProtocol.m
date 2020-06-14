@@ -18,7 +18,7 @@
 
 @dynamic onReloadDataBlock;
 
-+ (instancetype)KVTableViewWithPresent:(id<KVTableViewPresentProtocol>)present adapter:(id<KVTableViewAdapterProtocol>)adapter stateView:(UIView<KVStateViewProtocol> *)stateView {
++ (instancetype)KVTableViewWithPresent:(id<KVTableViewPresentProtocol>)present adapter:(id<KVTableViewAdapterProtocol>)adapter {
     
     KVTableView *view = [[KVTableView alloc] initWithFrame:CGRectZero style:(UITableViewStylePlain)];
      
@@ -29,7 +29,6 @@
     
     view.adapter = adapter;
     view.present = present;
-    view.stateView = stateView;
     
     return view;
 }

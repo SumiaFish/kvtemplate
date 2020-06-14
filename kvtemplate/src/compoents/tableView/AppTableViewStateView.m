@@ -33,6 +33,8 @@
     [super awakeFromNib];
     
     _activity.hidesWhenStopped = YES;
+    
+    _activity.theme_color = globalTextColorPicker;
 }
 
 - (void)showLoadding:(NSString *)text {

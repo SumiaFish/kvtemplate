@@ -24,7 +24,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.view.backgroundColor = UIColor.whiteColor;
+    self.view.theme_backgroundColor = globalBackgroundColorPicker;
 
     NSArray<NSString *> *titles = @[@"home", @"discaover", @"channel", @"personal"];
     NSArray<NSString *> *icons = @[@"", @"", @"", @""];
@@ -55,6 +55,8 @@
         [vcs addObject:nav];
     }
     self.viewControllers = vcs;
+    
+    [MyThemes conf];
 }
 
 /*

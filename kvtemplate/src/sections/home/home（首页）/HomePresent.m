@@ -18,6 +18,10 @@
 
 @implementation HomePresent
 
+- (void)dealloc {
+    kLog(@"%@ dealloc~", NSStringFromClass(self.class));
+}
+
 - (FBLPromise *)kv_loadDataWithTableView:(id<KVTableViewProtocol>)tableView isRefresh:(BOOL)isRefresh {
     
     return [FBLPromise async:^(FBLPromiseFulfillBlock  _Nonnull fulfill, FBLPromiseRejectBlock  _Nonnull reject) {
