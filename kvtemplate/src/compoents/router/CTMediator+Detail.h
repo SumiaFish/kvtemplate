@@ -12,6 +12,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface CTMediator (Detail)
 
+- (UIViewController *)detailController;
+
+@end
+
+@interface Target_Detail : NSObject
+
+- (UIViewController *)Action_DetailController:(id)params;
+
 @end
 
 NS_ASSUME_NONNULL_END

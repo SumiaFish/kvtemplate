@@ -14,21 +14,7 @@ PODS:
   - AFNetworking/Serialization (4.0.1)
   - AFNetworking/UIKit (4.0.1):
     - AFNetworking/NSURLSession
-  - BlocksKit (2.2.5):
-    - BlocksKit/All (= 2.2.5)
-  - BlocksKit/All (2.2.5):
-    - BlocksKit/Core
-    - BlocksKit/DynamicDelegate
-    - BlocksKit/MessageUI
-    - BlocksKit/UIKit
-  - BlocksKit/Core (2.2.5)
-  - BlocksKit/DynamicDelegate (2.2.5)
-  - BlocksKit/MessageUI (2.2.5):
-    - BlocksKit/Core
-    - BlocksKit/DynamicDelegate
-  - BlocksKit/UIKit (2.2.5):
-    - BlocksKit/Core
-    - BlocksKit/DynamicDelegate
+  - Aspects (1.4.1)
   - CTMediator (32)
   - MJRefresh (3.4.1)
   - PromisesObjC (1.2.8)
@@ -38,7 +24,7 @@ PODS:
 
 DEPENDENCIES:
   - AFNetworking
-  - BlocksKit
+  - Aspects
   - CTMediator
   - MJRefresh
   - PromisesObjC
@@ -49,7 +35,7 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - AFNetworking
-    - BlocksKit
+    - Aspects
     - CTMediator
     - MJRefresh
     - PromisesObjC
@@ -59,7 +45,7 @@ SPEC REPOS:
 
 SPEC CHECKSUMS:
   AFNetworking: 7864c38297c79aaca1500c33288e429c3451fdce
-  BlocksKit: 7f422b971407001178d181a43b99014ea2591fe6
+  Aspects: 7595ba96a6727a58ebcbfc954497fc5d2fdde546
   CTMediator: 10f2c387be0ab2061b75b88c86f9903eedba1ce8
   MJRefresh: 3153c59a363159092c08b2177ec3a7d09f90bfaf
   PromisesObjC: c119f3cd559f50b7ae681fa59dc1acd19173b7e6
@@ -67,6 +53,6 @@ SPEC CHECKSUMS:
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
   YYCache: 8105b6638f5e849296c71f331ff83891a4942952
 
-PODFILE CHECKSUM: 16b21d514054195e947e15ef9bcd395317f1a30c
+PODFILE CHECKSUM: 7e9eb8d27f43e255010fdc7f40842c4fd77dc09e
 
 COCOAPODS: 1.9.1

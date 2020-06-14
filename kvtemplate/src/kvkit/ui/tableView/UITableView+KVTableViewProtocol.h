@@ -16,14 +16,6 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-/** stateView loadding显示配置 */
-typedef NS_ENUM(NSInteger, KVTableViewShowLoaddingMode) {
-    /** 加载中且当列表为空的时候才显示 */
-    KVTableViewShowInfoMode_WhenEmptyContent,
-    /** 加载中就显示 */
-    KVTableViewShowInfoMode_AnyTime,
-};
-
 @interface UITableView (KVTableViewProtocol)
 <KVTableViewProtocol>
 
@@ -40,12 +32,6 @@ typedef NS_ENUM(NSInteger, KVTableViewShowLoaddingMode) {
 - (void)useDefaultHeader;
 
 - (void)useDefaultFooter;
-
-@end
-
-@interface UITableView (ShowLoaddingMode)
-
-@property (assign, nonatomic) KVTableViewShowLoaddingMode showLoaddingMode;
 
 @end
 

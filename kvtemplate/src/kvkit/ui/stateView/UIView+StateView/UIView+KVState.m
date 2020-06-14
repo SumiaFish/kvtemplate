@@ -13,6 +13,8 @@
 
 #import "NSObject+WeakObserve.h"
 
+#import <Aspects.h>
+
 //static void InstallWillMoveToSuperviewListener(void (^listener)(id _self, UIView* newSuperview)) {
 //    if (listener == NULL) {
 //        KVKitLog(@"listener cannot be NULL.");
@@ -30,8 +32,8 @@
 //    IMP newImp = imp_implementationWithBlock(block);
 //    method_setImplementation(willMoveToSuperview, newImp);
 //}
-//
-//static void InstallWillRemoveSubviewListener(void (^listener)(id _self, UIView* newSuperview)) {
+
+//static void InstallWillRemoveSubviewListener(void (^listener)(id _self, UIView* subview)) {
 //    if (listener == NULL) {
 //        KVKitLog(@"listener cannot be NULL.");
 //        return;
@@ -41,7 +43,11 @@
 //    IMP originalImp = method_getImplementation(willRemoveSubview);
 //
 //    void (^block)(id, UIView*) = ^(id _self, UIView* subview) {
-//        originalImp();
+//        [_self willChangeValueForKey:@"superview"];
+//        originalImp(_self, @selector(willMoveToSuperview:), superview);
+//        [_self didChangeValueForKey:@"superview"];
+//
+//        originalImp(_self, @selector(willRemoveSubview:), subview);
 //        listener(_self, subview);
 //    };
 //
@@ -56,14 +62,7 @@ static void* UIViewStateViewKey = &UIViewStateViewKey;
 static void* UIViewStateViewFrameKey = &UIViewStateViewFrameKey;
 
 - (void)setStateView:(UIView<KVStateViewProtocol> *)stateView {
-    // nil 则表示只删除
-    [self.stateView removeFromSuperview];
-    [stateView showInitialize];
-    objc_setAssociatedObject(self, UIViewStateViewKey, stateView, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-    //
-    [self stateViewBindSuperView];
-    // superView 是不能以kvo监听的??!!
-    [self kv_addWeakObserve:self keyPath:@"frame" options:(NSKeyValueObservingOptionNew) context:(__bridge void * _Nullable)(self) isCallBackInMain:YES];
+    [self setStateView:stateView andMoveTo:self];
 }
 
 - (UIView<KVStateViewProtocol> *)stateView {
@@ -102,6 +101,19 @@ static void* UIViewStateViewFrameKey = &UIViewStateViewFrameKey;
     return self.stateView.state;
 }
 
+- (void)setStateView:(UIView<KVStateViewProtocol> *)stateView andMoveTo:(UIView *)view {
+    // nil 则表示只删除
+    [self.stateView removeFromSuperview];
+    [stateView showInitialize];
+    objc_setAssociatedObject(self, UIViewStateViewKey, stateView, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    //
+    [self stateViewBindSuperView:view];
+    //
+    [self layoutStateView];
+    // superView 是不能以kvo监听的??!!
+    [self kv_addWeakObserve:self keyPath:@"frame" options:(NSKeyValueObservingOptionNew) context:(__bridge void * _Nullable)(self) isCallBackInMain:YES];
+}
+
 - (void)kv_receiveWeakObserveValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
     if (object == self &&
         context == (__bridge void * _Nullable)(self)) {
@@ -114,13 +126,21 @@ static void* UIViewStateViewFrameKey = &UIViewStateViewFrameKey;
     [super kv_receiveWeakObserveValueForKeyPath:keyPath ofObject:object change:change context:context];
 }
 
-- (void)stateViewBindSuperView {
+- (void)stateViewBindSuperView:(UIView *)view {
     
-    if (self.stateView &&
-        self.stateView.superview == nil) {
-        UIView *superView = self;
-        if (![superView.subviews containsObject:self.stateView]) {
+    if (self.stateView) {
+        UIView *superView = view;
+        if (self.stateView.superview != view ||
+            ![superView.subviews containsObject:self.stateView]) {
+            [self.stateView removeFromSuperview];
             [superView addSubview:self.stateView];
+            //
+            __weak typeof(self) ws = self;
+            [self aspect_hookSelector:@selector(willRemoveSubview:) withOptions:(AspectPositionAfter) usingBlock:^{
+                if (ws.stateView.superview) {
+                    [ws.stateView removeFromSuperview];
+                }
+            } error:nil];
         }
     }
 }

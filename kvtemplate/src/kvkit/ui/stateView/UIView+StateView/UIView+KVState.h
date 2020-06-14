@@ -20,6 +20,8 @@ NS_ASSUME_NONNULL_BEGIN
 /** 状态视图，默认为空 */
 @property (strong, nonatomic, nullable) UIView<KVStateViewProtocol> *stateView;
 
+- (void)setStateView:(UIView<KVStateViewProtocol> * _Nullable)stateView andMoveTo:(UIView *)view;
+
 @end
 
 NS_ASSUME_NONNULL_END

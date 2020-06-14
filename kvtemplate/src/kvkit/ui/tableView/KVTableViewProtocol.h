@@ -56,7 +56,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (copy, nonatomic) void (^ onReloadDataBlock) (UITableView<KVTableViewProtocol> *tableView);
 
-@property (strong, nonatomic, nullable) id<KVTableViewPresentProtocol> present;
+@property (weak, nonatomic, nullable) id<KVTableViewPresentProtocol> present;
 @property (strong, nonatomic, nullable) id<KVTableViewAdapterProtocol> adapter;
 
 - (void)refreshData:(BOOL)isShowHeaderLoadding;

@@ -8,6 +8,8 @@
 
 #import <CTMediator/CTMediator.h>
 
+#import "CTMediator+Detail.h"
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface CTMediator (Router)

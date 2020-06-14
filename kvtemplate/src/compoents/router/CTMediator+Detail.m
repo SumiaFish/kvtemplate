@@ -8,6 +8,20 @@
 
 #import "CTMediator+Detail.h"
 
+#import "DetailViewController.h"
+
 @implementation CTMediator (Detail)
+
+- (UIViewController *)detailController {
+    return [self performTarget:@"Detail" action:@"DetailController" params:nil shouldCacheTarget:NO];
+}
+
+@end
+
+@implementation Target_Detail
+
+- (UIViewController *)Action_DetailController:(id)params {
+    return [[DetailViewController alloc] init];
+}
 
 @end

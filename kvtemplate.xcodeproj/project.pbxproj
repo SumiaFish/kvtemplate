@@ -10,6 +10,9 @@
 		0422A7B824954CD4004FE1D5 /* UIViewController+SimpleAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = 0422A7B624954CD4004FE1D5 /* UIViewController+SimpleAlert.m */; };
 		0422A7C724955A96004FE1D5 /* NSObject+WeakProperty.m in Sources */ = {isa = PBXBuildFile; fileRef = 0422A7C624955A96004FE1D5 /* NSObject+WeakProperty.m */; };
 		0422A7D02495F1B2004FE1D5 /* UITableView+KVTableViewProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 0422A7CF2495F1B2004FE1D5 /* UITableView+KVTableViewProtocol.m */; };
+		0422A81D24962057004FE1D5 /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0422A81C24962057004FE1D5 /* DetailViewController.m */; };
+		0422A821249620DB004FE1D5 /* CTMediator+Router.m in Sources */ = {isa = PBXBuildFile; fileRef = 0422A820249620DB004FE1D5 /* CTMediator+Router.m */; };
+		0422A824249620EC004FE1D5 /* CTMediator+Detail.m in Sources */ = {isa = PBXBuildFile; fileRef = 0422A823249620EC004FE1D5 /* CTMediator+Detail.m */; };
 		043A38EC2477CE7F00FFC960 /* UIView+KVState.m in Sources */ = {isa = PBXBuildFile; fileRef = 043A38EB2477CE7F00FFC960 /* UIView+KVState.m */; };
 		044EF8D82477D153007F2CB6 /* KVHud.m in Sources */ = {isa = PBXBuildFile; fileRef = 044EF8D72477D153007F2CB6 /* KVHud.m */; };
 		044EF8DB2477D1F0007F2CB6 /* KVBaseStateView.m in Sources */ = {isa = PBXBuildFile; fileRef = 044EF8DA2477D1F0007F2CB6 /* KVBaseStateView.m */; };
@@ -78,6 +81,12 @@
 		0422A7C624955A96004FE1D5 /* NSObject+WeakProperty.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSObject+WeakProperty.m"; sourceTree = "<group>"; };
 		0422A7CE2495F1B2004FE1D5 /* UITableView+KVTableViewProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UITableView+KVTableViewProtocol.h"; sourceTree = "<group>"; };
 		0422A7CF2495F1B2004FE1D5 /* UITableView+KVTableViewProtocol.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UITableView+KVTableViewProtocol.m"; sourceTree = "<group>"; };
+		0422A81B24962057004FE1D5 /* DetailViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DetailViewController.h; sourceTree = "<group>"; };
+		0422A81C24962057004FE1D5 /* DetailViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DetailViewController.m; sourceTree = "<group>"; };
+		0422A81F249620DB004FE1D5 /* CTMediator+Router.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CTMediator+Router.h"; sourceTree = "<group>"; };
+		0422A820249620DB004FE1D5 /* CTMediator+Router.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "CTMediator+Router.m"; sourceTree = "<group>"; };
+		0422A822249620EC004FE1D5 /* CTMediator+Detail.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CTMediator+Detail.h"; sourceTree = "<group>"; };
+		0422A823249620EC004FE1D5 /* CTMediator+Detail.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "CTMediator+Detail.m"; sourceTree = "<group>"; };
 		043A38EA2477CE7F00FFC960 /* UIView+KVState.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIView+KVState.h"; sourceTree = "<group>"; };
 		043A38EB2477CE7F00FFC960 /* UIView+KVState.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIView+KVState.m"; sourceTree = "<group>"; };
 		043A38EE2477CEB700FFC960 /* KVStateViewProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KVStateViewProtocol.h; sourceTree = "<group>"; };
@@ -260,6 +269,37 @@
 			path = toast;
 			sourceTree = "<group>";
 		};
+		0422A81924962024004FE1D5 /* home（首页） */ = {
+			isa = PBXGroup;
+			children = (
+				046097D0246C323E00BA6FD5 /* HomeViewController.h */,
+				046097CE246C323E00BA6FD5 /* HomeViewController.m */,
+				046097CF246C323E00BA6FD5 /* HomePresent.h */,
+				046097CD246C323E00BA6FD5 /* HomePresent.m */,
+			);
+			path = "home（首页）";
+			sourceTree = "<group>";
+		};
+		0422A81A24962031004FE1D5 /* detail（详情页） */ = {
+			isa = PBXGroup;
+			children = (
+				0422A81B24962057004FE1D5 /* DetailViewController.h */,
+				0422A81C24962057004FE1D5 /* DetailViewController.m */,
+			);
+			path = "detail（详情页）";
+			sourceTree = "<group>";
+		};
+		0422A81E249620C8004FE1D5 /* router */ = {
+			isa = PBXGroup;
+			children = (
+				0422A81F249620DB004FE1D5 /* CTMediator+Router.h */,
+				0422A820249620DB004FE1D5 /* CTMediator+Router.m */,
+				0422A822249620EC004FE1D5 /* CTMediator+Detail.h */,
+				0422A823249620EC004FE1D5 /* CTMediator+Detail.m */,
+			);
+			path = router;
+			sourceTree = "<group>";
+		};
 		043A38E92477CE5500FFC960 /* UIView+StateView */ = {
 			isa = PBXGroup;
 			children = (
@@ -379,10 +419,7 @@
 				049FA921248BCE1B003B61BD /* chnnel */,
 				049FA924248BCE1C003B61BD /* discover */,
 				049FA927248BCE1C003B61BD /* personal */,
-				049FA91A248BCD6B003B61BD /* tabbar */,
-				046097D2246C323E00BA6FD5 /* detail */,
 				046097CC246C323E00BA6FD5 /* home */,
-				046097D1246C323E00BA6FD5 /* navigation */,
 			);
 			path = sections;
 			sourceTree = "<group>";
@@ -390,28 +427,10 @@
 		046097CC246C323E00BA6FD5 /* home */ = {
 			isa = PBXGroup;
 			children = (
-				046097D0246C323E00BA6FD5 /* HomeViewController.h */,
-				046097CE246C323E00BA6FD5 /* HomeViewController.m */,
-				046097CF246C323E00BA6FD5 /* HomePresent.h */,
-				046097CD246C323E00BA6FD5 /* HomePresent.m */,
+				0422A81A24962031004FE1D5 /* detail（详情页） */,
+				0422A81924962024004FE1D5 /* home（首页） */,
 			);
 			path = home;
-			sourceTree = "<group>";
-		};
-		046097D1246C323E00BA6FD5 /* navigation */ = {
-			isa = PBXGroup;
-			children = (
-				049FA91E248BCDB9003B61BD /* AppNavigationController.h */,
-				049FA91F248BCDB9003B61BD /* AppNavigationController.m */,
-			);
-			path = navigation;
-			sourceTree = "<group>";
-		};
-		046097D2246C323E00BA6FD5 /* detail */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = detail;
 			sourceTree = "<group>";
 		};
 		046097D3246C323E00BA6FD5 /* kvkit */ = {
@@ -517,6 +536,7 @@
 		046097F5246C323E00BA6FD5 /* compoents */ = {
 			isa = PBXGroup;
 			children = (
+				0422A81E249620C8004FE1D5 /* router */,
 				0422A81524961448004FE1D5 /* toast */,
 				0422A7BC24954DC0004FE1D5 /* mediator */,
 				049FA92D248BD06E003B61BD /* controller */,
@@ -554,15 +574,6 @@
 			path = operation;
 			sourceTree = "<group>";
 		};
-		049FA91A248BCD6B003B61BD /* tabbar */ = {
-			isa = PBXGroup;
-			children = (
-				049FA91B248BCD92003B61BD /* AppTabbarController.h */,
-				049FA91C248BCD92003B61BD /* AppTabbarController.m */,
-			);
-			path = tabbar;
-			sourceTree = "<group>";
-		};
 		049FA921248BCE1B003B61BD /* chnnel */ = {
 			isa = PBXGroup;
 			children = (
@@ -595,6 +606,10 @@
 			children = (
 				049FA92E248BD07C003B61BD /* AppViewController.h */,
 				049FA92F248BD07C003B61BD /* AppViewController.m */,
+				049FA91B248BCD92003B61BD /* AppTabbarController.h */,
+				049FA91C248BCD92003B61BD /* AppTabbarController.m */,
+				049FA91E248BCDB9003B61BD /* AppNavigationController.h */,
+				049FA91F248BCDB9003B61BD /* AppNavigationController.m */,
 			);
 			path = controller;
 			sourceTree = "<group>";
@@ -873,6 +888,8 @@
 				049FA92A248BCE1C003B61BD /* ChannelViewController.m in Sources */,
 				04609803246C323E00BA6FD5 /* KVToast.m in Sources */,
 				04609801246C323E00BA6FD5 /* KVDefaultStateView.m in Sources */,
+				0422A821249620DB004FE1D5 /* CTMediator+Router.m in Sources */,
+				0422A81D24962057004FE1D5 /* DetailViewController.m in Sources */,
 				046097FC246C323E00BA6FD5 /* HomePresent.m in Sources */,
 				049FA920248BCDB9003B61BD /* AppNavigationController.m in Sources */,
 				0460980B246C323F00BA6FD5 /* AppNetworking.m in Sources */,
@@ -892,6 +909,7 @@
 				0422A7D02495F1B2004FE1D5 /* UITableView+KVTableViewProtocol.m in Sources */,
 				04609812246C515400BA6FD5 /* NSObject+WeakObserve.m in Sources */,
 				046097CA246C321D00BA6FD5 /* AppDelegate.m in Sources */,
+				0422A824249620EC004FE1D5 /* CTMediator+Detail.m in Sources */,
 				046097C9246C321D00BA6FD5 /* SceneDelegate.m in Sources */,
 				0460979D246C31AB00BA6FD5 /* main.m in Sources */,
 				046097FD246C323E00BA6FD5 /* HomeViewController.m in Sources */,

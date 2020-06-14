@@ -22,7 +22,7 @@ target 'kvtemplate' do
   
   pod "CTMediator"
   
-  pod 'BlocksKit'
+  pod "Aspects"
 
   target 'kvtemplateTests' do
     inherit! :search_paths
