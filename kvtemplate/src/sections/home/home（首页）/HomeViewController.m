@@ -19,16 +19,11 @@
 @end
 
 @implementation HomeViewController
-{
-    AppNetworking *task;
-}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
     self.title = @"Home";
-    self.navigationController.navigationBar.hidden = NO;
-    
     [self button];
 }
 

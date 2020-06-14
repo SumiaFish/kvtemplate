@@ -23,9 +23,6 @@
 @end
 
 @implementation DetailViewController
-{
-    AppNetworking *task;
-}
 
 - (void)dealloc {
     kLog(@"%@ dealloc~", NSStringFromClass(self.class));
@@ -139,7 +136,7 @@
         [_tableView registerHeaderFooterClazz:@{@"header": UITableViewHeaderFooterView.class}];
         
         AppTableViewStateView *stateView = [AppTableViewStateView viewWithKVTableView:(UITableView<KVTableViewPresentProtocol> *)_tableView];
-        [_tableView setStateView:stateView andMoveTo:self.view];
+        [_tableView setStateView:stateView andMoveTo:AppDelegate.window];
         
     }
     

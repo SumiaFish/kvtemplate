@@ -16,6 +16,13 @@
 
 @implementation AppDelegate
 
++ (UIWindow *)window {
+    id appDelegate = UIApplication.sharedApplication.delegate;
+    if ([appDelegate isKindOfClass:AppDelegate.class]) {
+        return ((AppDelegate *)appDelegate).window;
+    }
+    return nil;
+}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     

@@ -18,6 +18,8 @@
 
 #import "AppNetworking.h"
 
+#import "AppDelegate.h"
+
 #import "KVToast.h"
 #import "UIView+Context.h"
 #import "UIView+KVState.h"

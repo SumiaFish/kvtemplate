@@ -76,25 +76,27 @@
     
     [self showLoadding:@"加载中"];
         
+    __weak typeof(self) ws = self;
+    
     [[[[self.present kv_loadDataWithTableView:self isRefresh:isRefresh] then:^id _Nullable(id  _Nullable value) {
 
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self showSuccess:@"加载成功"];
+            [ws showSuccess:@"加载成功"];
         });
         
-        if (self.onReloadDataBlock) {
-            self.onReloadDataBlock(self);
+        if (ws.onReloadDataBlock) {
+            ws.onReloadDataBlock(ws);
         } else {
-            [self reloadData];
+            [ws reloadData];
         }
 
         return value;
         
     }] catch:^(NSError * _Nonnull error) {
-        [self showError:error];
+        [ws showError:error];
         
     }] always:^{
-        [self displayRefreshCompoent:NO isRefresh:isRefresh];
+        [ws displayRefreshCompoent:NO isRefresh:isRefresh];
         
     }];
 }

@@ -135,12 +135,17 @@ static void* UIViewStateViewFrameKey = &UIViewStateViewFrameKey;
             [self.stateView removeFromSuperview];
             [superView addSubview:self.stateView];
             //
-            __weak typeof(self) ws = self;
-            [self aspect_hookSelector:@selector(willRemoveSubview:) withOptions:(AspectPositionAfter) usingBlock:^{
-                if (ws.stateView.superview) {
-                    [ws.stateView removeFromSuperview];
+            [self aspect_hookSelector:@selector(removeFromSuperview) withOptions:(AspectPositionBefore) usingBlock:^ (id<AspectInfo> info) {
+                id instance = info.instance;
+                if ([instance isKindOfClass:UIView.class]) {
+                    UIView *view = instance;
+                    if (view.stateView) {
+                        [view showInitialize];
+                        [view.stateView removeFromSuperview];
+                    }
                 }
             } error:nil];
+
         }
     }
 }
