@@ -12,7 +12,7 @@
 
 @interface HomePresent ()
 
-@property (strong, nonatomic) NSMutableArray *data;
+@property (strong, nonatomic, readwrite) NSMutableArray<NSArray<NSNumber *> *> *data;
 
 @end
 
@@ -40,12 +40,14 @@
                 NSInteger newPage = [tableView.adapter getOffsetPageWithIsRefresh:isRefresh];
                 BOOL hasMore = newPage <= 5;
                 if (isRefresh) {
-                    [self.data removeAllObjects];
+                    [self.mtData removeAllObjects];
                 }
                 if (hasMore) {
+                    NSMutableArray *items = NSMutableArray.array;
                     for (NSInteger i = 0; i < 20; i++) {
-                        [self.data addObject:@(i)];
+                        [items addObject:@(i)];
                     }
+                    [self.mtData addObject:items];
                 }
                 [tableView.adapter updateWithData:self.data page:newPage hasMore:hasMore];
                 fulfill(nil);
@@ -58,7 +60,11 @@
     
 }
 
-- (NSMutableArray *)data {
+- (NSArray<NSArray<NSNumber *> *> *)data {
+    return [self mtData];
+}
+
+- (NSMutableArray *)mtData {
     if (!_data) {
         _data = NSMutableArray.array;
     }

@@ -18,10 +18,10 @@
 
 @property (strong, nonatomic, readwrite) KVHttpToolInfos *info;
 
-/// 请求成功回调：默认 nil
+// 请求成功回调：默认 nil
 @property (copy, nonatomic, readwrite) KVHttpTool* _Nullable (^ success) (void (^ _Nullable successBlock)(id _Nullable responseObject));
 
-/// 请求成功失败：默认 nil
+// 请求成功失败：默认 nil
 @property (copy, nonatomic, readwrite) KVHttpTool* _Nullable (^ failure) (void (^ _Nullable failureBlock)(NSError * _Nullable error));
 
 @end
@@ -90,7 +90,7 @@ static AppNetworkingToastShowMode AppNetworkingToastShowModeVar = AppNetworkingT
                 obj? obj(responseObject): nil;
                 if (ss.toastShowMode == AppNetworkingToastShowMode_OnSuccess ||
                     ss.toastShowMode == AppNetworkingToastShowMode_All) {
-                    [ss.toast kv_show:RequestSucc];
+                    [ss.toast show:RequestSucc];
                 }
                 ss.info.successBlock = nil;
                 ss.info.failureBlock = nil;
@@ -113,7 +113,7 @@ static AppNetworkingToastShowMode AppNetworkingToastShowModeVar = AppNetworkingT
                 obj? obj(error): nil;
                 if (ss.toastShowMode == AppNetworkingToastShowMode_OnFailed ||
                     ss.toastShowMode == AppNetworkingToastShowMode_All) {
-                    [ss.toast kv_show:error.localizedDescription];
+                    [ss.toast show:error.localizedDescription];
                 }
                 ss.info.failureBlock = nil;
                 ss.info.successBlock = nil;

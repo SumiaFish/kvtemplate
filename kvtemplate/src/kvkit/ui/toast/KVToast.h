@@ -7,13 +7,27 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <Toast/UIView+Toast.h>
 
 #import "KVToastViewProtocol.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
+/** toast 配置 */
+@interface KVToastConf : NSObject
+
+@property (strong, nonatomic) CSToastStyle *style;
+@property (assign, nonatomic) NSTimeInterval deuration;
+@property (assign, nonatomic) CGPoint screenPoint;
+@property (copy, nonatomic, nullable) void (^ onComplete) (BOOL didTap);
+
+@end
+
+/** toast 弹窗 */
 @interface KVToast : NSObject
 <KVToastViewProtocol>
+
+@property (strong, nonatomic) KVToastConf *conf;
 
 + (instancetype)share;
 

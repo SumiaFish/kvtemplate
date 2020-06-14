@@ -8,39 +8,20 @@
 
 #import "UIView+Context.h"
 
-@interface _KVUIViewContext : NSObject
+static NSString * const UIViewContextKey = @"UIViewContextKey";
 
-@property (weak, nonatomic) id context;
-
-@property (weak, nonatomic) id<KVUIViewDisplayDelegate> displayContext;
-
-@end
-
-@implementation _KVUIViewContext
-
-@end
+static NSString * const UIViewDisplayContextKey = @"UIViewDisplayContextKey";
 
 @implementation UIView (Context)
 
 static void* UIViewContextObjectKey = @"UIViewContextObjectKey";
 
 - (void)setContext:(id)context {
-    if (!self.contextObj) {
-        self.contextObj = _KVUIViewContext.new;
-    }
-    self.contextObj.context = context;
+    [self.weakPropsMap setObject:context forKey:UIViewContextKey];
 }
 
 - (id)context {
-    return self.contextObj.context;
-}
-
-- (void)setContextObj:(_KVUIViewContext *)contextObj {
-    objc_setAssociatedObject(self, UIViewContextObjectKey, contextObj, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-}
-
-- (_KVUIViewContext *)contextObj {
-    return objc_getAssociatedObject(self, UIViewContextObjectKey);
+    return [self.weakPropsMap objectForKey:UIViewContextKey];
 }
 
 @end
@@ -48,14 +29,11 @@ static void* UIViewContextObjectKey = @"UIViewContextObjectKey";
 @implementation UIView (DisplayContext)
 
 - (void)setDisplayContext:(id<KVUIViewDisplayDelegate>)displayContext {
-    if (!self.contextObj) {
-        self.contextObj = _KVUIViewContext.new;
-    }
-    self.contextObj.displayContext = displayContext;
+    [self.weakPropsMap setObject:displayContext forKey:UIViewDisplayContextKey];
 }
 
 - (id<KVUIViewDisplayDelegate>)displayContext {
-    return self.contextObj.displayContext;
+    return [self.weakPropsMap objectForKey:UIViewDisplayContextKey];
 }
 
 - (void)display:(BOOL)isDisplay {

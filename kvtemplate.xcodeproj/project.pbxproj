@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0422A7B824954CD4004FE1D5 /* UIViewController+SimpleAlert.m in Sources */ = {isa = PBXBuildFile; fileRef = 0422A7B624954CD4004FE1D5 /* UIViewController+SimpleAlert.m */; };
+		0422A7C724955A96004FE1D5 /* NSObject+WeakProperty.m in Sources */ = {isa = PBXBuildFile; fileRef = 0422A7C624955A96004FE1D5 /* NSObject+WeakProperty.m */; };
+		0422A7D02495F1B2004FE1D5 /* UITableView+KVTableViewProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 0422A7CF2495F1B2004FE1D5 /* UITableView+KVTableViewProtocol.m */; };
 		043A38EC2477CE7F00FFC960 /* UIView+KVState.m in Sources */ = {isa = PBXBuildFile; fileRef = 043A38EB2477CE7F00FFC960 /* UIView+KVState.m */; };
 		044EF8D82477D153007F2CB6 /* KVHud.m in Sources */ = {isa = PBXBuildFile; fileRef = 044EF8D72477D153007F2CB6 /* KVHud.m */; };
 		044EF8DB2477D1F0007F2CB6 /* KVBaseStateView.m in Sources */ = {isa = PBXBuildFile; fileRef = 044EF8DA2477D1F0007F2CB6 /* KVBaseStateView.m */; };
@@ -34,13 +37,18 @@
 		04609806246C323F00BA6FD5 /* KVHttpTool+MISC.m in Sources */ = {isa = PBXBuildFile; fileRef = 046097EB246C323E00BA6FD5 /* KVHttpTool+MISC.m */; };
 		04609807246C323F00BA6FD5 /* KVHttpTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 046097EC246C323E00BA6FD5 /* KVHttpTool.m */; };
 		04609808246C323F00BA6FD5 /* KVHttpToolCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 046097EE246C323E00BA6FD5 /* KVHttpToolCache.m */; };
-		0460980A246C323F00BA6FD5 /* AppTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 046097F8246C323E00BA6FD5 /* AppTableView.m */; };
 		0460980B246C323F00BA6FD5 /* AppNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 046097FB246C323E00BA6FD5 /* AppNetworking.m */; };
 		0460980F246C425000BA6FD5 /* KVStorege.m in Sources */ = {isa = PBXBuildFile; fileRef = 0460980E246C425000BA6FD5 /* KVStorege.m */; };
 		04609812246C515400BA6FD5 /* NSObject+WeakObserve.m in Sources */ = {isa = PBXBuildFile; fileRef = 04609810246C515400BA6FD5 /* NSObject+WeakObserve.m */; };
 		04609817246D276500BA6FD5 /* KVOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 04609816246D276500BA6FD5 /* KVOperation.m */; };
 		0460981A246D49D800BA6FD5 /* KVHttpOpration.m in Sources */ = {isa = PBXBuildFile; fileRef = 04609819246D49D800BA6FD5 /* KVHttpOpration.m */; };
 		0460981D246D49EC00BA6FD5 /* KVHttpToolInfos.m in Sources */ = {isa = PBXBuildFile; fileRef = 0460981C246D49EC00BA6FD5 /* KVHttpToolInfos.m */; };
+		049FA91D248BCD92003B61BD /* AppTabbarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 049FA91C248BCD92003B61BD /* AppTabbarController.m */; };
+		049FA920248BCDB9003B61BD /* AppNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 049FA91F248BCDB9003B61BD /* AppNavigationController.m */; };
+		049FA92A248BCE1C003B61BD /* ChannelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 049FA922248BCE1B003B61BD /* ChannelViewController.m */; };
+		049FA92B248BCE1C003B61BD /* DiscoverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 049FA926248BCE1C003B61BD /* DiscoverViewController.m */; };
+		049FA92C248BCE1C003B61BD /* PersonalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 049FA929248BCE1C003B61BD /* PersonalViewController.m */; };
+		049FA930248BD07C003B61BD /* AppViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 049FA92F248BD07C003B61BD /* AppViewController.m */; };
 		2F5695BBB2BCD2C876B6CA4B /* Pods_kvtemplateTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D08409416198747B4D09A66B /* Pods_kvtemplateTests.framework */; };
 		3D17287909FE42D4E2FA0092 /* Pods_kvtemplate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37C03827A0F330876CB317AF /* Pods_kvtemplate.framework */; };
 		D62D71C15E20B2037451AB76 /* Pods_kvtemplate_kvtemplateUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFA9D26535CA6B8139DC717C /* Pods_kvtemplate_kvtemplateUITests.framework */; };
@@ -64,6 +72,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0422A7B624954CD4004FE1D5 /* UIViewController+SimpleAlert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+SimpleAlert.m"; sourceTree = "<group>"; };
+		0422A7B724954CD4004FE1D5 /* UIViewController+SimpleAlert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+SimpleAlert.h"; sourceTree = "<group>"; };
+		0422A7C524955A96004FE1D5 /* NSObject+WeakProperty.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSObject+WeakProperty.h"; sourceTree = "<group>"; };
+		0422A7C624955A96004FE1D5 /* NSObject+WeakProperty.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSObject+WeakProperty.m"; sourceTree = "<group>"; };
+		0422A7CE2495F1B2004FE1D5 /* UITableView+KVTableViewProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UITableView+KVTableViewProtocol.h"; sourceTree = "<group>"; };
+		0422A7CF2495F1B2004FE1D5 /* UITableView+KVTableViewProtocol.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UITableView+KVTableViewProtocol.m"; sourceTree = "<group>"; };
 		043A38EA2477CE7F00FFC960 /* UIView+KVState.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIView+KVState.h"; sourceTree = "<group>"; };
 		043A38EB2477CE7F00FFC960 /* UIView+KVState.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIView+KVState.m"; sourceTree = "<group>"; };
 		043A38EE2477CEB700FFC960 /* KVStateViewProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KVStateViewProtocol.h; sourceTree = "<group>"; };
@@ -125,8 +139,6 @@
 		046097EE246C323E00BA6FD5 /* KVHttpToolCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KVHttpToolCache.m; sourceTree = "<group>"; };
 		046097EF246C323E00BA6FD5 /* KVHttpTool+Business.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "KVHttpTool+Business.h"; sourceTree = "<group>"; };
 		046097F0246C323E00BA6FD5 /* KVHttpToolHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KVHttpToolHeader.h; sourceTree = "<group>"; };
-		046097F7246C323E00BA6FD5 /* AppTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppTableView.h; sourceTree = "<group>"; };
-		046097F8246C323E00BA6FD5 /* AppTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppTableView.m; sourceTree = "<group>"; };
 		046097FA246C323E00BA6FD5 /* AppNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppNetworking.h; sourceTree = "<group>"; };
 		046097FB246C323E00BA6FD5 /* AppNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppNetworking.m; sourceTree = "<group>"; };
 		0460980C246C40E000BA6FD5 /* KVStoregeProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KVStoregeProtocol.h; sourceTree = "<group>"; };
@@ -140,6 +152,18 @@
 		04609819246D49D800BA6FD5 /* KVHttpOpration.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KVHttpOpration.m; sourceTree = "<group>"; };
 		0460981B246D49EC00BA6FD5 /* KVHttpToolInfos.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KVHttpToolInfos.h; sourceTree = "<group>"; };
 		0460981C246D49EC00BA6FD5 /* KVHttpToolInfos.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KVHttpToolInfos.m; sourceTree = "<group>"; };
+		049FA91B248BCD92003B61BD /* AppTabbarController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppTabbarController.h; sourceTree = "<group>"; };
+		049FA91C248BCD92003B61BD /* AppTabbarController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppTabbarController.m; sourceTree = "<group>"; };
+		049FA91E248BCDB9003B61BD /* AppNavigationController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppNavigationController.h; sourceTree = "<group>"; };
+		049FA91F248BCDB9003B61BD /* AppNavigationController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppNavigationController.m; sourceTree = "<group>"; };
+		049FA922248BCE1B003B61BD /* ChannelViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChannelViewController.m; sourceTree = "<group>"; };
+		049FA923248BCE1B003B61BD /* ChannelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChannelViewController.h; sourceTree = "<group>"; };
+		049FA925248BCE1C003B61BD /* DiscoverViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiscoverViewController.h; sourceTree = "<group>"; };
+		049FA926248BCE1C003B61BD /* DiscoverViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiscoverViewController.m; sourceTree = "<group>"; };
+		049FA928248BCE1C003B61BD /* PersonalViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonalViewController.h; sourceTree = "<group>"; };
+		049FA929248BCE1C003B61BD /* PersonalViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonalViewController.m; sourceTree = "<group>"; };
+		049FA92E248BD07C003B61BD /* AppViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppViewController.h; sourceTree = "<group>"; };
+		049FA92F248BD07C003B61BD /* AppViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppViewController.m; sourceTree = "<group>"; };
 		0D32C6FFADBA6601939A87F6 /* Pods-kvtemplate-kvtemplateUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-kvtemplate-kvtemplateUITests.debug.xcconfig"; path = "Target Support Files/Pods-kvtemplate-kvtemplateUITests/Pods-kvtemplate-kvtemplateUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		37C03827A0F330876CB317AF /* Pods_kvtemplate.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_kvtemplate.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4064FF0390EA78F4D5679892 /* Pods-kvtemplateTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-kvtemplateTests.debug.xcconfig"; path = "Target Support Files/Pods-kvtemplateTests/Pods-kvtemplateTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -179,20 +203,10 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		043A38E92477CE5500FFC960 /* UIView */ = {
+		0422A7B32495479F004FE1D5 /* stateView */ = {
 			isa = PBXGroup;
 			children = (
-				043A38EA2477CE7F00FFC960 /* UIView+KVState.h */,
-				043A38EB2477CE7F00FFC960 /* UIView+KVState.m */,
-				045D5D1E247E7B9500C22452 /* UIView+Context.h */,
-				045D5D1F247E7B9500C22452 /* UIView+Context.m */,
-			);
-			path = UIView;
-			sourceTree = "<group>";
-		};
-		043A38ED2477CE8900FFC960 /* stateView */ = {
-			isa = PBXGroup;
-			children = (
+				043A38E92477CE5500FFC960 /* UIView+StateView */,
 				043A38EE2477CEB700FFC960 /* KVStateViewProtocol.h */,
 				046097D7246C323E00BA6FD5 /* KVDefaultStateView.h */,
 				046097DA246C323E00BA6FD5 /* KVDefaultStateView.m */,
@@ -205,18 +219,62 @@
 			path = stateView;
 			sourceTree = "<group>";
 		};
-		045D5D2A247EAE5200C22452 /* controller */ = {
+		0422A7B524954ADF004FE1D5 /* UIVIew+Context */ = {
 			isa = PBXGroup;
 			children = (
+				045D5D1E247E7B9500C22452 /* UIView+Context.h */,
+				045D5D1F247E7B9500C22452 /* UIView+Context.m */,
 			);
-			path = controller;
+			path = "UIVIew+Context";
 			sourceTree = "<group>";
 		};
-		045D5D2E247EB0B500C22452 /* appDelegate */ = {
+		0422A7B924954CF4004FE1D5 /* UIViewController+Alert */ = {
+			isa = PBXGroup;
+			children = (
+				0422A7B724954CD4004FE1D5 /* UIViewController+SimpleAlert.h */,
+				0422A7B624954CD4004FE1D5 /* UIViewController+SimpleAlert.m */,
+			);
+			path = "UIViewController+Alert";
+			sourceTree = "<group>";
+		};
+		0422A7BC24954DC0004FE1D5 /* mediator */ = {
 			isa = PBXGroup;
 			children = (
 			);
-			path = appDelegate;
+			path = mediator;
+			sourceTree = "<group>";
+		};
+		0422A7C324955A54004FE1D5 /* objectWeakProperty */ = {
+			isa = PBXGroup;
+			children = (
+				0422A7C524955A96004FE1D5 /* NSObject+WeakProperty.h */,
+				0422A7C624955A96004FE1D5 /* NSObject+WeakProperty.m */,
+			);
+			path = objectWeakProperty;
+			sourceTree = "<group>";
+		};
+		0422A81524961448004FE1D5 /* toast */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = toast;
+			sourceTree = "<group>";
+		};
+		043A38E92477CE5500FFC960 /* UIView+StateView */ = {
+			isa = PBXGroup;
+			children = (
+				043A38EA2477CE7F00FFC960 /* UIView+KVState.h */,
+				043A38EB2477CE7F00FFC960 /* UIView+KVState.m */,
+			);
+			path = "UIView+StateView";
+			sourceTree = "<group>";
+		};
+		045D5D2A247EAE5200C22452 /* alert */ = {
+			isa = PBXGroup;
+			children = (
+				0422A7B924954CF4004FE1D5 /* UIViewController+Alert */,
+			);
+			path = alert;
 			sourceTree = "<group>";
 		};
 		0460977E246C31A600BA6FD5 = {
@@ -318,6 +376,10 @@
 		046097CB246C323E00BA6FD5 /* sections */ = {
 			isa = PBXGroup;
 			children = (
+				049FA921248BCE1B003B61BD /* chnnel */,
+				049FA924248BCE1C003B61BD /* discover */,
+				049FA927248BCE1C003B61BD /* personal */,
+				049FA91A248BCD6B003B61BD /* tabbar */,
 				046097D2246C323E00BA6FD5 /* detail */,
 				046097CC246C323E00BA6FD5 /* home */,
 				046097D1246C323E00BA6FD5 /* navigation */,
@@ -339,6 +401,8 @@
 		046097D1246C323E00BA6FD5 /* navigation */ = {
 			isa = PBXGroup;
 			children = (
+				049FA91E248BCDB9003B61BD /* AppNavigationController.h */,
+				049FA91F248BCDB9003B61BD /* AppNavigationController.m */,
 			);
 			path = navigation;
 			sourceTree = "<group>";
@@ -364,12 +428,11 @@
 		046097D4246C323E00BA6FD5 /* ui */ = {
 			isa = PBXGroup;
 			children = (
-				045D5D2E247EB0B500C22452 /* appDelegate */,
-				045D5D2A247EAE5200C22452 /* controller */,
-				043A38ED2477CE8900FFC960 /* stateView */,
-				043A38E92477CE5500FFC960 /* UIView */,
-				046097D5246C323E00BA6FD5 /* tableView */,
+				045D5D2A247EAE5200C22452 /* alert */,
 				046097E0246C323E00BA6FD5 /* toast */,
+				0422A7B32495479F004FE1D5 /* stateView */,
+				0422A7B524954ADF004FE1D5 /* UIVIew+Context */,
+				046097D5246C323E00BA6FD5 /* tableView */,
 			);
 			path = ui;
 			sourceTree = "<group>";
@@ -382,6 +445,8 @@
 				046097DB246C323E00BA6FD5 /* KVTableViewAdapter.h */,
 				046097D6246C323E00BA6FD5 /* KVTableViewAdapter.m */,
 				046097DE246C323E00BA6FD5 /* KVTableViewProtocol.h */,
+				0422A7CE2495F1B2004FE1D5 /* UITableView+KVTableViewProtocol.h */,
+				0422A7CF2495F1B2004FE1D5 /* UITableView+KVTableViewProtocol.m */,
 			);
 			path = tableView;
 			sourceTree = "<group>";
@@ -389,9 +454,9 @@
 		046097E0246C323E00BA6FD5 /* toast */ = {
 			isa = PBXGroup;
 			children = (
+				046097E3246C323E00BA6FD5 /* KVToastViewProtocol.h */,
 				046097E1246C323E00BA6FD5 /* KVToast.h */,
 				046097E2246C323E00BA6FD5 /* KVToast.m */,
-				046097E3246C323E00BA6FD5 /* KVToastViewProtocol.h */,
 			);
 			path = toast;
 			sourceTree = "<group>";
@@ -399,6 +464,7 @@
 		046097E4246C323E00BA6FD5 /* foundation */ = {
 			isa = PBXGroup;
 			children = (
+				0422A7C324955A54004FE1D5 /* objectWeakProperty */,
 				046097E5246C323E00BA6FD5 /* network */,
 				046097F1246C323E00BA6FD5 /* storege */,
 				04609813246D273000BA6FD5 /* operation */,
@@ -451,6 +517,9 @@
 		046097F5246C323E00BA6FD5 /* compoents */ = {
 			isa = PBXGroup;
 			children = (
+				0422A81524961448004FE1D5 /* toast */,
+				0422A7BC24954DC0004FE1D5 /* mediator */,
+				049FA92D248BD06E003B61BD /* controller */,
 				046097F6246C323E00BA6FD5 /* tableView */,
 				046097F9246C323E00BA6FD5 /* network */,
 			);
@@ -460,8 +529,6 @@
 		046097F6246C323E00BA6FD5 /* tableView */ = {
 			isa = PBXGroup;
 			children = (
-				046097F7246C323E00BA6FD5 /* AppTableView.h */,
-				046097F8246C323E00BA6FD5 /* AppTableView.m */,
 				045D5D25247E9D9700C22452 /* AppTableViewStateView.h */,
 				045D5D26247E9D9700C22452 /* AppTableViewStateView.m */,
 				045D5D28247E9DA000C22452 /* AppTableViewStateView.xib */,
@@ -485,6 +552,51 @@
 				04609816246D276500BA6FD5 /* KVOperation.m */,
 			);
 			path = operation;
+			sourceTree = "<group>";
+		};
+		049FA91A248BCD6B003B61BD /* tabbar */ = {
+			isa = PBXGroup;
+			children = (
+				049FA91B248BCD92003B61BD /* AppTabbarController.h */,
+				049FA91C248BCD92003B61BD /* AppTabbarController.m */,
+			);
+			path = tabbar;
+			sourceTree = "<group>";
+		};
+		049FA921248BCE1B003B61BD /* chnnel */ = {
+			isa = PBXGroup;
+			children = (
+				049FA923248BCE1B003B61BD /* ChannelViewController.h */,
+				049FA922248BCE1B003B61BD /* ChannelViewController.m */,
+			);
+			path = chnnel;
+			sourceTree = "<group>";
+		};
+		049FA924248BCE1C003B61BD /* discover */ = {
+			isa = PBXGroup;
+			children = (
+				049FA925248BCE1C003B61BD /* DiscoverViewController.h */,
+				049FA926248BCE1C003B61BD /* DiscoverViewController.m */,
+			);
+			path = discover;
+			sourceTree = "<group>";
+		};
+		049FA927248BCE1C003B61BD /* personal */ = {
+			isa = PBXGroup;
+			children = (
+				049FA928248BCE1C003B61BD /* PersonalViewController.h */,
+				049FA929248BCE1C003B61BD /* PersonalViewController.m */,
+			);
+			path = personal;
+			sourceTree = "<group>";
+		};
+		049FA92D248BD06E003B61BD /* controller */ = {
+			isa = PBXGroup;
+			children = (
+				049FA92E248BD07C003B61BD /* AppViewController.h */,
+				049FA92F248BD07C003B61BD /* AppViewController.m */,
+			);
+			path = controller;
 			sourceTree = "<group>";
 		};
 		4A191CC8EBB995D7E8440881 /* Pods */ = {
@@ -751,14 +863,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				04609804246C323F00BA6FD5 /* KVHttpToolCacheImp.m in Sources */,
+				049FA930248BD07C003B61BD /* AppViewController.m in Sources */,
 				0460980F246C425000BA6FD5 /* KVStorege.m in Sources */,
 				04609817246D276500BA6FD5 /* KVOperation.m in Sources */,
 				046097FE246C323E00BA6FD5 /* KVTableViewAdapter.m in Sources */,
 				0460981D246D49EC00BA6FD5 /* KVHttpToolInfos.m in Sources */,
 				045D5D27247E9D9700C22452 /* AppTableViewStateView.m in Sources */,
+				0422A7B824954CD4004FE1D5 /* UIViewController+SimpleAlert.m in Sources */,
+				049FA92A248BCE1C003B61BD /* ChannelViewController.m in Sources */,
 				04609803246C323E00BA6FD5 /* KVToast.m in Sources */,
 				04609801246C323E00BA6FD5 /* KVDefaultStateView.m in Sources */,
 				046097FC246C323E00BA6FD5 /* HomePresent.m in Sources */,
+				049FA920248BCDB9003B61BD /* AppNavigationController.m in Sources */,
 				0460980B246C323F00BA6FD5 /* AppNetworking.m in Sources */,
 				04609792246C31A600BA6FD5 /* ViewController.m in Sources */,
 				045D5D20247E7B9500C22452 /* UIView+Context.m in Sources */,
@@ -767,16 +883,20 @@
 				04609806246C323F00BA6FD5 /* KVHttpTool+MISC.m in Sources */,
 				044EF8D82477D153007F2CB6 /* KVHud.m in Sources */,
 				04609805246C323F00BA6FD5 /* KVHttpTool+Business.m in Sources */,
+				049FA92B248BCE1C003B61BD /* DiscoverViewController.m in Sources */,
 				04609800246C323E00BA6FD5 /* KVTableView.m in Sources */,
 				0460981A246D49D800BA6FD5 /* KVHttpOpration.m in Sources */,
-				0460980A246C323F00BA6FD5 /* AppTableView.m in Sources */,
+				049FA92C248BCE1C003B61BD /* PersonalViewController.m in Sources */,
 				043A38EC2477CE7F00FFC960 /* UIView+KVState.m in Sources */,
+				049FA91D248BCD92003B61BD /* AppTabbarController.m in Sources */,
+				0422A7D02495F1B2004FE1D5 /* UITableView+KVTableViewProtocol.m in Sources */,
 				04609812246C515400BA6FD5 /* NSObject+WeakObserve.m in Sources */,
 				046097CA246C321D00BA6FD5 /* AppDelegate.m in Sources */,
 				046097C9246C321D00BA6FD5 /* SceneDelegate.m in Sources */,
 				0460979D246C31AB00BA6FD5 /* main.m in Sources */,
 				046097FD246C323E00BA6FD5 /* HomeViewController.m in Sources */,
 				04609808246C323F00BA6FD5 /* KVHttpToolCache.m in Sources */,
+				0422A7C724955A96004FE1D5 /* NSObject+WeakProperty.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

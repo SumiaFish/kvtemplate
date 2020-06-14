@@ -24,43 +24,30 @@
 
 @property (copy, nonatomic, readwrite) NSString *url;
 
-/// 请求方法： 默认 GET
 @property (copy, nonatomic, readwrite) KVHttpTool* _Nullable (^ method) (KVHttpToolMethod method);
 
-/// 请求参数：默认 nil
 @property (copy, nonatomic, readwrite) KVHttpTool* _Nullable (^ params) (NSDictionary * _Nullable params);
 
-/// 请求头：默认 KVHttpTool+Business 里的全局 headers; AF要求 headers 必须是 { string : string }
 @property (copy, nonatomic, readwrite) KVHttpTool* _Nullable (^ headers) (NSDictionary<NSString *, NSString *> * _Nullable headers);
 
-/// AFNetworking怎么解析请求结果：默认为data
 @property (copy, nonatomic, readwrite) KVHttpTool* _Nullable (^ responseSerialization) (KVHttpToolResponseSerialization responseSerialization);
 
-/// 最后要不要把请求结果转为JSON再返回：默认为YES;  如果你的返回结果明确要Data, 需要设为NO(如果不设置，会多一次转换时间，尝试转换失败后会返回原数据)；设置为NO也没法做返回的数据过滤了
 @property (copy, nonatomic, readwrite) KVHttpTool* _Nullable (^ serializationToJSON) (BOOL serializationToJSON);
 
-/// 匹配缓存策略： 默认不从缓存加载
 @property (copy, nonatomic, readwrite) KVHttpTool* _Nullable (^ cacheMate) (KVHttpToolCacheMate cacheMate);
 
-/// 缓存代理: 默认 KVHttpToolCache
 @property (copy, nonatomic, readwrite) KVHttpTool* _Nullable (^ cacheDelegate) (id<KVHttpToolCacheProtocol> cacheDelegate);
 
-/// 单独设置业务代理: 默认 KVHttpToolCache
 @property (copy, nonatomic, readwrite) KVHttpTool* _Nullable (^ businessDelegate) (id<KVHttpToolBusinessProtocol> businessDelegate);
 
-/// 请求进度：默认 nil
 @property (copy, nonatomic, readwrite) KVHttpTool* _Nullable (^ progress) (void (^ _Nullable progressBlock)(NSProgress *progress));
 
-/// 请求成功回调：默认 nil
 @property (copy, nonatomic, readwrite) KVHttpTool* _Nullable (^ success) (void (^ _Nullable successBlock)(id _Nullable responseObject));
 
-/// 请求成功失败：默认 nil
 @property (copy, nonatomic, readwrite) KVHttpTool* _Nullable (^ failure) (void (^ _Nullable failureBlock)(NSError * _Nullable error));
 
-/// 读取缓存的回调：默认 nil
 @property (copy, nonatomic, readwrite) KVHttpTool* _Nullable (^ cache) (void (^ _Nullable cacheBlock)(id _Nullable responseObject));
 
-/// 发送：必须在最后调用
 @property (copy, nonatomic, readwrite) void (^ send) (void);
 
 @end
@@ -88,7 +75,7 @@
     return self;
 }
 
-/// 给默认值
+// 给默认值
 - (void)commonInit {
     _semaphore = dispatch_semaphore_create(1);
     _queue = [[NSOperationQueue alloc] init];
@@ -345,13 +332,13 @@
     
 //    [self lock];
 //
-//    /// 开始发起请求
+//    // 开始发起请求
 //
 //    NSString *url = self.url;
 //    NSString *filePath = self.filePath;
 //
 //    KVHttpToolInfos *info = self.info;
-////    KVHttpToolMethod method = KVHttpTool_POST; //info.method; // 上传只能POST
+//    KVHttpToolMethod method = KVHttpTool_POST; //info.method; // 上传只能POST
 //    NSDictionary *params = info.params;
 //    NSDictionary *headers = info.headers;
 //    KVHttpToolResponseSerialization responseSerialization = info.responseSerialization;
@@ -361,7 +348,7 @@
 //    void (^ failureBlock)(NSError * _Nullable error) = info.failureBlock;
 //
 //
-//    /// 检测文件是否存在
+//    // 检测文件是否存在
 //    BOOL isDirectory = NO;
 //    BOOL isExecutableFileAtPath = [[NSFileManager defaultManager] fileExistsAtPath:filePath isDirectory:&isDirectory];
 //    if (!isExecutableFileAtPath) {
@@ -371,7 +358,7 @@
 //        return;
 //    }
     
-//    /// 拷贝到一个新目录
+//    // 拷贝到一个新目录
 //    if (![self createTmpFile:filePath]) {
 //        NSError *error = [NSError errorWithDomain:url code:-1 userInfo:@{NSLocalizedDescriptionKey: @"无法拷贝待上传文件"}];
 //        failureBlock? failureBlock(error): nil;

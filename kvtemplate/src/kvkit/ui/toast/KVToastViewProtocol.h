@@ -12,7 +12,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol KVToastViewProtocol <NSObject>
 
-- (void)kv_show:(NSString *)text;
+- (void)show:(NSString *)text;
+
+- (void)hide;
 
 @end
 

@@ -23,11 +23,19 @@
 @synthesize tableView = _tableView;
 @synthesize onRenderSectionsBlock = _onRenderSectionsBlock;
 @synthesize onRenderRowsBlock = _onRenderRowsBlock;
+@synthesize onRenderHeaderBlock = _onRenderHeaderBlock;
 @synthesize onRenderCellBlock = _onRenderCellBlock;
 @synthesize onRenderRowHeightBlock = _onRenderRowHeightBlock;
+@synthesize onRenderHeaderHeightBlock = _onRenderHeaderHeightBlock;
+@synthesize onSelecteItemBlock = _onSelecteItemBlock;
 
 - (instancetype)init {
+    return [[self.class alloc] initWithContext:nil];
+}
+
+- (instancetype)initWithContext:(id _Nullable)context {
     if (self = [super init]) {
+        self.context = context;
         [self commonInit];
     }
     return self;
@@ -66,8 +74,20 @@
     return _onRenderCellBlock ? _onRenderCellBlock(_tableView, indexPath) :UITableViewCell.new;
 }
 
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    return _onRenderHeaderBlock? _onRenderHeaderBlock(_tableView, section): nil;
+}
+
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return _onRenderRowHeightBlock ? _onRenderRowHeightBlock(_tableView, indexPath) : UITableViewAutomaticDimension;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return _onRenderHeaderHeightBlock? _onRenderHeaderHeightBlock(_tableView, section): 0;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    _onSelecteItemBlock? _onSelecteItemBlock(_tableView, indexPath): nil;
 }
 
 @end

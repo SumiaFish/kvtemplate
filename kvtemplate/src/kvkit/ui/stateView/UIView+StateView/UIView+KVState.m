@@ -11,6 +11,8 @@
 
 #import "KVKitHeader.h"
 
+#import "NSObject+WeakObserve.h"
+
 //static void InstallWillMoveToSuperviewListener(void (^listener)(id _self, UIView* newSuperview)) {
 //    if (listener == NULL) {
 //        KVKitLog(@"listener cannot be NULL.");
@@ -54,13 +56,13 @@ static void* UIViewStateViewKey = &UIViewStateViewKey;
 static void* UIViewStateViewFrameKey = &UIViewStateViewFrameKey;
 
 - (void)setStateView:(UIView<KVStateViewProtocol> *)stateView {
-    /// nil 则表示只删除
+    // nil 则表示只删除
     [self.stateView removeFromSuperview];
     [stateView showInitialize];
     objc_setAssociatedObject(self, UIViewStateViewKey, stateView, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     //
     [self stateViewBindSuperView];
-    /// superView 是不能以kvo监听的??!!
+    // superView 是不能以kvo监听的??!!
     [self kv_addWeakObserve:self keyPath:@"frame" options:(NSKeyValueObservingOptionNew) context:(__bridge void * _Nullable)(self) isCallBackInMain:YES];
 }
 
@@ -98,14 +100,6 @@ static void* UIViewStateViewFrameKey = &UIViewStateViewFrameKey;
 
 - (KVViewState)state {
     return self.stateView.state;
-}
-
-- (void)willMoveToSuperview:(UIView *)newSuperview {
-    
-}
-
-- (void)willRemoveSubview:(UIView *)subview {
-    
 }
 
 - (void)kv_receiveWeakObserveValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {

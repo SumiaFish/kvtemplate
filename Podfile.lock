@@ -14,33 +14,59 @@ PODS:
   - AFNetworking/Serialization (4.0.1)
   - AFNetworking/UIKit (4.0.1):
     - AFNetworking/NSURLSession
+  - BlocksKit (2.2.5):
+    - BlocksKit/All (= 2.2.5)
+  - BlocksKit/All (2.2.5):
+    - BlocksKit/Core
+    - BlocksKit/DynamicDelegate
+    - BlocksKit/MessageUI
+    - BlocksKit/UIKit
+  - BlocksKit/Core (2.2.5)
+  - BlocksKit/DynamicDelegate (2.2.5)
+  - BlocksKit/MessageUI (2.2.5):
+    - BlocksKit/Core
+    - BlocksKit/DynamicDelegate
+  - BlocksKit/UIKit (2.2.5):
+    - BlocksKit/Core
+    - BlocksKit/DynamicDelegate
+  - CTMediator (32)
   - MJRefresh (3.4.1)
   - PromisesObjC (1.2.8)
+  - SwiftTheme (0.5.2)
   - Toast (4.0.0)
   - YYCache (1.0.4)
 
 DEPENDENCIES:
   - AFNetworking
+  - BlocksKit
+  - CTMediator
   - MJRefresh
   - PromisesObjC
+  - SwiftTheme
   - Toast
   - YYCache
 
 SPEC REPOS:
   trunk:
     - AFNetworking
+    - BlocksKit
+    - CTMediator
     - MJRefresh
     - PromisesObjC
+    - SwiftTheme
     - Toast
     - YYCache
 
 SPEC CHECKSUMS:
   AFNetworking: 7864c38297c79aaca1500c33288e429c3451fdce
+  BlocksKit: 7f422b971407001178d181a43b99014ea2591fe6
+  CTMediator: 10f2c387be0ab2061b75b88c86f9903eedba1ce8
   MJRefresh: 3153c59a363159092c08b2177ec3a7d09f90bfaf
   PromisesObjC: c119f3cd559f50b7ae681fa59dc1acd19173b7e6
+  SwiftTheme: 8b02c479bb4441b2b6790ac126e961b1b6fb0932
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
   YYCache: 8105b6638f5e849296c71f331ff83891a4942952
 
-PODFILE CHECKSUM: b50832ecef6c33022862e5c20aa8d6639d8fc686
+PODFILE CHECKSUM: 16b21d514054195e947e15ef9bcd395317f1a30c
 
 COCOAPODS: 1.9.1

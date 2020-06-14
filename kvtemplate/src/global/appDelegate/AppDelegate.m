@@ -8,7 +8,7 @@
 
 #import "AppDelegate.h"
 
-#import "HomeViewController.h"
+#import "AppTabbarController.h"
 
 @interface AppDelegate ()
 
@@ -24,9 +24,8 @@
     } else {
         self.window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
         
-        HomeViewController *home = [[HomeViewController alloc] init];
-        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:home];
-        self.window.rootViewController = nav;
+        AppTabbarController *tabbar = [[AppTabbarController alloc] init];
+        self.window.rootViewController = tabbar;
         [self.window makeKeyAndVisible];
         
     }

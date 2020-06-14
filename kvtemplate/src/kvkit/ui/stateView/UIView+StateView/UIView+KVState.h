@@ -14,10 +14,11 @@ NS_ASSUME_NONNULL_BEGIN
 @interface UIView (KVState)
 <KVStateViewProtocol>
 
-/// stateViewFrame == CGRectZero 则和 self 一样的 frame
+/** stateViewFrame == CGRectZero 则和 self 一样的 frame */
 @property (assign, nonatomic) CGRect stateViewFrame;
 
-@property (strong, nonatomic) UIView<KVStateViewProtocol> *stateView;
+/** 状态视图，默认为空 */
+@property (strong, nonatomic, nullable) UIView<KVStateViewProtocol> *stateView;
 
 @end
 

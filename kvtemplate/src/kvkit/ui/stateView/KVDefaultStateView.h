@@ -11,6 +11,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+/** 默认的stateView */
 @interface KVDefaultStateView : KVBaseStateView
 
 + (instancetype)view;

@@ -14,6 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
 @interface HomePresent : NSObject
 <KVTableViewPresentProtocol>
 
+@property (strong, nonatomic, readonly) NSArray<NSArray<NSNumber *> *> *data;
+
 @end
 
 NS_ASSUME_NONNULL_END

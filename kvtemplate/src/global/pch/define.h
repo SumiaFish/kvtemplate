@@ -12,21 +12,23 @@
 #define kDesignWidth (667.f)
 #define kDesignHeight (375.f)
 
-/// 屏幕宽
+
+/** 屏幕宽 */
 #define kScreenWidth ([UIScreen mainScreen].bounds.size.width)
-/// 屏幕高
+
+/** 屏幕高 */
 #define kScreenHeight ([UIScreen mainScreen].bounds.size.height)
 
-/// 按照设计稿比例转换数值
+/** 按照设计稿比例转换数值 */
 #define kConverValue(value) (value/kDesignWidth*kScreenWidth)
 
-/// 判断是否为iPhone
+/** 判断是否为iPhone */
 #define kIsIPhone (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
 
-/// 判断是否为iPad
+/** 判断是否为iPad */
 #define kIsIPad (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
 
-/// 判断是不是刘海屏
+/** 判断是不是刘海屏 */
 #define kIsIPhonexSerious \
 (^BOOL { \
   if (@available(iOS 11.0, *)) { \
@@ -38,20 +40,20 @@
 }()) \
 
 
-/// NSUserDefaults
+/** NSUserDefaults */
 #define kUserDefaults ([NSUserDefaults standardUserDefaults])
 
-/// NSUserDefaults set and synchronize
+/** NSUserDefaults set and synchronize */
 #define kUserDefaultsSet(object, key) \
 { \
 [kUserDefaults setObject:object forKey:key]; \
 [kUserDefaults synchronize]; \
 }
 
-/// NSUserDefaults get
+/** NSUserDefaults get */
 #define kUserDefaultsGet(key) ([kUserDefaults objectForKey:key])
 
-/// NSUserDefaults remove and synchronize
+/** NSUserDefaults remove and synchronize */
 #define kUserDefaultsRemove(key) \
 { \
 [kUserDefaults removeObjectForKey:key]; \
@@ -59,7 +61,7 @@
 }
 
 
-/// 单例
+/** 单例 */
 #define kSingletionDeclaration(className) \
 \
 + (instancetype _Nullable)shareInstance;
@@ -92,7 +94,7 @@ return shared##className; \
 }
 
 
-/// Log
+/** Log */
 #ifdef DEBUG
 //#define kLog(format,...) printf("%s #%d: %s\n", __func__, __LINE__, ([[NSString stringWithFormat:(format), ##__VA_ARGS__] UTF8String]))
 #define kLog(format,...) NSLog(@"%s #%d: \n%@\n", __func__, __LINE__, [NSString stringWithFormat:(format), ##__VA_ARGS__])
@@ -101,7 +103,7 @@ return shared##className; \
 #endif
 
 
-/// weak self strong self
+/** weak self strong self */
 #define kWeakSelf __weak typeof(self) weakSelf = self;
 #define kStrongSelf __strong typeof(self) type = weakSelf;
 
@@ -109,11 +111,11 @@ return shared##className; \
 #define kStrongInstance(type)  __strong typeof(type) type = weak##type;
 
 
-/// color
+/** color */
 #define kRGBA(r, g, b, a) ([UIColor colorWithRed:(r)/255.0 green:(r)/255.0 blue:(r)/255.0 alpha:a])
 #define kRGB(r, g, b) (kRGBA(1))
 
-/// project info
+/** project info */
 #define kBundleId ([[NSBundle mainBundle].infoDictionary objectForKey:@"CFBundleIdentifier"]) //获取BundleId
 #define kBundleProjectName ([[NSBundle mainBundle].infoDictionary objectForKey:(NSString *)kCFBundleExecutableKey]) //获取工程名称
 #define kBundleDisplayName ([[NSBundle mainBundle].infoDictionary objectForKey:@"CFBundleDisplayName"]) //获取APP名称
@@ -121,11 +123,11 @@ return shared##className; \
 #define kBundleBuildVersion ([[NSBundle mainBundle].infoDictionary objectForKey:@"CFBundleVersion"]) // app build版本
 
 
-/// xib
+/** xib */
 #define kViewFromNib(nibName) ([[NSBundle mainBundle] loadNibNamed:nibName owner:nil options:nil].lastObject)
 
 
-/// CGD
+/** CGD */
 #define kDispatchTimeOffset(t) (dispatch_time(DISPATCH_TIME_NOW, (int64_t)(t * NSEC_PER_SEC))) // s
 
 #ifndef kDispatchMainThreadTask
@@ -153,11 +155,11 @@ if (strcmp(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL), dispatch_queu
 
 
 
-///
+/** */
 #define kFormatString(format,...) ([NSString stringWithFormat:(format), ##__VA_ARGS__])
 
 
-///
+/**  */
 #define KVSafeRespondsToSelector(target, sel, object) { \
     if ([target respondsToSelector:sel]) { \
         [target performSelector:sel withObject:object]; \

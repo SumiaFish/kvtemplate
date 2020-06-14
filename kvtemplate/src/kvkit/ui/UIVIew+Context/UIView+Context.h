@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+#import "NSObject+WeakProperty.h"
+
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol KVUIViewDisplayDelegate <NSObject>
@@ -18,13 +20,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface UIView (Context)
 
-@property (weak, nonatomic) id context;
+//@property (weak, nonatomic, nullable) id context;
 
 @end
 
 @interface UIView (DisplayContext)
 
-@property (weak, nonatomic) id<KVUIViewDisplayDelegate> displayContext;
+@property (weak, nonatomic, nullable) id<KVUIViewDisplayDelegate> displayContext;
 
 - (void)display:(BOOL)isDisplay;
 

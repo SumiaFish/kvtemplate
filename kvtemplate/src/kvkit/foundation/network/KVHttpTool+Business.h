@@ -10,16 +10,16 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-/// 网络请求类
+/** 网络请求类业务封装 */
 @interface KVHttpTool (Business)
 
-/// 配置全局请求头
+/** 配置全局请求头 */
 @property (class, strong, nonatomic, nullable) NSDictionary <NSString *, NSString *> *headers;
 
-/// 数据的业务校验
+/** 数据的业务校验 */
 @property (class, strong, nonatomic, nullable) id<KVHttpToolBusinessProtocol> business;
 
-/// 全局缓存对象
+/** 全局缓存对象 */
 @property (class, strong, nonatomic, nullable) id<KVHttpToolCacheProtocol> cacheDelegate;
 
 @end

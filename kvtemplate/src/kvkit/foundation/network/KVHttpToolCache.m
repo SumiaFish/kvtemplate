@@ -115,7 +115,7 @@ static BOOL KVHttpToolCacheInitFlag = NO;
 
 - (void)cache:(KVHttpToolCacheMate)type url:(nonnull NSString *)url headers:(NSDictionary * _Nullable)headers params:(NSDictionary * _Nullable)params data:(nonnull NSData *)data {
 
-    /// 参数检查!!!
+    // 参数检查!!!
     if (!data.length) {
         return;
     }
@@ -141,7 +141,7 @@ static BOOL KVHttpToolCacheInitFlag = NO;
 
 - (void)responseObjectWithCacheType:(KVHttpToolCacheMate)type url:(NSString *)url headers:(NSDictionary *)headers params:(NSDictionary *)params complete:(nonnull void (^)(NSData * _Nullable))complete {
     
-    /// 参数检查!!!
+    // 参数检查!!!
     NSString *key = [self getKeyWithCache:type url:url headers:headers params:params];
     if (!key.length) {
         complete? complete(nil): nil;
@@ -156,7 +156,7 @@ static BOOL KVHttpToolCacheInitFlag = NO;
             if (!complete) {
                 return;
             }
-            /// 切换到主线程执行回调
+            // 切换到主线程执行回调
             if (strcmp(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL), dispatch_queue_get_label(dispatch_get_main_queue())) == 0) {
                 complete(responseObject);
             } else {
@@ -176,7 +176,7 @@ static BOOL KVHttpToolCacheInitFlag = NO;
 
 - (void)removeCache:(KVHttpToolCacheMate)type url:(NSString *)url headers:(NSDictionary *)headers params:(NSDictionary *)params {
     
-    /// 参数检查!!!
+    // 参数检查!!!
     NSString *key = [self getKeyWithCache:type url:url headers:headers params:params];
     if (!key.length) {
         return;
@@ -202,7 +202,7 @@ static BOOL KVHttpToolCacheInitFlag = NO;
 
 - (void)removeAll {
     
-    /// 停止所有操作
+    // 停止所有操作
     [self lock];
     
 //    _queue.suspended = NO;// 这里不能这么写，会有问题
@@ -338,15 +338,15 @@ static BOOL KVHttpToolCacheInitFlag = NO;
     
 }
 
-/// 获取缓存文件路径
+// 获取缓存文件路径
 - (NSString *)getCachePath {
     // 获取Caches目录路径
     NSString *cachesDir = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject];
     
-    /// 这不是全路径，是cache目录下的 rootDirectoryName/directoryName  ==> @"aaa/bbb"
+    // 这不是全路径，是cache目录下的 rootDirectoryName/directoryName  ==> @"aaa/bbb"
     NSString *defaultsDirectoryName = [self getUserDefaultsDirectoryNameWithKey:[self userDefaultsKey]];
     if (defaultsDirectoryName.length == 0) {
-        /// 不存在j就创建
+        // 不存在j就创建
         defaultsDirectoryName = [self directoryName];
         NSString *cacheName = NSUUID.UUID.UUIDString;
     
@@ -362,7 +362,7 @@ static BOOL KVHttpToolCacheInitFlag = NO;
     }
 }
 
-/// 获取UserDefaults中的保存的缓存目录路径 @"directoryName/ cacheName"
+// 获取UserDefaults中的保存的缓存目录路径 @"directoryName/ cacheName"
 - (NSString *)getUserDefaultsDirectoryNameWithKey:(NSString *)key {
     NSString *base64 = [[NSUserDefaults standardUserDefaults] objectForKey:key];
     if ([base64 isKindOfClass:NSString.class]) {
@@ -374,7 +374,7 @@ static BOOL KVHttpToolCacheInitFlag = NO;
     return nil;
 }
 
-/// 保存缓存目录路径到UserDefaults中 @"directoryName/ cacheName"
+// 保存缓存目录路径到UserDefaults中 @"directoryName/ cacheName"
 - (void)setUserDefaultsDirectoryName:(NSString *)defaultsDirectoryName key:(NSString *)key {
     NSString *userDefaultsValue = defaultsDirectoryName;
     NSData *data = [userDefaultsValue dataUsingEncoding:NSUTF8StringEncoding];
@@ -384,7 +384,7 @@ static BOOL KVHttpToolCacheInitFlag = NO;
 }
 
 - (NSString *)userDefaultsKey {
-    /// bundleid + 类名，避免重名
+    // bundleid + 类名，避免重名
     NSString *bundleId = [[NSBundle mainBundle].infoDictionary objectForKey:@"CFBundleIdentifier"];
     NSString *clsName = NSStringFromClass(self.class);
     NSString *suffix = @"directory";
@@ -392,7 +392,7 @@ static BOOL KVHttpToolCacheInitFlag = NO;
     return key.lowercaseString;
 }
 
-/// 缓存目录
+// 缓存目录
 - (NSString *)directoryName {
     return [self userDefaultsKey];
 }

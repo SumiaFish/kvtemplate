@@ -41,7 +41,7 @@
     BOOL isExistPath = NO;
     if (![path isKindOfClass:NSString.class] ||
         ![[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isExistPath]) {
-        /// 没有缓存文件
+        // 没有缓存文件
         return;
     }
     
@@ -49,7 +49,7 @@
     NSString *directoryPath = [self directoryPath];
     if (!directoryName.length ||
         !directoryPath.length) {
-        /// 没有缓存目录
+        // 没有缓存目录
         return;
     }
     
@@ -77,7 +77,7 @@
     [array enumerateObjectsUsingBlock:^(NSString *  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         if (![obj hasPrefix:@"."] &&
             ![obj isEqualToString:cacheName]) {
-            /// 不是正在使用的都删除
+            // 不是正在使用的都删除
             NSString *filePath = [directoryPath stringByAppendingPathComponent:obj];
             [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
         }
@@ -178,7 +178,7 @@
 }
 
 - (NSString *)userDefaultsKey {
-    /// bundleid + 类名，避免重名
+    // bundleid + 类名，避免重名
     NSString *bundleId = [[NSBundle mainBundle].infoDictionary objectForKey:@"CFBundleIdentifier"];
     NSString *clsName = NSStringFromClass(self.class);
     NSString *suffix = @"keys";
@@ -235,7 +235,7 @@
     BOOL isExistPath = NO;
     if (![path isKindOfClass:NSString.class] ||
         ![[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isExistPath]) {
-        /// 没有缓存文件
+        // 没有缓存文件
         return;
     }
     
@@ -243,7 +243,7 @@
     NSString *directoryPath = [self directoryPath];
     if (!directoryName.length ||
         !directoryPath.length) {
-        /// 没有缓存目录
+        // 没有缓存目录
         return;
     }
     
@@ -260,7 +260,7 @@
     [array enumerateObjectsUsingBlock:^(NSString *  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         if (![obj hasPrefix:@"."] &&
             ![obj isEqualToString:cacheName]) {
-            /// 不是正在使用的都删除
+            // 不是正在使用的都删除
             NSString *filePath = [directoryPath stringByAppendingPathComponent:obj];
             NSDictionary *fileAttributes = [manager attributesOfItemAtPath:filePath error:nil];
             NSDate *date = [fileAttributes objectForKey:NSFileCreationDate];
@@ -295,7 +295,7 @@
 }
 
 - (NSString *)filePathWithKey:(NSString *)shortKey {
-    /// 做md5是防止文件名过长
+    // 做md5是防止文件名过长
     return [_path stringByAppendingPathComponent:[self md5:shortKey]];
 }
 

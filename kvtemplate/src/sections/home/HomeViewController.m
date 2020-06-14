@@ -8,20 +8,16 @@
 
 #import "HomeViewController.h"
 
-#import "KVTableView.h"
 #import "HomePresent.h"
 
-#import "KVStorege.h"
-#import "KVHttpTool+MISC.h"
-
-@interface HomeTableViewAdapter : KVTableViewAdapter
-
-@end
+#import "AppTableViewStateView.h"
 
 @interface HomeViewController ()
-<KVUIViewDisplayDelegate>
+<KVUIViewDisplayDelegate, KVTableViewPresentProtocol>
 
-@property (strong, nonatomic) AppTableView *tableView;
+@property (strong, nonatomic) HomePresent *homePresent;
+
+@property (strong, nonatomic) UITableView *tableView;
 @property (strong, nonatomic) UIButton *button;
 
 @end
@@ -39,12 +35,13 @@
     self.view.backgroundColor = UIColor.whiteColor;
     
     self.view.stateView = AppTableViewStateView.view;
-    
+//
 //    [self.tableView display:NO];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self.tableView removeFromSuperview];
+//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+////        [self.tableView removeFromSuperview];
 //        [self.tableView display:YES animate:YES];
-    });
+//        [self.tableView refreshData:YES];
+//    });
     
     [self.tableView refreshData:YES];
 //    [self button];
@@ -70,6 +67,15 @@
     }
 }
 
+- (FBLPromise *)kv_loadDataWithTableView:(id<KVTableViewProtocol>)tableView isRefresh:(BOOL)isRefresh {
+    if (tableView == self.tableView) {
+        return [[self.homePresent kv_loadDataWithTableView:tableView isRefresh:isRefresh] then:^id _Nullable(id  _Nullable value) {
+            return value;
+        }];
+    }
+    return nil;
+}
+
 - (UIButton *)button {
     if (!_button) {
         _button = [UIButton buttonWithType:(UIButtonTypeSystem)];
@@ -82,45 +88,66 @@
     return _button;
 }
 
-- (KVTableView *)tableView {
+- (UITableView *)tableView {
     if (!_tableView) {
 
-        HomeTableViewAdapter *adapter = [[HomeTableViewAdapter alloc] init];
-        adapter.onRenderRowsBlock = ^NSInteger(UITableView<KVTableViewProtocol> * _Nonnull tableView, NSInteger section) {
-            return tableView.adapter.data.count;
+        __weak typeof(self) ws = self;
+        
+        HomePresent *present = self.homePresent;
+        
+        KVTableViewAdapter *adapter = [[KVTableViewAdapter alloc] init];
+        
+        adapter.onRenderSectionsBlock = ^NSInteger(UITableView<KVTableViewProtocol> * _Nonnull tableView) {
+            return present.data.count;
         };
+        
+        adapter.onRenderHeaderBlock = ^UITableViewHeaderFooterView * _Nonnull(UITableView<KVTableViewProtocol> * _Nonnull tableView, NSInteger section) {
+            UITableViewHeaderFooterView *view = [tableView dequeueReusableHeaderFooterViewWithIdentifier:@"header"];
+            if (!view.backgroundView) {
+                view.backgroundView = UIView.new;
+            }
+            UIColor *color = section % 2 == 0? UIColor.redColor: UIColor.blueColor;
+            view.backgroundView.backgroundColor = color;
+            return view;
+        };
+        
+        adapter.onRenderHeaderHeightBlock = ^CGFloat(UITableView<KVTableViewProtocol> * _Nonnull tableView, NSInteger section) {
+          return 100;
+        };
+        
+        adapter.onRenderRowsBlock = ^NSInteger(UITableView<KVTableViewProtocol> * _Nonnull tableView, NSInteger section) {
+            return present.data[section].count;
+        };
+        
         adapter.onRenderCellBlock = ^UITableViewCell * _Nonnull(UITableView<KVTableViewProtocol> * _Nonnull tableView, NSIndexPath * _Nonnull indexPath) {
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell" forIndexPath:indexPath];
             cell.textLabel.text = @(indexPath.row).stringValue;
             return cell;
         };
         
-        HomePresent *present = [HomePresent new];
-                
-        _tableView = [AppTableView defaultTableViewWithPresent:present adapter:adapter stateView:self.view.stateView];
-        _tableView.context = self;
+        adapter.onSelecteItemBlock = ^(UITableView<KVTableViewProtocol> * _Nonnull tableView, NSIndexPath * _Nonnull indexPath) {
+            [ws selecteIndex: indexPath.row];
+        };
+
+        _tableView = [UITableView KVTableViewWithPresent:self adapter:adapter stateView:self.view.stateView];
         _tableView.displayContext = self;
         [self.view addSubview:_tableView];
         _tableView.frame = self.view.bounds;
 
         [_tableView registerCellClazz:@{@"cell": UITableViewCell.class}];
         
+        [_tableView registerHeaderFooterClazz:@{@"header": UITableViewHeaderFooterView.class}];
+        
     }
     
     return _tableView;
 }
 
-@end
-
-@implementation HomeTableViewAdapter
-
-- (HomeViewController *)context {
-    return [super context];
-}
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [self.context selecteIndex:indexPath.row];
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+- (HomePresent *)homePresent {
+    if (!_homePresent) {
+        _homePresent = [[HomePresent alloc] init];
+    }
+    return _homePresent;
 }
 
 @end

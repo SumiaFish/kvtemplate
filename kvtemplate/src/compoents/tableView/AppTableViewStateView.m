@@ -8,7 +8,6 @@
 
 #import "AppTableViewStateView.h"
 #import "KVBaseStateView.h"
-#import "KVToast.h"
 
 @interface AppTableViewStateView ()
 
@@ -30,12 +29,11 @@
 
 - (void)onShowInfo:(NSString *)text duration:(NSTimeInterval)duration {
     [super onShowInfo:text duration:duration];
-    [[KVToast share] kv_show:text];
+    [KVToast.share show:text];
 }
 
 - (void)onHideToast {
     [super onHideToast];
-    /// 不管他
 }
 
 - (void)onDisplayLoadding:(BOOL)isDisplay {

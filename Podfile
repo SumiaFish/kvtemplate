@@ -17,6 +17,12 @@ target 'kvtemplate' do
   pod 'Toast'
   
   pod 'YYCache'
+  
+  pod 'SwiftTheme'
+  
+  pod "CTMediator"
+  
+  pod 'BlocksKit'
 
   target 'kvtemplateTests' do
     inherit! :search_paths

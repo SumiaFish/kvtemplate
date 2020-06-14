@@ -54,7 +54,7 @@ typedef struct {
 #pragma mark - override
 
 - (void)todo {
-    /// 开始发起请求
+    // 开始发起请求
 
     NSString *url = self.url;
     
@@ -73,7 +73,7 @@ typedef struct {
         res;
     });
     
-    /// 调用manager
+    // 调用manager
     if (method == KVHttpTool_GET) {
         self.task = [manager GET:url parameters:params headers:headers progress:^(NSProgress * _Nonnull downloadProgress) {
             [self sendProgressTask:downloadProgress];
@@ -191,7 +191,7 @@ typedef struct {
 
 #pragma mark - private
 
-/// 发送进度回调
+// 发送进度回调
 - (void)sendProgressTask:(NSProgress *)progress {
     if (!self.info.progressBlock) {
         return;
@@ -217,7 +217,7 @@ typedef struct {
     }];
 }
 
-/// 过滤数据
+// 过滤数据
 - (void)filterTask:(id)responseObject result:(KVHttpOprationFilterResult *)result {
     NSString *url = self.url;
     KVHttpToolInfos *info = self.info;
@@ -228,7 +228,7 @@ typedef struct {
     [self filter:business url:url responseSerialization:responseSerialization serializationToJSON:serializationToJSON responseObject:responseObject result:result];
 }
 
-/// 把数据加到缓存
+// 把数据加到缓存
 - (void)cacheTask:(id)responseObject {
     id originalResponse = responseObject;
     
@@ -241,7 +241,7 @@ typedef struct {
     id<KVHttpToolCacheProtocol> cacheDelegate = info.cacheDelegate;
     
     if (cacheMate != KVHttpToolCacheMate_Undefine) {
-        /// 做缓存
+        // 做缓存
         NSData *data = nil;
         if (responseSerialization == KVHttpToolResponseSerialization_Data) {
             data = originalResponse;
@@ -254,7 +254,7 @@ typedef struct {
     }
 }
 
-/// 发送成功的回调
+// 发送成功的回调
 - (void)sendSuccessTask:(id)responseObject {
     if (!self.info.successBlock) {
         return;
@@ -280,7 +280,7 @@ typedef struct {
     }];
 }
 
-/// 发送从缓存获取数据成功的回调
+// 发送从缓存获取数据成功的回调
 - (void)sendLoadCacheDataSuccessTask {
     if (!self.info.cacheBlock ||
         self.info.cacheMate == KVHttpToolCacheMate_Undefine) {
@@ -329,7 +329,7 @@ typedef struct {
     }];
 }
 
-/// 发送失败的回调
+// 发送失败的回调
 - (void)sendFailedTask:(NSError *)error {
     if (!self.info.failureBlock) {
         return;
@@ -347,7 +347,7 @@ typedef struct {
     }
     
     _error = error;
-    /// 请求失败回调
+    // 请求失败回调
     [KVHttpTool todoInMainQueue:^{
         self.info.failureBlock? self.info.failureBlock(error): nil;
         self->_error = nil;
@@ -357,7 +357,7 @@ typedef struct {
 }
 
 - (void)logTask:(id)responseObject error:(NSError *)error {
-    /// 打印结果(与取消无关)
+    // 打印结果(与取消无关)
     NSString *url = self.url;
     KVHttpToolInfos *info = self.info;
     NSDictionary *params = info.params;
@@ -370,7 +370,7 @@ typedef struct {
 
 #pragma mark - 纯函数
 
-/// log
+// log
 - (void)log:(NSString *)url headers:(NSDictionary *)headers params:(NSDictionary * _Nullable)params responseSerialization:(KVHttpToolResponseSerialization)responseSerialization responseObject:(id)responseObject error:(NSError *)error {
 #if DEBUG
     printf("\n%s #%d: \n", __func__, __LINE__);
@@ -406,11 +406,11 @@ typedef struct {
         if (responseSerialization == KVHttpToolResponseSerialization_JSON) {
             res = responseObject;
         } else {
-            /// 尝试转为JSON
+            // 尝试转为JSON
             NSError *jsonSerializationErr = nil;
             res = responseObject? [NSJSONSerialization JSONObjectWithData:responseObject options:(NSJSONReadingAllowFragments) error:&jsonSerializationErr]: nil;
             if (jsonSerializationErr) {
-                /// 没转成功不做过滤
+                // 没转成功不做过滤
                 ignore = YES;
                 res = responseObject;
 #if DEBUG
@@ -419,7 +419,7 @@ typedef struct {
             }
         }
     } else {
-        /// 不做过滤
+        // 不做过滤
         ignore = YES;
         res = responseObject;
         
@@ -428,18 +428,18 @@ typedef struct {
     if (ignore == NO) {
         NSError *error = [businessDelegate getBusinessErrorWithUrl:url responseObject:res];
         if (error) {
-            /// 有业务错误
+            // 有业务错误
             result->error = error;
             result->responseObject = nil;
             result->isIgnore = ignore;
         } else {
-            /// 业务通过
+            // 业务通过
             result->error = nil;
             result->responseObject = res;
             result->isIgnore = ignore;
         }
     } else {
-        /// 已经忽略了过滤，直接返回吧
+        // 已经忽略了过滤，直接返回吧
         result->error = nil;
         result->responseObject = res;
         result->isIgnore = ignore;
@@ -458,7 +458,7 @@ typedef struct {
 @implementation KVHttpDownloadOpration
 
 - (void)todo {
-    /// 开始发起请求
+    // 开始发起请求
 
     NSString *url = self.url;
     

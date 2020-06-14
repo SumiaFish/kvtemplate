@@ -19,31 +19,6 @@
 @synthesize adapter = _adapter;
 @synthesize onReloadDataBlock = _onReloadDataBlock;
 
-- (instancetype)init {
-    if (self = [super init]) {
-        [self commonInit];
-    }
-    return self;
-}
-
-- (instancetype)initWithFrame:(CGRect)frame {
-    if (self = [super initWithFrame:frame]) {
-        [self commonInit];
-    }
-    return self;
-}
-
-- (instancetype)initWithFrame:(CGRect)frame style:(UITableViewStyle)style {
-    if (self = [super initWithFrame:frame style:style]) {
-        [self commonInit];
-    }
-    return self;
-}
-
-- (void)commonInit {
-    self.tableFooterView = UIView.new;
-}
-
 - (void)setMj_header:(MJRefreshHeader *)mj_header {
     __weak typeof(self) ws = self;
     mj_header.refreshingBlock = ^{
@@ -72,16 +47,10 @@
 - (void)setAdapter:(id<KVTableViewAdapterProtocol>)adapter {
     _adapter = adapter;
     adapter.tableView = self;
-    adapter.context = self.context;
     self.dataSource = adapter;
     self.delegate = adapter;
     
     [self initMJFooter];
-}
-
-- (void)setContext:(id)context {
-    [super setContext:context];
-    self.adapter.context = context;
 }
 
 - (void)refreshData:(BOOL)isShowHeaderLoadding {
@@ -102,7 +71,7 @@
     }
 }
 
-/// 注意防止被调用两次：header(no refreshing)  ->  -loadData  ->  beginRefreshing  ->  loadData;
+// 注意防止被调用两次：header(no refreshing)  ->  -loadData  ->  beginRefreshing  ->  loadData;
 - (void)loadData:(BOOL)isRefresh {
     
     [self showLoadding:@"加载中"];
@@ -153,18 +122,4 @@
 
 @end
 
-@implementation KVTableView (Factory)
 
-- (void)registerCellClazz:(NSDictionary<NSString *, Class> *)cellClazz {
-    [cellClazz enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, Class  _Nonnull obj, BOOL * _Nonnull stop) {
-        [self registerClass:obj forCellReuseIdentifier:key];
-    }];
-}
-
-- (void)registerCellNib:(NSDictionary<NSString *, NSString *> *)cellNibs {
-    [cellNibs enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
-        [self registerNib:[UINib nibWithNibName:obj bundle:nil] forCellReuseIdentifier:key];
-    }];
-}
-
-@end
