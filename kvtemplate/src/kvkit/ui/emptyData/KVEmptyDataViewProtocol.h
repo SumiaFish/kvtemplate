@@ -15,11 +15,16 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol KVEmptyDataViewProtocol <NSObject>
 
 - (void)displayEmptyView:(BOOL)isDisplay;
-
 - (BOOL)isDisplayEmptyView;
 
-- (void)reloadEmptyView:(KVEmptyDataInfo *)info;
-- (KVEmptyDataInfo *)emptyDataInfo;
+
+- (void)reloadEmptyView;
+- (KVEmptyDataInfo * _Nullable)emptyDataInfo;
+
+
+- (void)setOnDisplayEmptyViewBlock:(KVEmptyDataInfo * _Nonnull (^ _Nullable)(void))onDisplayEmptyViewBlock;
+- (KVEmptyDataInfo * _Nonnull (^ _Nullable)(void))onDisplayEmptyViewBlock;
+
 
 @end
 

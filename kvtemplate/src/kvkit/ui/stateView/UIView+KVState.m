@@ -61,6 +61,8 @@ static void* UIViewEmptyDataViewKey = &UIViewEmptyDataViewKey;
 
 static void* UIViewEmptyDataViewFrameKey = &UIViewEmptyDataViewFrameKey;
 
+static void* UIViewOnDisplayEmptyViewBlockKey = &UIViewOnDisplayEmptyViewBlockKey;
+
 static void* UIViewStateViewKey = &UIViewStateViewKey;
 
 static void* UIViewStateViewFrameKey = &UIViewStateViewFrameKey;
@@ -117,8 +119,16 @@ static void* UIViewStateViewFrameKey = &UIViewStateViewFrameKey;
     return self.emptyDataView.isDisplayEmptyView;
 }
 
-- (void)reloadEmptyView:(KVEmptyDataInfo *)info {
-    [self.emptyDataView reloadEmptyView:info];
+- (void)setOnDisplayEmptyViewBlock:(KVEmptyDataInfo * _Nonnull (^)(void))onDisplayEmptyViewBlock {
+    objc_setAssociatedObject(self, UIViewOnDisplayEmptyViewBlockKey, onDisplayEmptyViewBlock, OBJC_ASSOCIATION_COPY_NONATOMIC);
+}
+
+- (KVEmptyDataInfo * _Nonnull (^)(void))onDisplayEmptyViewBlock {
+    return objc_getAssociatedObject(self, UIViewOnDisplayEmptyViewBlockKey);
+}
+
+- (void)reloadEmptyView {
+    [self.emptyDataView reloadEmptyView];
 }
 
 - (KVEmptyDataInfo *)emptyDataInfo {

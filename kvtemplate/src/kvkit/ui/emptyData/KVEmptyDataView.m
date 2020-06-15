@@ -24,12 +24,11 @@
     return self.alpha == 1;
 }
 
-- (void)reloadEmptyView:(KVEmptyDataInfo *)info {
-    self.emptyDataInfo = info;
-    [self onSetupView];
-    //
-    if (self.onDisplayBlock) {
-        [self displayEmptyView:self.onDisplayBlock()];
+- (void)reloadEmptyView {
+    if (self.onDisplayEmptyViewBlock) {
+        self.emptyDataInfo = self.onDisplayEmptyViewBlock();
+        [self onSetupView];
+        [self displayEmptyView:self.emptyDataInfo != nil];
     }
 }
 

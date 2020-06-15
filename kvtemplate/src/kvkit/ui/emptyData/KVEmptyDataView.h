@@ -15,9 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface KVEmptyDataView : UIView
 <KVEmptyDataViewProtocol>
 
-@property (copy, nonatomic) BOOL (^ onDisplayBlock) (void);
-
-@property (strong, nonatomic) KVEmptyDataInfo *emptyDataInfo;
+@property (strong, nonatomic, nullable) KVEmptyDataInfo *emptyDataInfo;
 
 #pragma mark - 子类重写
 

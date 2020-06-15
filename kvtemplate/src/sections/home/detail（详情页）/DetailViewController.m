@@ -71,7 +71,7 @@
         [self.tableView showInfo:KVStateViewInfo.loaddingInfo];
         return [[[self.homePresent kv_loadDataWithTableView:tableView isRefresh:isRefresh] then:^id _Nullable(id  _Nullable value) {
             [ws.tableView showInfo:KVStateViewInfo.succInfo];
-            [ws.tableView reloadEmptyView:KVEmptyDataInfo.info];
+            [ws.tableView reloadEmptyView];
             return value;
         }] catch:^(NSError * _Nonnull error) {
             [ws.tableView showInfo:[KVStateViewInfo errorInfo:error]];
@@ -147,8 +147,8 @@
         [_tableView setStateView:stateView andMoveTo:AppDelegate.window];
         
         AppEmptyDataView *emptyView = [AppEmptyDataView view];
-        emptyView.onDisplayBlock = ^BOOL{
-            return present.data.count == 0;
+        emptyView.onDisplayEmptyViewBlock = ^KVEmptyDataInfo * _Nonnull{
+            return present.data.count == 0 ? KVEmptyDataInfo.info : nil;
         };
         _tableView.emptyDataView = emptyView;
         

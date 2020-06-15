@@ -22,6 +22,9 @@ NS_ASSUME_NONNULL_BEGIN
 /** 空数据视图，默认为空 */
 @property (strong, nonatomic, nullable) UIView<KVEmptyDataViewProtocol> *emptyDataView;
 
+/** 空视图显示回调，返回info则显示，nil不显示 */
+@property (copy, nonatomic, nullable) KVEmptyDataInfo * (^ onDisplayEmptyViewBlock) (void);
+
 /** stateViewFrame == CGRectZero 则和 self 一样的 frame */
 @property (assign, nonatomic) CGRect stateViewFrame;
 

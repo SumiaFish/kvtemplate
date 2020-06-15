@@ -27,11 +27,11 @@
     _infoLab.theme_textColor = globalTextColorPicker;
 }
 
-//- (void)displayEmptyView:(BOOL)isDisplay {
-//    [UIView animateWithDuration:0 animations:^{
-//        [super displayEmptyView:isDisplay];
-//    }];
-//}
+- (void)displayEmptyView:(BOOL)isDisplay {
+    [UIView animateWithDuration:isDisplay ? 0.3 : 0 animations:^{
+        [super displayEmptyView:isDisplay];
+    }];
+}
 
 - (void)onSetupView {
     self.infoLab.text = self.emptyDataInfo.title;
