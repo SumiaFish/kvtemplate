@@ -41,6 +41,8 @@ typedef NS_ENUM(NSInteger, KVOperationCtrolCmd) {
 
 @property (assign, nonatomic) BOOL kv_isExecuting;
 @property (assign, nonatomic) BOOL kv_isFinished;
+@property (assign, nonatomic) BOOL isPause;
+@property (assign, readwrite) KVOperationState state;
 
 @end
 
@@ -65,12 +67,9 @@ typedef NS_ENUM(NSInteger, KVOperationCtrolCmd) {
         _ctrlcmdSemaphore = dispatch_semaphore_create(1);
         _ctrlqueue = [[NSOperationQueue alloc] init];
         _ctrlqueue.maxConcurrentOperationCount = 1;
+        self.state = KVOperationState_Ready;
     }
     return self;
-}
-
-- (BOOL)isAsynchronous {
-    return NO;
 }
 
 - (void)start {
@@ -85,6 +84,7 @@ typedef NS_ENUM(NSInteger, KVOperationCtrolCmd) {
         return;
     }
     
+    self.state = KVOperationState_Running;
     self.kv_isExecuting = YES;
     [self todo];
     while (_kv_isFinished == NO || _isPause == YES) {
@@ -101,6 +101,7 @@ typedef NS_ENUM(NSInteger, KVOperationCtrolCmd) {
 - (void)complete {
     dispatch_semaphore_wait(_completeSemaphore, DISPATCH_TIME_FOREVER);
     if (!self.kv_isFinished) {
+        self.state = KVOperationState_Finish;
         self.kv_isFinished = YES;
     }
     dispatch_semaphore_signal(_completeSemaphore);
@@ -109,6 +110,7 @@ typedef NS_ENUM(NSInteger, KVOperationCtrolCmd) {
 - (void)cancel {
     dispatch_semaphore_wait(_completeSemaphore, DISPATCH_TIME_FOREVER);
     if (!self.kv_isFinished) {
+        self.state = KVOperationState_Cancel;
         [self addCtrlcmd:(KVOperationCtrolCmd_Cancel)];
         [super cancel];
         self.kv_isFinished = YES;
@@ -126,12 +128,13 @@ typedef NS_ENUM(NSInteger, KVOperationCtrolCmd) {
         dispatch_semaphore_signal(_pauseSemaphore);
         return;
     }
-    _isPause = YES;
     if (self.isCancelled ||
         self.isFinished) {
         dispatch_semaphore_signal(_pauseSemaphore);
         return;
     }
+    self.state = KVOperationState_Pause;
+    _isPause = YES;
     [self addCtrlcmd:(KVOperationCtrolCmd_Pause)];
     dispatch_semaphore_signal(_pauseSemaphore);
 }
@@ -146,12 +149,13 @@ typedef NS_ENUM(NSInteger, KVOperationCtrolCmd) {
         dispatch_semaphore_signal(_pauseSemaphore);
         return;
     }
-    _isPause = NO;
     if (self.isCancelled ||
         self.isFinished) {
         dispatch_semaphore_signal(_pauseSemaphore);
         return;
     }
+    self.state = KVOperationState_Running;
+    _isPause = NO;
     [self addCtrlcmd:(KVOperationCtrolCmd_Resume)];
     dispatch_semaphore_signal(_pauseSemaphore);
 }
@@ -216,6 +220,9 @@ typedef NS_ENUM(NSInteger, KVOperationCtrolCmd) {
     return _kv_isFinished;
 }
 
+- (BOOL)isAsynchronous {
+    return NO;
+}
 
 @end
 

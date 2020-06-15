@@ -10,6 +10,14 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef NS_ENUM(NSInteger, KVOperationState) {
+    KVOperationState_Ready,
+    KVOperationState_Running,
+    KVOperationState_Pause,
+    KVOperationState_Cancel,
+    KVOperationState_Finish,
+};
+
 @interface KVOperation : NSOperation
 {
     @private dispatch_semaphore_t _taskSemaphore;
@@ -18,7 +26,8 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 @property (copy, nonatomic, readonly) NSString *taskId;
-@property (assign, nonatomic, readonly) BOOL isPause;
+
+@property (assign, readonly) KVOperationState state;
 
 #pragma mark - 外部调用
 

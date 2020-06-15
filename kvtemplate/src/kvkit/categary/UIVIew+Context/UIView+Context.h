@@ -8,8 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-#import "NSObject+WeakProperty.h"
-
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol KVUIViewDisplayDelegate <NSObject>

@@ -53,6 +53,7 @@
        
        [[UIApplication sharedApplication] theme_setStatusBarStyle:statusPicker animated:YES];
 
+
        // navigation bar
        
        UINavigationBar *navigationBar = [UINavigationBar appearance];

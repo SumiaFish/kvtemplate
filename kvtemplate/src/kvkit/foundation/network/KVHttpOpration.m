@@ -198,23 +198,26 @@ typedef struct {
     }
     
     // 操作前检查一遍有没有被取消 或 暂停
-    if (self.isFinished) {
-        [self complete];
+    dispatch_semaphore_wait(_semaphore, DISPATCH_TIME_FOREVER);
+    if (self.state == KVOperationState_Cancel) {
+        dispatch_semaphore_signal(self->_semaphore);
         return;
     }
-    dispatch_semaphore_wait(_semaphore, DISPATCH_TIME_FOREVER);
-    if (self.isPause) {
+    
+    if (self.state == KVOperationState_Pause) {
         _progress = progress;
         dispatch_semaphore_signal(self->_semaphore);
         return;
     }
-
+    
+    // 发送
     _progress = progress;
     [KVHttpTool todoInMainQueue:^{
         self.info.progressBlock? self.info.progressBlock(progress): nil;
         self->_progress = nil;
         dispatch_semaphore_signal(self->_semaphore);
     }];
+    
 }
 
 // 过滤数据
@@ -260,12 +263,13 @@ typedef struct {
         return;
     }
     
-    if (self.isFinished) {
-        [self complete];
+    dispatch_semaphore_wait(_semaphore, DISPATCH_TIME_FOREVER);
+    if (self.state == KVOperationState_Cancel) {
+        dispatch_semaphore_signal(self->_semaphore);
         return;
     }
-    dispatch_semaphore_wait(_semaphore, DISPATCH_TIME_FOREVER);
-    if (self.isPause) {
+    
+    if (self.state == KVOperationState_Pause) {
         _responseObject = responseObject;
         dispatch_semaphore_signal(self->_semaphore);
         return;
@@ -287,12 +291,13 @@ typedef struct {
         return;
     }
     
-    if (self.isFinished) {
-        [self complete];
+    dispatch_semaphore_wait(_semaphore, DISPATCH_TIME_FOREVER);
+    if (self.state == KVOperationState_Cancel) {
+        dispatch_semaphore_signal(self->_semaphore);
         return;
     }
-    dispatch_semaphore_wait(_semaphore, DISPATCH_TIME_FOREVER);
-    if (self.isPause) {
+    
+    if (self.state == KVOperationState_Pause) {
         _loaddingCacheFlag = NSObject.new;
         dispatch_semaphore_signal(self->_semaphore);
         return;
@@ -335,12 +340,13 @@ typedef struct {
         return;
     }
     
-    if (self.isFinished) {
-        [self complete];
+    dispatch_semaphore_wait(_semaphore, DISPATCH_TIME_FOREVER);
+    if (self.state == KVOperationState_Cancel) {
+        dispatch_semaphore_signal(self->_semaphore);
         return;
     }
-    dispatch_semaphore_wait(_semaphore, DISPATCH_TIME_FOREVER);
-    if (self.isPause) {
+    
+    if (self.state == KVOperationState_Pause) {
         _error = error;
         dispatch_semaphore_signal(self->_semaphore);
         return;

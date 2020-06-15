@@ -22,11 +22,13 @@
 //
 //#define globalBarTintColorPicker [ThemeColorPicker pickerWithColors: @[@"#EB4F38", @"#F4C600", @"#56ABE4", @"#01040D"]]
 
+// ----
+
+#define globalSectionHeaderBackgroundColorPicker [ThemeColorPicker pickerWithColors:@[@"#8B0000", @"#f00"]]
+
 #define globalStatusBarStringStyles @[@"Default", @"LightContent"]
 
 #define globalBackgroundColorPicker [ThemeColorPicker pickerWithColors:@[@"#292b38", @"#fff"]]
-
-#define globalSectionHeaderBackgroundColorPicker [ThemeColorPicker pickerWithColors:@[@"#8B0000", @"#f00"]]
 
 #define globalTextColorPicker [ThemeColorPicker pickerWithColors:@[@"#ECF0F1", @"#000"]]
 

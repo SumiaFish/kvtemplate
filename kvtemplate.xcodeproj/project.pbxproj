@@ -18,6 +18,7 @@
 		0422A8322496506E004FE1D5 /* Red.json in Resources */ = {isa = PBXBuildFile; fileRef = 0422A82F2496506E004FE1D5 /* Red.json */; };
 		0422A8332496506E004FE1D5 /* Night.json in Resources */ = {isa = PBXBuildFile; fileRef = 0422A8302496506E004FE1D5 /* Night.json */; };
 		0422A8342496506E004FE1D5 /* Yellow.json in Resources */ = {isa = PBXBuildFile; fileRef = 0422A8312496506E004FE1D5 /* Yellow.json */; };
+		0422A83624968B06004FE1D5 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0422A83524968B06004FE1D5 /* SceneDelegate.m */; };
 		043A38EC2477CE7F00FFC960 /* UIView+KVState.m in Sources */ = {isa = PBXBuildFile; fileRef = 043A38EB2477CE7F00FFC960 /* UIView+KVState.m */; };
 		044EF8D82477D153007F2CB6 /* KVHud.m in Sources */ = {isa = PBXBuildFile; fileRef = 044EF8D72477D153007F2CB6 /* KVHud.m */; };
 		044EF8DB2477D1F0007F2CB6 /* KVBaseStateView.m in Sources */ = {isa = PBXBuildFile; fileRef = 044EF8DA2477D1F0007F2CB6 /* KVBaseStateView.m */; };
@@ -31,7 +32,6 @@
 		0460979D246C31AB00BA6FD5 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 0460979C246C31AB00BA6FD5 /* main.m */; };
 		046097A7246C31AB00BA6FD5 /* kvtemplateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 046097A6246C31AB00BA6FD5 /* kvtemplateTests.m */; };
 		046097B2246C31AB00BA6FD5 /* kvtemplateUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 046097B1246C31AB00BA6FD5 /* kvtemplateUITests.m */; };
-		046097C9246C321D00BA6FD5 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 046097C5246C321D00BA6FD5 /* SceneDelegate.m */; };
 		046097CA246C321D00BA6FD5 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 046097C7246C321D00BA6FD5 /* AppDelegate.m */; };
 		046097FC246C323E00BA6FD5 /* HomePresent.m in Sources */ = {isa = PBXBuildFile; fileRef = 046097CD246C323E00BA6FD5 /* HomePresent.m */; };
 		046097FD246C323E00BA6FD5 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 046097CE246C323E00BA6FD5 /* HomeViewController.m */; };
@@ -57,6 +57,8 @@
 		049FA92B248BCE1C003B61BD /* DiscoverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 049FA926248BCE1C003B61BD /* DiscoverViewController.m */; };
 		049FA92C248BCE1C003B61BD /* PersonalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 049FA929248BCE1C003B61BD /* PersonalViewController.m */; };
 		049FA930248BD07C003B61BD /* AppViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 049FA92F248BD07C003B61BD /* AppViewController.m */; };
+		04E51E9F24975D5000B59181 /* NSData+Encrypt.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E51E9E24975D5000B59181 /* NSData+Encrypt.m */; };
+		04E51EA22497643700B59181 /* NSString+Encrypt.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E51EA12497643700B59181 /* NSString+Encrypt.m */; };
 		2F5695BBB2BCD2C876B6CA4B /* Pods_kvtemplateTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D08409416198747B4D09A66B /* Pods_kvtemplateTests.framework */; };
 		3D17287909FE42D4E2FA0092 /* Pods_kvtemplate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37C03827A0F330876CB317AF /* Pods_kvtemplate.framework */; };
 		D62D71C15E20B2037451AB76 /* Pods_kvtemplate_kvtemplateUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFA9D26535CA6B8139DC717C /* Pods_kvtemplate_kvtemplateUITests.framework */; };
@@ -100,6 +102,8 @@
 		0422A82F2496506E004FE1D5 /* Red.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Red.json; sourceTree = "<group>"; };
 		0422A8302496506E004FE1D5 /* Night.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Night.json; sourceTree = "<group>"; };
 		0422A8312496506E004FE1D5 /* Yellow.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Yellow.json; sourceTree = "<group>"; };
+		0422A83524968B06004FE1D5 /* SceneDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SceneDelegate.m; sourceTree = "<group>"; };
+		0422A83724968B2B004FE1D5 /* SceneDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneDelegate.h; sourceTree = "<group>"; };
 		043A38EA2477CE7F00FFC960 /* UIView+KVState.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIView+KVState.h"; sourceTree = "<group>"; };
 		043A38EB2477CE7F00FFC960 /* UIView+KVState.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIView+KVState.m"; sourceTree = "<group>"; };
 		043A38EE2477CEB700FFC960 /* KVStateViewProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KVStateViewProtocol.h; sourceTree = "<group>"; };
@@ -131,10 +135,8 @@
 		046097B3246C31AB00BA6FD5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		046097C2246C31E400BA6FD5 /* Strings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Strings.h; sourceTree = "<group>"; };
 		046097C3246C31E400BA6FD5 /* pch.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pch.pch; sourceTree = "<group>"; };
-		046097C5246C321D00BA6FD5 /* SceneDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SceneDelegate.m; sourceTree = "<group>"; };
 		046097C6246C321D00BA6FD5 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		046097C7246C321D00BA6FD5 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		046097C8246C321D00BA6FD5 /* SceneDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneDelegate.h; sourceTree = "<group>"; };
 		046097CD246C323E00BA6FD5 /* HomePresent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomePresent.m; sourceTree = "<group>"; };
 		046097CE246C323E00BA6FD5 /* HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
 		046097CF246C323E00BA6FD5 /* HomePresent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomePresent.h; sourceTree = "<group>"; };
@@ -186,6 +188,10 @@
 		049FA929248BCE1C003B61BD /* PersonalViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonalViewController.m; sourceTree = "<group>"; };
 		049FA92E248BD07C003B61BD /* AppViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppViewController.h; sourceTree = "<group>"; };
 		049FA92F248BD07C003B61BD /* AppViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppViewController.m; sourceTree = "<group>"; };
+		04E51E9D24975D5000B59181 /* NSData+Encrypt.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSData+Encrypt.h"; sourceTree = "<group>"; };
+		04E51E9E24975D5000B59181 /* NSData+Encrypt.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSData+Encrypt.m"; sourceTree = "<group>"; };
+		04E51EA02497643700B59181 /* NSString+Encrypt.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSString+Encrypt.h"; sourceTree = "<group>"; };
+		04E51EA12497643700B59181 /* NSString+Encrypt.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSString+Encrypt.m"; sourceTree = "<group>"; };
 		0D32C6FFADBA6601939A87F6 /* Pods-kvtemplate-kvtemplateUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-kvtemplate-kvtemplateUITests.debug.xcconfig"; path = "Target Support Files/Pods-kvtemplate-kvtemplateUITests/Pods-kvtemplate-kvtemplateUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		37C03827A0F330876CB317AF /* Pods_kvtemplate.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_kvtemplate.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4064FF0390EA78F4D5679892 /* Pods-kvtemplateTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-kvtemplateTests.debug.xcconfig"; path = "Target Support Files/Pods-kvtemplateTests/Pods-kvtemplateTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -266,13 +272,13 @@
 			path = mediator;
 			sourceTree = "<group>";
 		};
-		0422A7C324955A54004FE1D5 /* objectWeakProperty */ = {
+		0422A7C324955A54004FE1D5 /* NSObject+WeakProperty */ = {
 			isa = PBXGroup;
 			children = (
 				0422A7C524955A96004FE1D5 /* NSObject+WeakProperty.h */,
 				0422A7C624955A96004FE1D5 /* NSObject+WeakProperty.m */,
 			);
-			path = objectWeakProperty;
+			path = "NSObject+WeakProperty";
 			sourceTree = "<group>";
 		};
 		0422A81524961448004FE1D5 /* toast */ = {
@@ -343,6 +349,26 @@
 			path = Json;
 			sourceTree = "<group>";
 		};
+		0422A83E2496BAC0004FE1D5 /* categary */ = {
+			isa = PBXGroup;
+			children = (
+				0422A83F2496BB87004FE1D5 /* NSObject+WeakObserve */,
+				0422A7B524954ADF004FE1D5 /* UIVIew+Context */,
+				0422A7C324955A54004FE1D5 /* NSObject+WeakProperty */,
+				0422A7B924954CF4004FE1D5 /* UIViewController+Alert */,
+			);
+			path = categary;
+			sourceTree = "<group>";
+		};
+		0422A83F2496BB87004FE1D5 /* NSObject+WeakObserve */ = {
+			isa = PBXGroup;
+			children = (
+				04609811246C515400BA6FD5 /* NSObject+WeakObserve.h */,
+				04609810246C515400BA6FD5 /* NSObject+WeakObserve.m */,
+			);
+			path = "NSObject+WeakObserve";
+			sourceTree = "<group>";
+		};
 		043A38E92477CE5500FFC960 /* UIView+StateView */ = {
 			isa = PBXGroup;
 			children = (
@@ -355,7 +381,6 @@
 		045D5D2A247EAE5200C22452 /* alert */ = {
 			isa = PBXGroup;
 			children = (
-				0422A7B924954CF4004FE1D5 /* UIViewController+Alert */,
 			);
 			path = alert;
 			sourceTree = "<group>";
@@ -418,10 +443,10 @@
 		046097BF246C31BD00BA6FD5 /* src */ = {
 			isa = PBXGroup;
 			children = (
-				046097C0246C31C200BA6FD5 /* global */,
-				046097D3246C323E00BA6FD5 /* kvkit */,
-				046097F5246C323E00BA6FD5 /* compoents */,
 				046097CB246C323E00BA6FD5 /* sections */,
+				046097C0246C31C200BA6FD5 /* global */,
+				046097F5246C323E00BA6FD5 /* compoents */,
+				046097D3246C323E00BA6FD5 /* kvkit */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -450,8 +475,8 @@
 			children = (
 				046097C6246C321D00BA6FD5 /* AppDelegate.h */,
 				046097C7246C321D00BA6FD5 /* AppDelegate.m */,
-				046097C8246C321D00BA6FD5 /* SceneDelegate.h */,
-				046097C5246C321D00BA6FD5 /* SceneDelegate.m */,
+				0422A83724968B2B004FE1D5 /* SceneDelegate.h */,
+				0422A83524968B06004FE1D5 /* SceneDelegate.m */,
 			);
 			path = appDelegate;
 			sourceTree = "<group>";
@@ -482,6 +507,7 @@
 				045D5D21247E7D2400C22452 /* KVKitExportHeader.h */,
 				046097D4246C323E00BA6FD5 /* ui */,
 				046097E4246C323E00BA6FD5 /* foundation */,
+				0422A83E2496BAC0004FE1D5 /* categary */,
 				044EF8DF2477D890007F2CB6 /* KVKitHeader.h */,
 			);
 			path = kvkit;
@@ -494,7 +520,6 @@
 				045D5D2A247EAE5200C22452 /* alert */,
 				046097E0246C323E00BA6FD5 /* toast */,
 				0422A7B32495479F004FE1D5 /* stateView */,
-				0422A7B524954ADF004FE1D5 /* UIVIew+Context */,
 				046097D5246C323E00BA6FD5 /* tableView */,
 			);
 			path = ui;
@@ -527,11 +552,10 @@
 		046097E4246C323E00BA6FD5 /* foundation */ = {
 			isa = PBXGroup;
 			children = (
-				0422A7C324955A54004FE1D5 /* objectWeakProperty */,
+				04E51E9C24975D1500B59181 /* encrypt */,
 				046097E5246C323E00BA6FD5 /* network */,
 				046097F1246C323E00BA6FD5 /* storege */,
 				04609813246D273000BA6FD5 /* operation */,
-				046097F4246C323E00BA6FD5 /* NSObject */,
 			);
 			path = foundation;
 			sourceTree = "<group>";
@@ -566,15 +590,6 @@
 				0460980E246C425000BA6FD5 /* KVStorege.m */,
 			);
 			path = storege;
-			sourceTree = "<group>";
-		};
-		046097F4246C323E00BA6FD5 /* NSObject */ = {
-			isa = PBXGroup;
-			children = (
-				04609811246C515400BA6FD5 /* NSObject+WeakObserve.h */,
-				04609810246C515400BA6FD5 /* NSObject+WeakObserve.m */,
-			);
-			path = NSObject;
 			sourceTree = "<group>";
 		};
 		046097F5246C323E00BA6FD5 /* compoents */ = {
@@ -657,6 +672,17 @@
 				049FA91F248BCDB9003B61BD /* AppNavigationController.m */,
 			);
 			path = controller;
+			sourceTree = "<group>";
+		};
+		04E51E9C24975D1500B59181 /* encrypt */ = {
+			isa = PBXGroup;
+			children = (
+				04E51E9D24975D5000B59181 /* NSData+Encrypt.h */,
+				04E51E9E24975D5000B59181 /* NSData+Encrypt.m */,
+				04E51EA02497643700B59181 /* NSString+Encrypt.h */,
+				04E51EA12497643700B59181 /* NSString+Encrypt.m */,
+			);
+			path = encrypt;
 			sourceTree = "<group>";
 		};
 		4A191CC8EBB995D7E8440881 /* Pods */ = {
@@ -943,6 +969,7 @@
 				049FA920248BCDB9003B61BD /* AppNavigationController.m in Sources */,
 				0460980B246C323F00BA6FD5 /* AppNetworking.m in Sources */,
 				04609792246C31A600BA6FD5 /* ViewController.m in Sources */,
+				04E51E9F24975D5000B59181 /* NSData+Encrypt.m in Sources */,
 				045D5D20247E7B9500C22452 /* UIView+Context.m in Sources */,
 				0422A8292496492C004FE1D5 /* MyThemes.m in Sources */,
 				04609807246C323F00BA6FD5 /* KVHttpTool.m in Sources */,
@@ -951,7 +978,9 @@
 				044EF8D82477D153007F2CB6 /* KVHud.m in Sources */,
 				04609805246C323F00BA6FD5 /* KVHttpTool+Business.m in Sources */,
 				049FA92B248BCE1C003B61BD /* DiscoverViewController.m in Sources */,
+				04E51EA22497643700B59181 /* NSString+Encrypt.m in Sources */,
 				04609800246C323E00BA6FD5 /* KVTableView.m in Sources */,
+				0422A83624968B06004FE1D5 /* SceneDelegate.m in Sources */,
 				0460981A246D49D800BA6FD5 /* KVHttpOpration.m in Sources */,
 				049FA92C248BCE1C003B61BD /* PersonalViewController.m in Sources */,
 				043A38EC2477CE7F00FFC960 /* UIView+KVState.m in Sources */,
@@ -960,7 +989,6 @@
 				04609812246C515400BA6FD5 /* NSObject+WeakObserve.m in Sources */,
 				046097CA246C321D00BA6FD5 /* AppDelegate.m in Sources */,
 				0422A824249620EC004FE1D5 /* CTMediator+Detail.m in Sources */,
-				046097C9246C321D00BA6FD5 /* SceneDelegate.m in Sources */,
 				0460979D246C31AB00BA6FD5 /* main.m in Sources */,
 				046097FD246C323E00BA6FD5 /* HomeViewController.m in Sources */,
 				04609808246C323F00BA6FD5 /* KVHttpToolCache.m in Sources */,

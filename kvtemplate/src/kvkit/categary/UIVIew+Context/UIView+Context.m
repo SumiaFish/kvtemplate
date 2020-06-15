@@ -8,6 +8,8 @@
 
 #import "UIView+Context.h"
 
+#import "NSObject+WeakProperty.h"
+
 static NSString * const UIViewContextKey = @"UIViewContextKey";
 
 static NSString * const UIViewDisplayContextKey = @"UIViewDisplayContextKey";

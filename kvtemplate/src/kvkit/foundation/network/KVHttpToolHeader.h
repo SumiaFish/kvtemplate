@@ -45,6 +45,11 @@ typedef struct {
 @protocol KVHttpToolCacheProtocol <NSObject>
 
 /**
+ 缓存失效期限
+ */
+@property (assign, nonatomic) NSTimeInterval overdueTimeval;
+
+/**
  存数据
  type: 存的方式
  url: url

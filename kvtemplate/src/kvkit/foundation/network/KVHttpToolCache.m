@@ -53,6 +53,8 @@
     id<KVHttpToolCacheImpProtocol> _cache;
 }
 
+@synthesize overdueTimeval = _overdueTimeval;
+
 static KVHttpToolCache *instance = nil;
 static BOOL KVHttpToolCacheInitFlag = NO;
 
@@ -81,7 +83,7 @@ static BOOL KVHttpToolCacheInitFlag = NO;
             _queue.maxConcurrentOperationCount = KVHttpToolCacheMaxConcurrentOperationCount;
             _semaphore = dispatch_semaphore_create(1);
             
-            _cache = [[KVHttpToolFileManager alloc] initWithPath:[self getCachePath] directoryName:[self directoryName] overdueTimeval:KVHttpToolCacheOverdueTimeval];
+            _cache = [[KVHttpToolFileManager alloc] initWithPath:[self getCachePath] directoryName:[self directoryName] overdueTimeval:self.overdueTimeval];
             
             __weak typeof(self) ws = self;
             KVHttpToolCacheOperation *op = [[KVHttpToolCacheOperation alloc] initWithKey:nil taskBlock:^{
@@ -102,6 +104,13 @@ static BOOL KVHttpToolCacheInitFlag = NO;
 
 - (id<KVHttpToolCacheImpProtocol>)cache {
     return _cache;
+}
+
+- (NSTimeInterval)overdueTimeval {
+    if (_overdueTimeval == 0) {
+        return KVHttpToolCacheOverdueTimeval;
+    }
+    return _overdueTimeval;
 }
 
 #pragma mark - KVStoregeProtocol
