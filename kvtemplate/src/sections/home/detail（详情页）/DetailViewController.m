@@ -14,11 +14,12 @@
 #import "AppEmptyDataView.h"
 
 @interface DetailViewController ()
-<KVUIViewDisplayDelegate, KVTableViewPresentProtocol>
+<KVUIViewDisplayDelegate, KVTableViewPresentProtocol, KVCollectionViewPresentProtocol>
 
 @property (strong, nonatomic) HomePresent *homePresent;
 
 @property (strong, nonatomic) UITableView *tableView;
+@property (strong, nonatomic) UICollectionView *collectionView;
 @property (strong, nonatomic) UIButton *button;
 
 @end
@@ -35,14 +36,16 @@
     self.title = @"Detail";
     
 //
-    [self.tableView display:NO];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//        [self.tableView removeFromSuperview];
-        [self.tableView display:YES animate:YES];
-        [self.tableView refreshData:YES];
-    });
+//    [self.tableView display:NO];
+//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+////        [self.tableView removeFromSuperview];
+//        [self.tableView display:YES animate:YES];
+//        [self.tableView refreshData:YES];
+//    });
     
 //    [self.tableView refreshData:YES];
+    
+    [self.collectionView refreshData:YES];
 
 }
 
@@ -75,6 +78,21 @@
             return value;
         }] catch:^(NSError * _Nonnull error) {
             [ws.tableView showInfo:[KVStateViewInfo errorInfo:error]];
+        }];
+    }
+    return nil;
+}
+
+- (FBLPromise *)kv_loadDataWithCollectionView:(id<KVCollectionViewProtocol>)collectionView isRefresh:(BOOL)isRefresh {
+    if (collectionView == self.collectionView) {
+        __weak typeof(self) ws = self;
+        [self.collectionView showInfo:KVStateViewInfo.loaddingInfo];
+        return [[[self.homePresent kv_loadDataWithCollectionView:collectionView isRefresh:isRefresh] then:^id _Nullable(id  _Nullable value) {
+            [ws.collectionView showInfo:KVStateViewInfo.succInfo];
+            [ws.collectionView reloadEmptyView];
+            return value;
+        }] catch:^(NSError * _Nonnull error) {
+            [ws.collectionView showInfo:[KVStateViewInfo errorInfo:error]];
         }];
     }
     return nil;
@@ -167,6 +185,99 @@
     }
     
     return _tableView;
+}
+
+- (UICollectionView *)collectionView {
+    if (!_collectionView) {
+        
+        __weak typeof(self) ws = self;
+        
+        HomePresent *present = self.homePresent;
+        
+        KVCollectionViewAdapter *adapter = [[KVCollectionViewAdapter alloc] init];
+        
+        adapter.onRenderSectionsBlock = ^NSInteger(UICollectionView<KVCollectionViewProtocol> * _Nonnull collectionView) {
+            return present.data.count;
+        };
+        
+        adapter.onRenderHeaderBlock = ^UICollectionReusableView * _Nullable(UICollectionView<KVCollectionViewProtocol> * _Nonnull collectionView, NSIndexPath * _Nonnull indexPath) {
+            UICollectionReusableView *view = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"header" forIndexPath:indexPath];
+            view.theme_backgroundColor = globalSectionHeaderBackgroundColorPicker;
+            return view;
+        };
+        
+        adapter.onRenderHeaderSizeBlock = ^CGSize(UICollectionView<KVCollectionViewProtocol> * _Nonnull collectionView, NSInteger section) {
+            return CGSizeMake(collectionView.bounds.size.width, 100);
+        };
+        
+        adapter.onRenderRowsBlock = ^NSInteger(UICollectionView<KVCollectionViewProtocol> * _Nonnull collectionView, NSInteger section) {
+            return present.data[section].count;
+        };
+        
+        adapter.onRenderCellBlock = ^UICollectionViewCell * _Nonnull(UICollectionView<KVCollectionViewProtocol> * _Nonnull collectionView, NSIndexPath * _Nonnull indexPath) {
+            UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
+            
+            NSInteger textLabTag = 100000;
+            UILabel *lable = (UILabel *)[cell.contentView viewWithTag:textLabTag];
+            if (!lable) {
+                lable = [[UILabel alloc] init];
+                lable.tag = textLabTag;
+                lable.frame = cell.contentView.bounds;
+                lable.textAlignment = NSTextAlignmentCenter;
+                lable.font = [UIFont systemFontOfSize:16];
+                [cell.contentView addSubview:lable];
+            }
+            lable.text = @(indexPath.row).stringValue;
+            cell.contentView.theme_backgroundColor = globalBackgroundColorPicker;
+            lable.theme_textColor = globalTextColorPicker;
+            return cell;
+        };
+        
+        adapter.onRenderItemSizeBlock = ^CGSize(UICollectionView<KVCollectionViewProtocol> * _Nonnull collectionView, NSIndexPath * _Nonnull indexPath) {
+            return CGSizeMake(collectionView.bounds.size.width/2, collectionView.bounds.size.width/2);
+        };
+        
+        adapter.onSelecteItemBlock = ^(UICollectionView<KVCollectionViewProtocol> * _Nonnull collectionView, NSIndexPath * _Nonnull indexPath) {
+            [ws selecteIndex: indexPath.row];
+        };
+
+        UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
+        layout.sectionInset = UIEdgeInsetsZero;
+        layout.minimumLineSpacing = 0;
+        layout.minimumInteritemSpacing = 0;
+        
+        _collectionView = [UICollectionView KVCollectionViewWithPresent:self adapter:adapter layout:layout];
+        _collectionView.displayContext = self;
+        [self.view addSubview:_collectionView];
+        _collectionView.frame = self.view.bounds;
+
+        [_collectionView registerCellClazz:@{@"cell": UICollectionViewCell.class}];
+        
+        [_collectionView registerHeaderFooterClazz:@{@"header": UICollectionReusableView.class} isHeader:YES];
+        
+        AppStateView *stateView = [AppStateView viewWithKVCollectionView:(UICollectionView<KVCollectionViewProtocol> *)_collectionView];
+        [_collectionView setStateView:stateView andMoveTo:AppDelegate.window];
+        
+        AppEmptyDataView *emptyView = [AppEmptyDataView view];
+        emptyView.onDisplayEmptyViewBlock = ^KVEmptyDataInfo * _Nonnull{
+            return present.data.count == 0 ? KVEmptyDataInfo.info : nil;
+        };
+        _collectionView.emptyDataView = emptyView;
+        
+        _collectionView.theme_backgroundColor = globalBackgroundColorPicker;
+        
+        if ([_collectionView.mj_header isKindOfClass:MJRefreshNormalHeader.class]) {
+            ((MJRefreshNormalHeader *)_collectionView.mj_header).loadingView.theme_color = globalTextColorPicker;
+            ((MJRefreshNormalHeader *)_collectionView.mj_header).stateLabel.theme_textColor = globalTextColorPicker;
+            ((MJRefreshNormalHeader *)_collectionView.mj_header).lastUpdatedTimeLabel.theme_textColor = globalTextColorPicker;
+        }
+        if ([_collectionView.mj_footer isKindOfClass:MJRefreshAutoNormalFooter.class]) {
+            ((MJRefreshAutoNormalFooter *)_collectionView.mj_footer).loadingView.theme_color = globalTextColorPicker;
+            ((MJRefreshAutoNormalFooter *)_collectionView.mj_footer).stateLabel.theme_textColor = globalTextColorPicker;
+        }
+        
+    }
+    return _collectionView;
 }
 
 - (HomePresent *)homePresent {

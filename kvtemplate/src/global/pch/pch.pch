@@ -26,6 +26,7 @@
 #import "UIView+Context.h"
 #import "UIView+KVState.h"
 #import "UITableView+KVTableViewProtocol.h"
+#import "UICollectionView+KVCollectionViewProtocol.h"
 
 #import "AppViewController.h"
 

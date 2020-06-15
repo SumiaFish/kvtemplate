@@ -64,6 +64,9 @@
 		04E51EAD2497BF6D00B59181 /* KVEmptyDataInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E51EAC2497BF6D00B59181 /* KVEmptyDataInfo.m */; };
 		04E51EB02497C10E00B59181 /* AppEmptyDataView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E51EAF2497C10E00B59181 /* AppEmptyDataView.m */; };
 		04E51EB22497C11700B59181 /* AppEmptyDataView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 04E51EB12497C11700B59181 /* AppEmptyDataView.xib */; };
+		04E51EB62497CF5300B59181 /* KVCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E51EB52497CF5300B59181 /* KVCollectionView.m */; };
+		04E51EBA2497D14A00B59181 /* KVCollectionViewAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E51EB92497D14A00B59181 /* KVCollectionViewAdapter.m */; };
+		04E51EBD2497D33700B59181 /* UICollectionView+KVCollectionViewProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E51EBC2497D33700B59181 /* UICollectionView+KVCollectionViewProtocol.m */; };
 		2F5695BBB2BCD2C876B6CA4B /* Pods_kvtemplateTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D08409416198747B4D09A66B /* Pods_kvtemplateTests.framework */; };
 		3D17287909FE42D4E2FA0092 /* Pods_kvtemplate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37C03827A0F330876CB317AF /* Pods_kvtemplate.framework */; };
 		D62D71C15E20B2037451AB76 /* Pods_kvtemplate_kvtemplateUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFA9D26535CA6B8139DC717C /* Pods_kvtemplate_kvtemplateUITests.framework */; };
@@ -207,6 +210,13 @@
 		04E51EAE2497C10E00B59181 /* AppEmptyDataView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppEmptyDataView.h; sourceTree = "<group>"; };
 		04E51EAF2497C10E00B59181 /* AppEmptyDataView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppEmptyDataView.m; sourceTree = "<group>"; };
 		04E51EB12497C11700B59181 /* AppEmptyDataView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AppEmptyDataView.xib; sourceTree = "<group>"; };
+		04E51EB42497CF5300B59181 /* KVCollectionView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KVCollectionView.h; sourceTree = "<group>"; };
+		04E51EB52497CF5300B59181 /* KVCollectionView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KVCollectionView.m; sourceTree = "<group>"; };
+		04E51EB72497CF7F00B59181 /* KVCollectionViewProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KVCollectionViewProtocol.h; sourceTree = "<group>"; };
+		04E51EB82497D14A00B59181 /* KVCollectionViewAdapter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KVCollectionViewAdapter.h; sourceTree = "<group>"; };
+		04E51EB92497D14A00B59181 /* KVCollectionViewAdapter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KVCollectionViewAdapter.m; sourceTree = "<group>"; };
+		04E51EBB2497D33700B59181 /* UICollectionView+KVCollectionViewProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UICollectionView+KVCollectionViewProtocol.h"; sourceTree = "<group>"; };
+		04E51EBC2497D33700B59181 /* UICollectionView+KVCollectionViewProtocol.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UICollectionView+KVCollectionViewProtocol.m"; sourceTree = "<group>"; };
 		0D32C6FFADBA6601939A87F6 /* Pods-kvtemplate-kvtemplateUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-kvtemplate-kvtemplateUITests.debug.xcconfig"; path = "Target Support Files/Pods-kvtemplate-kvtemplateUITests/Pods-kvtemplate-kvtemplateUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		37C03827A0F330876CB317AF /* Pods_kvtemplate.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_kvtemplate.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4064FF0390EA78F4D5679892 /* Pods-kvtemplateTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-kvtemplateTests.debug.xcconfig"; path = "Target Support Files/Pods-kvtemplateTests/Pods-kvtemplateTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -525,6 +535,7 @@
 		046097D4246C323E00BA6FD5 /* ui */ = {
 			isa = PBXGroup;
 			children = (
+				04E51EB32497CF3500B59181 /* collectionView */,
 				0422A82A24964A3C004FE1D5 /* theme */,
 				045D5D2A247EAE5200C22452 /* alert */,
 				046097E0246C323E00BA6FD5 /* toast */,
@@ -708,6 +719,20 @@
 				04E51EAC2497BF6D00B59181 /* KVEmptyDataInfo.m */,
 			);
 			path = emptyData;
+			sourceTree = "<group>";
+		};
+		04E51EB32497CF3500B59181 /* collectionView */ = {
+			isa = PBXGroup;
+			children = (
+				04E51EB42497CF5300B59181 /* KVCollectionView.h */,
+				04E51EB52497CF5300B59181 /* KVCollectionView.m */,
+				04E51EB82497D14A00B59181 /* KVCollectionViewAdapter.h */,
+				04E51EB92497D14A00B59181 /* KVCollectionViewAdapter.m */,
+				04E51EB72497CF7F00B59181 /* KVCollectionViewProtocol.h */,
+				04E51EBB2497D33700B59181 /* UICollectionView+KVCollectionViewProtocol.h */,
+				04E51EBC2497D33700B59181 /* UICollectionView+KVCollectionViewProtocol.m */,
+			);
+			path = collectionView;
 			sourceTree = "<group>";
 		};
 		4A191CC8EBB995D7E8440881 /* Pods */ = {
@@ -985,6 +1010,7 @@
 				0460981D246D49EC00BA6FD5 /* KVHttpToolInfos.m in Sources */,
 				045D5D27247E9D9700C22452 /* AppStateView.m in Sources */,
 				0422A7B824954CD4004FE1D5 /* UIViewController+SimpleAlert.m in Sources */,
+				04E51EB62497CF5300B59181 /* KVCollectionView.m in Sources */,
 				049FA92A248BCE1C003B61BD /* ChannelViewController.m in Sources */,
 				0422A82D24964A75004FE1D5 /* KVThemeMap.m in Sources */,
 				04609803246C323E00BA6FD5 /* KVToast.m in Sources */,
@@ -1005,6 +1031,7 @@
 				044EF8DB2477D1F0007F2CB6 /* KVBaseStateView.m in Sources */,
 				04609806246C323F00BA6FD5 /* KVHttpTool+MISC.m in Sources */,
 				044EF8D82477D153007F2CB6 /* KVHud.m in Sources */,
+				04E51EBA2497D14A00B59181 /* KVCollectionViewAdapter.m in Sources */,
 				04609805246C323F00BA6FD5 /* KVHttpTool+Business.m in Sources */,
 				049FA92B248BCE1C003B61BD /* DiscoverViewController.m in Sources */,
 				04E51EA22497643700B59181 /* NSString+Encrypt.m in Sources */,
@@ -1018,6 +1045,7 @@
 				04609812246C515400BA6FD5 /* NSObject+WeakObserve.m in Sources */,
 				046097CA246C321D00BA6FD5 /* AppDelegate.m in Sources */,
 				0422A824249620EC004FE1D5 /* CTMediator+Detail.m in Sources */,
+				04E51EBD2497D33700B59181 /* UICollectionView+KVCollectionViewProtocol.m in Sources */,
 				0460979D246C31AB00BA6FD5 /* main.m in Sources */,
 				04E51EA62497A86400B59181 /* KVStateViewInfo.m in Sources */,
 				046097FD246C323E00BA6FD5 /* HomeViewController.m in Sources */,

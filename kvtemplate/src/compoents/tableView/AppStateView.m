@@ -15,6 +15,8 @@
 
 @property (weak, nonatomic, readwrite) UITableView<KVTableViewPresentProtocol> *tableView;
 
+@property (weak, nonatomic, readwrite) UICollectionView<KVCollectionViewProtocol> *collectionView;
+
 @end
 
 @implementation AppStateView
@@ -25,8 +27,10 @@
     return view;
 }
 
-- (void)replaceTableView:(UITableView<KVTableViewPresentProtocol> *)tableView {
-    self.tableView = tableView;
++ (instancetype)viewWithKVCollectionView:(UICollectionView<KVCollectionViewProtocol> *)collectionView {
+    AppStateView *view = [NSBundle.mainBundle loadNibNamed:NSStringFromClass(AppStateView.class) owner:nil options:nil].lastObject;
+    view.collectionView = collectionView;
+    return view;
 }
 
 - (void)awakeFromNib {
@@ -52,16 +56,21 @@
     if (isDisplay) {
         if (self.showLoaddingMode == KVTableViewShowInfoMode_WhenEmptyContent) {
             // 没有cell 才显示
-            if (self.tableView.adapter.data.count == 0) {
-//                if (self.tableView.emptyDataView.isDisplayEmptyView == NO) {
-//                    [_activity startAnimating];
-//                }
-                
-                [self.tableView.emptyDataView displayEmptyView:NO];
-                [_activity startAnimating];
-                
-                return;
+            if (self.tableView) {
+                if (self.tableView.adapter.data.count == 0) {
+                    [self.tableView.emptyDataView displayEmptyView:NO];
+                    [_activity startAnimating];
+                    return;
+                }
             }
+            if (self.collectionView) {
+                if (self.collectionView.adapter.data.count == 0) {
+                    [self.collectionView.emptyDataView displayEmptyView:NO];
+                    [_activity startAnimating];
+                    return;
+                }
+            }
+            
         }
     }
     

@@ -32,7 +32,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (copy, nonatomic, nullable) NSInteger (^ onRenderRowsBlock) (UITableView<KVTableViewProtocol> *tableView, NSInteger section);
 
-@property (copy, nonatomic, nullable) UITableViewHeaderFooterView* (^ onRenderHeaderBlock) (UITableView<KVTableViewProtocol> *tableView, NSInteger section);
+@property (copy, nonatomic, nullable) UITableViewHeaderFooterView* _Nullable (^ onRenderHeaderBlock) (UITableView<KVTableViewProtocol> *tableView, NSInteger section);
 
 @property (copy, nonatomic, nullable) UITableViewCell* (^ onRenderCellBlock) (UITableView<KVTableViewProtocol> *tableView, NSIndexPath *indexPath);
 
