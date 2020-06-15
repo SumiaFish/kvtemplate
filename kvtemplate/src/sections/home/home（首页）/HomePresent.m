@@ -53,6 +53,9 @@
                     }
                     [self.mtData addObject:items];
                 }
+                
+                self.data = NSMutableArray.array;
+                
                 [tableView.adapter updateWithData:self.data page:newPage hasMore:hasMore];
                 fulfill(nil);
                 

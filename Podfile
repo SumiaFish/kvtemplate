@@ -23,6 +23,8 @@ target 'kvtemplate' do
   pod "CTMediator"
   
   pod "Aspects"
+  
+  pod 'DZNEmptyDataSet'
 
   target 'kvtemplateTests' do
     inherit! :search_paths

@@ -23,8 +23,8 @@
 		044EF8D82477D153007F2CB6 /* KVHud.m in Sources */ = {isa = PBXBuildFile; fileRef = 044EF8D72477D153007F2CB6 /* KVHud.m */; };
 		044EF8DB2477D1F0007F2CB6 /* KVBaseStateView.m in Sources */ = {isa = PBXBuildFile; fileRef = 044EF8DA2477D1F0007F2CB6 /* KVBaseStateView.m */; };
 		045D5D20247E7B9500C22452 /* UIView+Context.m in Sources */ = {isa = PBXBuildFile; fileRef = 045D5D1F247E7B9500C22452 /* UIView+Context.m */; };
-		045D5D27247E9D9700C22452 /* AppTableViewStateView.m in Sources */ = {isa = PBXBuildFile; fileRef = 045D5D26247E9D9700C22452 /* AppTableViewStateView.m */; };
-		045D5D29247E9DA000C22452 /* AppTableViewStateView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 045D5D28247E9DA000C22452 /* AppTableViewStateView.xib */; };
+		045D5D27247E9D9700C22452 /* AppStateView.m in Sources */ = {isa = PBXBuildFile; fileRef = 045D5D26247E9D9700C22452 /* AppStateView.m */; };
+		045D5D29247E9DA000C22452 /* AppStateView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 045D5D28247E9DA000C22452 /* AppStateView.xib */; };
 		04609792246C31A600BA6FD5 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 04609791246C31A600BA6FD5 /* ViewController.m */; };
 		04609795246C31A600BA6FD5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 04609793246C31A600BA6FD5 /* Main.storyboard */; };
 		04609797246C31AB00BA6FD5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 04609796246C31AB00BA6FD5 /* Assets.xcassets */; };
@@ -59,6 +59,11 @@
 		049FA930248BD07C003B61BD /* AppViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 049FA92F248BD07C003B61BD /* AppViewController.m */; };
 		04E51E9F24975D5000B59181 /* NSData+Encrypt.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E51E9E24975D5000B59181 /* NSData+Encrypt.m */; };
 		04E51EA22497643700B59181 /* NSString+Encrypt.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E51EA12497643700B59181 /* NSString+Encrypt.m */; };
+		04E51EA62497A86400B59181 /* KVStateViewInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E51EA52497A86400B59181 /* KVStateViewInfo.m */; };
+		04E51EA92497BAD200B59181 /* KVEmptyDataView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E51EA82497BAD200B59181 /* KVEmptyDataView.m */; };
+		04E51EAD2497BF6D00B59181 /* KVEmptyDataInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E51EAC2497BF6D00B59181 /* KVEmptyDataInfo.m */; };
+		04E51EB02497C10E00B59181 /* AppEmptyDataView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E51EAF2497C10E00B59181 /* AppEmptyDataView.m */; };
+		04E51EB22497C11700B59181 /* AppEmptyDataView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 04E51EB12497C11700B59181 /* AppEmptyDataView.xib */; };
 		2F5695BBB2BCD2C876B6CA4B /* Pods_kvtemplateTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D08409416198747B4D09A66B /* Pods_kvtemplateTests.framework */; };
 		3D17287909FE42D4E2FA0092 /* Pods_kvtemplate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37C03827A0F330876CB317AF /* Pods_kvtemplate.framework */; };
 		D62D71C15E20B2037451AB76 /* Pods_kvtemplate_kvtemplateUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFA9D26535CA6B8139DC717C /* Pods_kvtemplate_kvtemplateUITests.framework */; };
@@ -116,9 +121,9 @@
 		045D5D1E247E7B9500C22452 /* UIView+Context.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIView+Context.h"; sourceTree = "<group>"; };
 		045D5D1F247E7B9500C22452 /* UIView+Context.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIView+Context.m"; sourceTree = "<group>"; };
 		045D5D21247E7D2400C22452 /* KVKitExportHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KVKitExportHeader.h; sourceTree = "<group>"; };
-		045D5D25247E9D9700C22452 /* AppTableViewStateView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppTableViewStateView.h; sourceTree = "<group>"; };
-		045D5D26247E9D9700C22452 /* AppTableViewStateView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppTableViewStateView.m; sourceTree = "<group>"; };
-		045D5D28247E9DA000C22452 /* AppTableViewStateView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AppTableViewStateView.xib; sourceTree = "<group>"; };
+		045D5D25247E9D9700C22452 /* AppStateView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppStateView.h; sourceTree = "<group>"; };
+		045D5D26247E9D9700C22452 /* AppStateView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppStateView.m; sourceTree = "<group>"; };
+		045D5D28247E9DA000C22452 /* AppStateView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AppStateView.xib; sourceTree = "<group>"; };
 		04609787246C31A600BA6FD5 /* kvtemplate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = kvtemplate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		04609790246C31A600BA6FD5 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		04609791246C31A600BA6FD5 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
@@ -192,6 +197,16 @@
 		04E51E9E24975D5000B59181 /* NSData+Encrypt.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSData+Encrypt.m"; sourceTree = "<group>"; };
 		04E51EA02497643700B59181 /* NSString+Encrypt.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSString+Encrypt.h"; sourceTree = "<group>"; };
 		04E51EA12497643700B59181 /* NSString+Encrypt.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSString+Encrypt.m"; sourceTree = "<group>"; };
+		04E51EA42497A86400B59181 /* KVStateViewInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KVStateViewInfo.h; sourceTree = "<group>"; };
+		04E51EA52497A86400B59181 /* KVStateViewInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KVStateViewInfo.m; sourceTree = "<group>"; };
+		04E51EA72497BAD200B59181 /* KVEmptyDataView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KVEmptyDataView.h; sourceTree = "<group>"; };
+		04E51EA82497BAD200B59181 /* KVEmptyDataView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KVEmptyDataView.m; sourceTree = "<group>"; };
+		04E51EAA2497BF5F00B59181 /* KVEmptyDataViewProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KVEmptyDataViewProtocol.h; sourceTree = "<group>"; };
+		04E51EAB2497BF6C00B59181 /* KVEmptyDataInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KVEmptyDataInfo.h; sourceTree = "<group>"; };
+		04E51EAC2497BF6D00B59181 /* KVEmptyDataInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KVEmptyDataInfo.m; sourceTree = "<group>"; };
+		04E51EAE2497C10E00B59181 /* AppEmptyDataView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppEmptyDataView.h; sourceTree = "<group>"; };
+		04E51EAF2497C10E00B59181 /* AppEmptyDataView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppEmptyDataView.m; sourceTree = "<group>"; };
+		04E51EB12497C11700B59181 /* AppEmptyDataView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AppEmptyDataView.xib; sourceTree = "<group>"; };
 		0D32C6FFADBA6601939A87F6 /* Pods-kvtemplate-kvtemplateUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-kvtemplate-kvtemplateUITests.debug.xcconfig"; path = "Target Support Files/Pods-kvtemplate-kvtemplateUITests/Pods-kvtemplate-kvtemplateUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		37C03827A0F330876CB317AF /* Pods_kvtemplate.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_kvtemplate.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4064FF0390EA78F4D5679892 /* Pods-kvtemplateTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-kvtemplateTests.debug.xcconfig"; path = "Target Support Files/Pods-kvtemplateTests/Pods-kvtemplateTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -234,8 +249,9 @@
 		0422A7B32495479F004FE1D5 /* stateView */ = {
 			isa = PBXGroup;
 			children = (
-				043A38E92477CE5500FFC960 /* UIView+StateView */,
 				043A38EE2477CEB700FFC960 /* KVStateViewProtocol.h */,
+				04E51EA42497A86400B59181 /* KVStateViewInfo.h */,
+				04E51EA52497A86400B59181 /* KVStateViewInfo.m */,
 				046097D7246C323E00BA6FD5 /* KVDefaultStateView.h */,
 				046097DA246C323E00BA6FD5 /* KVDefaultStateView.m */,
 				046097DC246C323E00BA6FD5 /* KVDefaultStateView.xib */,
@@ -243,6 +259,8 @@
 				044EF8D72477D153007F2CB6 /* KVHud.m */,
 				044EF8D92477D1F0007F2CB6 /* KVBaseStateView.h */,
 				044EF8DA2477D1F0007F2CB6 /* KVBaseStateView.m */,
+				043A38EA2477CE7F00FFC960 /* UIView+KVState.h */,
+				043A38EB2477CE7F00FFC960 /* UIView+KVState.m */,
 			);
 			path = stateView;
 			sourceTree = "<group>";
@@ -367,15 +385,6 @@
 				04609810246C515400BA6FD5 /* NSObject+WeakObserve.m */,
 			);
 			path = "NSObject+WeakObserve";
-			sourceTree = "<group>";
-		};
-		043A38E92477CE5500FFC960 /* UIView+StateView */ = {
-			isa = PBXGroup;
-			children = (
-				043A38EA2477CE7F00FFC960 /* UIView+KVState.h */,
-				043A38EB2477CE7F00FFC960 /* UIView+KVState.m */,
-			);
-			path = "UIView+StateView";
 			sourceTree = "<group>";
 		};
 		045D5D2A247EAE5200C22452 /* alert */ = {
@@ -519,6 +528,7 @@
 				0422A82A24964A3C004FE1D5 /* theme */,
 				045D5D2A247EAE5200C22452 /* alert */,
 				046097E0246C323E00BA6FD5 /* toast */,
+				04E51EA32497A66800B59181 /* emptyData */,
 				0422A7B32495479F004FE1D5 /* stateView */,
 				046097D5246C323E00BA6FD5 /* tableView */,
 			);
@@ -609,9 +619,12 @@
 		046097F6246C323E00BA6FD5 /* tableView */ = {
 			isa = PBXGroup;
 			children = (
-				045D5D25247E9D9700C22452 /* AppTableViewStateView.h */,
-				045D5D26247E9D9700C22452 /* AppTableViewStateView.m */,
-				045D5D28247E9DA000C22452 /* AppTableViewStateView.xib */,
+				045D5D25247E9D9700C22452 /* AppStateView.h */,
+				045D5D26247E9D9700C22452 /* AppStateView.m */,
+				045D5D28247E9DA000C22452 /* AppStateView.xib */,
+				04E51EAE2497C10E00B59181 /* AppEmptyDataView.h */,
+				04E51EAF2497C10E00B59181 /* AppEmptyDataView.m */,
+				04E51EB12497C11700B59181 /* AppEmptyDataView.xib */,
 			);
 			path = tableView;
 			sourceTree = "<group>";
@@ -683,6 +696,18 @@
 				04E51EA12497643700B59181 /* NSString+Encrypt.m */,
 			);
 			path = encrypt;
+			sourceTree = "<group>";
+		};
+		04E51EA32497A66800B59181 /* emptyData */ = {
+			isa = PBXGroup;
+			children = (
+				04E51EAA2497BF5F00B59181 /* KVEmptyDataViewProtocol.h */,
+				04E51EA72497BAD200B59181 /* KVEmptyDataView.h */,
+				04E51EA82497BAD200B59181 /* KVEmptyDataView.m */,
+				04E51EAB2497BF6C00B59181 /* KVEmptyDataInfo.h */,
+				04E51EAC2497BF6D00B59181 /* KVEmptyDataInfo.m */,
+			);
+			path = emptyData;
 			sourceTree = "<group>";
 		};
 		4A191CC8EBB995D7E8440881 /* Pods */ = {
@@ -819,10 +844,11 @@
 				0460979A246C31AB00BA6FD5 /* LaunchScreen.storyboard in Resources */,
 				04609802246C323E00BA6FD5 /* KVDefaultStateView.xib in Resources */,
 				04609797246C31AB00BA6FD5 /* Assets.xcassets in Resources */,
+				04E51EB22497C11700B59181 /* AppEmptyDataView.xib in Resources */,
 				0422A8322496506E004FE1D5 /* Red.json in Resources */,
 				04609795246C31A600BA6FD5 /* Main.storyboard in Resources */,
 				0422A8332496506E004FE1D5 /* Night.json in Resources */,
-				045D5D29247E9DA000C22452 /* AppTableViewStateView.xib in Resources */,
+				045D5D29247E9DA000C22452 /* AppStateView.xib in Resources */,
 				0422A8342496506E004FE1D5 /* Yellow.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -957,7 +983,7 @@
 				04609817246D276500BA6FD5 /* KVOperation.m in Sources */,
 				046097FE246C323E00BA6FD5 /* KVTableViewAdapter.m in Sources */,
 				0460981D246D49EC00BA6FD5 /* KVHttpToolInfos.m in Sources */,
-				045D5D27247E9D9700C22452 /* AppTableViewStateView.m in Sources */,
+				045D5D27247E9D9700C22452 /* AppStateView.m in Sources */,
 				0422A7B824954CD4004FE1D5 /* UIViewController+SimpleAlert.m in Sources */,
 				049FA92A248BCE1C003B61BD /* ChannelViewController.m in Sources */,
 				0422A82D24964A75004FE1D5 /* KVThemeMap.m in Sources */,
@@ -966,9 +992,12 @@
 				0422A821249620DB004FE1D5 /* CTMediator+Router.m in Sources */,
 				0422A81D24962057004FE1D5 /* DetailViewController.m in Sources */,
 				046097FC246C323E00BA6FD5 /* HomePresent.m in Sources */,
+				04E51EAD2497BF6D00B59181 /* KVEmptyDataInfo.m in Sources */,
 				049FA920248BCDB9003B61BD /* AppNavigationController.m in Sources */,
 				0460980B246C323F00BA6FD5 /* AppNetworking.m in Sources */,
+				04E51EA92497BAD200B59181 /* KVEmptyDataView.m in Sources */,
 				04609792246C31A600BA6FD5 /* ViewController.m in Sources */,
+				04E51EB02497C10E00B59181 /* AppEmptyDataView.m in Sources */,
 				04E51E9F24975D5000B59181 /* NSData+Encrypt.m in Sources */,
 				045D5D20247E7B9500C22452 /* UIView+Context.m in Sources */,
 				0422A8292496492C004FE1D5 /* MyThemes.m in Sources */,
@@ -990,6 +1019,7 @@
 				046097CA246C321D00BA6FD5 /* AppDelegate.m in Sources */,
 				0422A824249620EC004FE1D5 /* CTMediator+Detail.m in Sources */,
 				0460979D246C31AB00BA6FD5 /* main.m in Sources */,
+				04E51EA62497A86400B59181 /* KVStateViewInfo.m in Sources */,
 				046097FD246C323E00BA6FD5 /* HomeViewController.m in Sources */,
 				04609808246C323F00BA6FD5 /* KVHttpToolCache.m in Sources */,
 				0422A7C724955A96004FE1D5 /* NSObject+WeakProperty.m in Sources */,

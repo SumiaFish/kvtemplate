@@ -56,6 +56,10 @@ static BOOL KVToastInitFlag = NO;
 }
 
 - (void)show:(NSString *)text {
+    [self show:text duration:self.conf.duration];
+}
+
+- (void)show:(NSString *)text duration:(NSTimeInterval)duration {
     if (!text.length) {
         return;
     }
@@ -67,7 +71,7 @@ static BOOL KVToastInitFlag = NO;
         [window hideToast:self.currentToast];
         
         self.currentToast = [window toastViewForMessage:text title:nil image:nil style:self.conf.style];
-        [window showToast:self.currentToast duration:self.conf.deuration position:self.conf.positionValue completion:self.conf.onComplete];
+        [window showToast:self.currentToast duration:duration position:self.conf.positionValue completion:self.conf.onComplete];
     };
     
     if (strcmp(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL), dispatch_queue_get_label(dispatch_get_main_queue())) == 0) {
@@ -101,7 +105,7 @@ static BOOL KVToastInitFlag = NO;
             //    style.displayShadow = YES;
             style;
         });
-        _conf.deuration = 3;
+        _conf.duration = 3;
         _conf.screenPoint = CGPointMake(UIScreen.mainScreen.bounds.size.width / 2.f, UIScreen.mainScreen.bounds.size.height - 49 - 20);
         _conf.onComplete = nil;
     }

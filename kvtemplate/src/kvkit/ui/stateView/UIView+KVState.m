@@ -57,9 +57,41 @@
 
 @implementation UIView (KVState)
 
+static void* UIViewEmptyDataViewKey = &UIViewEmptyDataViewKey;
+
+static void* UIViewEmptyDataViewFrameKey = &UIViewEmptyDataViewFrameKey;
+
 static void* UIViewStateViewKey = &UIViewStateViewKey;
 
 static void* UIViewStateViewFrameKey = &UIViewStateViewFrameKey;
+
+- (void)setEmptyDataView:(UIView *)emptyDataView {
+    // nil 则表示只删除
+    [self.emptyDataView removeFromSuperview];
+    [emptyDataView displayEmptyView:NO];
+    objc_setAssociatedObject(self, UIViewEmptyDataViewKey, emptyDataView, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    if (emptyDataView == nil) {
+        return;
+    }
+    //
+    [self emptyDataViewBindSuperView:self];
+    //
+    [self layoutEmptyDataView];
+    // 监听frame
+    [self kv_addWeakObserve:self keyPath:@"frame" options:(NSKeyValueObservingOptionNew) context:(__bridge void * _Nullable)(self) isCallBackInMain:YES];
+}
+
+- (UIView *)emptyDataView {
+    return objc_getAssociatedObject(self, UIViewEmptyDataViewKey);
+}
+
+- (void)setEmptyDataViewFrame:(CGRect)emptyDataViewFrame {
+    objc_setAssociatedObject(self, UIViewEmptyDataViewFrameKey, [NSValue valueWithCGRect:emptyDataViewFrame], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (CGRect)emptyDataViewFrame {
+    return ((NSValue *)objc_getAssociatedObject(self, UIViewEmptyDataViewFrameKey)).CGRectValue;
+}
 
 - (void)setStateView:(UIView<KVStateViewProtocol> *)stateView {
     [self setStateView:stateView andMoveTo:self];
@@ -77,24 +109,32 @@ static void* UIViewStateViewFrameKey = &UIViewStateViewFrameKey;
     return ((NSValue *)objc_getAssociatedObject(self, UIViewStateViewFrameKey)).CGRectValue;
 }
 
-- (void)showError:(NSError * _Nullable)error {
-    [self.stateView showError:error];
+- (void)displayEmptyView:(BOOL)isDisplay {
+    [self.emptyDataView displayEmptyView:isDisplay];
 }
 
-- (void)showInfo:(nonnull NSString *)text {
-    [self.stateView showInfo:text];
+- (BOOL)isDisplayEmptyView {
+    return self.emptyDataView.isDisplayEmptyView;
+}
+
+- (void)reloadEmptyView:(KVEmptyDataInfo *)info {
+    [self.emptyDataView reloadEmptyView:info];
+}
+
+- (KVEmptyDataInfo *)emptyDataInfo {
+    return self.emptyDataView.emptyDataInfo;
 }
 
 - (void)showInitialize {
     [self.stateView showInitialize];
 }
 
-- (void)showLoadding:(nonnull NSString *)text {
-    [self.stateView showLoadding:text];
+- (void)showInfo:(id<KVStateViewInfoProtocol>)info {
+    [self.stateView showInfo:info];
 }
 
-- (void)showSuccess:(nonnull NSString *)text {
-    [self.stateView showSuccess:text];
+- (id<KVStateViewInfoProtocol>)info {
+    return self.stateView.info;
 }
 
 - (KVViewState)state {
@@ -106,6 +146,9 @@ static void* UIViewStateViewFrameKey = &UIViewStateViewFrameKey;
     [self.stateView removeFromSuperview];
     [stateView showInitialize];
     objc_setAssociatedObject(self, UIViewStateViewKey, stateView, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    if (stateView == nil) {
+        return;
+    }
     //
     [self stateViewBindSuperView:view];
     //
@@ -119,6 +162,7 @@ static void* UIViewStateViewFrameKey = &UIViewStateViewFrameKey;
         context == (__bridge void * _Nullable)(self)) {
         if ([keyPath isEqualToString:@"frame"]) {
             [self layoutStateView];
+            [self layoutEmptyDataView];
             return;
         }
     }
@@ -150,12 +194,28 @@ static void* UIViewStateViewFrameKey = &UIViewStateViewFrameKey;
     }
 }
 
+- (void)emptyDataViewBindSuperView:(UIView *)view {
+    
+    if (self.emptyDataView) {
+        UIView *superView = view;
+        if (self.emptyDataView.superview != view ||
+            ![superView.subviews containsObject:self.emptyDataView]) {
+            [self.emptyDataView removeFromSuperview];
+            [superView addSubview:self.emptyDataView];
+        }
+    }
+}
+
 - (void)layoutStateView {
     if (CGRectEqualToRect(self.stateViewFrame, CGRectZero)) {
         self.stateView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
     } else {
         self.stateView.frame = CGRectMake(0, 0, self.stateViewFrame.size.width, self.stateViewFrame.size.height);;
     }
+}
+
+- (void)layoutEmptyDataView {
+    self.emptyDataView.frame = self.bounds;
 }
 
 - (BOOL)isControllerRootView {

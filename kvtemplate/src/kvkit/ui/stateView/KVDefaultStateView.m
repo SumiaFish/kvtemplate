@@ -47,8 +47,12 @@
     }
 }
 
+- (void)onSetupView {
+    [self onDisplayLoadding:self.state == KVViewState_Loadding];
+    [self onShowInfo:self.info.title duration:3];
+}
+
 - (void)onShowInfo:(NSString *)text duration:(NSTimeInterval)duration {
-    [super onShowInfo:text duration:duration];
     if (duration == 0) {
         self.infoLab.alpha = 0;
         return;
@@ -57,17 +61,15 @@
     [UIView animateWithDuration:0.1 animations:^{
         self.infoLab.alpha = 1;
     } completion:^(BOOL finished) {
-        
+        [self onHideToast];
     }];
 }
 
 - (void)onHideToast {
-    [super onHideToast];
     self.infoLab.alpha = 0;
 }
 
 - (void)onDisplayLoadding:(BOOL)isDisplay {
-    [super onDisplayLoadding:isDisplay];
     isDisplay? [self.hud startAnimating]: [self.hud stopAnimating];
 }
 

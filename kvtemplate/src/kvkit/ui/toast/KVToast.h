@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface KVToastConf : NSObject
 
 @property (strong, nonatomic) CSToastStyle *style;
-@property (assign, nonatomic) NSTimeInterval deuration;
+@property (assign, nonatomic) NSTimeInterval duration;
 @property (assign, nonatomic) CGPoint screenPoint;
 @property (copy, nonatomic, nullable) void (^ onComplete) (BOOL didTap);
 

@@ -10,7 +10,8 @@
 
 #import "HomePresent.h"
 
-#import "AppTableViewStateView.h"
+#import "AppStateView.h"
+#import "AppEmptyDataView.h"
 
 @interface DetailViewController ()
 <KVUIViewDisplayDelegate, KVTableViewPresentProtocol>
@@ -66,8 +67,14 @@
 
 - (FBLPromise *)kv_loadDataWithTableView:(id<KVTableViewProtocol>)tableView isRefresh:(BOOL)isRefresh {
     if (tableView == self.tableView) {
-        return [[self.homePresent kv_loadDataWithTableView:tableView isRefresh:isRefresh] then:^id _Nullable(id  _Nullable value) {
+        __weak typeof(self) ws = self;
+        [self.tableView showInfo:KVStateViewInfo.loaddingInfo];
+        return [[[self.homePresent kv_loadDataWithTableView:tableView isRefresh:isRefresh] then:^id _Nullable(id  _Nullable value) {
+            [ws.tableView showInfo:KVStateViewInfo.succInfo];
+            [ws.tableView reloadEmptyView:KVEmptyDataInfo.info];
             return value;
+        }] catch:^(NSError * _Nonnull error) {
+            [ws.tableView showInfo:[KVStateViewInfo errorInfo:error]];
         }];
     }
     return nil;
@@ -136,8 +143,14 @@
         
         [_tableView registerHeaderFooterClazz:@{@"header": UITableViewHeaderFooterView.class}];
         
-        AppTableViewStateView *stateView = [AppTableViewStateView viewWithKVTableView:(UITableView<KVTableViewPresentProtocol> *)_tableView];
+        AppStateView *stateView = [AppStateView viewWithKVTableView:(UITableView<KVTableViewPresentProtocol> *)_tableView];
         [_tableView setStateView:stateView andMoveTo:AppDelegate.window];
+        
+        AppEmptyDataView *emptyView = [AppEmptyDataView view];
+        emptyView.onDisplayBlock = ^BOOL{
+            return present.data.count == 0;
+        };
+        _tableView.emptyDataView = emptyView;
         
         _tableView.theme_backgroundColor = globalBackgroundColorPicker;
         

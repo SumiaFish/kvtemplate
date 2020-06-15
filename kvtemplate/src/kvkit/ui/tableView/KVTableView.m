@@ -78,16 +78,10 @@
 // 注意防止被调用两次：header(no refreshing)  ->  -loadData  ->  beginRefreshing  ->  loadData;
 - (void)loadData:(BOOL)isRefresh {
     
-    [self showLoadding:@"加载中"];
-        
     __weak typeof(self) ws = self;
     
-    [[[[self.present kv_loadDataWithTableView:self isRefresh:isRefresh] then:^id _Nullable(id  _Nullable value) {
+    [[[self.present kv_loadDataWithTableView:self isRefresh:isRefresh] then:^id _Nullable(id  _Nullable value) {
 
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [ws showSuccess:@"加载成功"];
-        });
-        
         if (ws.onReloadDataBlock) {
             ws.onReloadDataBlock(ws);
         } else {
@@ -95,9 +89,6 @@
         }
 
         return value;
-        
-    }] catch:^(NSError * _Nonnull error) {
-        [ws showError:error];
         
     }] always:^{
         [ws displayRefreshCompoent:NO isRefresh:isRefresh];

@@ -1,5 +1,5 @@
 //
-//  AppTableViewStateView.h
+//  AppStateView.h
 //  kvtemplate
 //
 //  Created by kevin on 2020/5/27.
@@ -20,7 +20,7 @@ typedef NS_ENUM(NSInteger, KVTableViewShowLoaddingMode) {
     KVTableViewShowInfoMode_AnyTime,
 };
 
-@interface AppTableViewStateView : KVBaseStateView
+@interface AppStateView : KVBaseStateView
 
 @property (assign, nonatomic) KVTableViewShowLoaddingMode showLoaddingMode;
 

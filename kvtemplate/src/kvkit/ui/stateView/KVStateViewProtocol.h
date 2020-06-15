@@ -8,24 +8,19 @@
 
 #import <Foundation/Foundation.h>
 
-NS_ASSUME_NONNULL_BEGIN
+#import "KVStateViewInfo.h"
 
-typedef NS_ENUM(NSInteger, KVViewState) {
-    KVViewState_Initialize = 0,
-    KVViewState_Loadding,
-    KVViewState_Success,
-    KVViewState_Error,
-};
+NS_ASSUME_NONNULL_BEGIN
 
 @protocol KVStateViewProtocol <NSObject>
 
 - (void)showInitialize;
-- (void)showLoadding:(NSString *)text;
-- (void)showSuccess:(NSString *)text;
-- (void)showError:(NSError * __nullable)error;
-- (void)showInfo:(NSString *)text;
-
+- (void)showInfo:(id<KVStateViewInfoProtocol>)info;
+- (id<KVStateViewInfoProtocol>)info;
 - (KVViewState)state;
+
+- (void)setEmptyDataView:(UIView * _Nullable)emptyDataView;
+- (UIView * _Nullable)emptyDataView;
 
 @end
 

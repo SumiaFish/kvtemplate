@@ -14,6 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)show:(NSString *)text;
 
+- (void)show:(NSString *)text duration:(NSTimeInterval)duration;
+
 - (void)hide;
 
 @end
