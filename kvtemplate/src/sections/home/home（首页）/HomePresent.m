@@ -26,7 +26,6 @@
     return [FBLPromise async:^(FBLPromiseFulfillBlock  _Nonnull fulfill, FBLPromiseRejectBlock  _Nonnull reject) {
         
         [AppNetworking request:@"https://www.baidu.com"]
-        .responseSerialization(KVHttpToolResponseSerialization_JSON)
         .cacheMate(KVHttpToolCacheMate_Url)
         .success(^(id  _Nullable responseObject) {
 

@@ -86,15 +86,18 @@
     __weak typeof(self) ws = self;
     
     if (self.onRefreshBlock) {
-        [[self.onRefreshBlock(isRefresh, [self.adapter getOffsetPageWithIsRefresh:isRefresh], self) then:^id _Nullable(KVListAdapterInfo * _Nullable value) {
+        [[[self.onRefreshBlock(isRefresh, [self.adapter getOffsetPageWithIsRefresh:isRefresh], self) then:^id _Nullable(KVListAdapterInfo * _Nullable value) {
             
             [ws reloadData];
             
             return value;
             
         }] catch:^(NSError * _Nonnull error) {
-            [ws displayRefreshCompoent:NO isRefresh:isRefresh];
+            [ws showInfo:[KVStateViewInfo errorInfo:error]];
             
+        }] always:^{
+            [ws displayRefreshCompoent:NO isRefresh:isRefresh];
+           
         }];
         
     } else {
