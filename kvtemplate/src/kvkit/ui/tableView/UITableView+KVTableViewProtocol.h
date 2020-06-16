@@ -19,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface UITableView (KVTableViewProtocol)
 <KVTableViewProtocol>
 
-+ (instancetype)KVTableViewWithPresent:(id<KVTableViewPresentProtocol> _Nullable)present adapter:(id<KVTableViewAdapterProtocol> _Nullable)adapter;
++ (instancetype)KVTableViewWithAdapter:(id<KVTableViewAdapterProtocol> _Nullable)adapter;
 
 - (void)registerCellNib:(NSDictionary<NSString *, NSString *> *)cellNibs;
 

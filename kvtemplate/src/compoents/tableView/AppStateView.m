@@ -13,7 +13,7 @@
 
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activity;
 
-@property (weak, nonatomic, readwrite) UITableView<KVTableViewPresentProtocol> *tableView;
+@property (weak, nonatomic, readwrite) UITableView<KVTableViewProtocol> *tableView;
 
 @property (weak, nonatomic, readwrite) UICollectionView<KVCollectionViewProtocol> *collectionView;
 
@@ -21,7 +21,7 @@
 
 @implementation AppStateView
 
-+ (instancetype)viewWithKVTableView:(UITableView<KVTableViewPresentProtocol> *)tableView {
++ (instancetype)viewWithKVTableView:(UITableView<KVTableViewProtocol> *)tableView {
     AppStateView *view = [NSBundle.mainBundle loadNibNamed:NSStringFromClass(AppStateView.class) owner:nil options:nil].lastObject;
     view.tableView = tableView;
     return view;

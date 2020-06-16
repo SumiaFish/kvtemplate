@@ -11,17 +11,12 @@
 
 #import <FBLPromises/FBLPromises.h>
 
+#import "KVListAdapterInfo.h"
+
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol KVTableViewProtocol;
 @protocol KVTableViewAdapterProtocol;
 @protocol KVTableViewProtocol;
-
-@protocol KVTableViewPresentProtocol <NSObject>
-
-- (FBLPromise *)kv_loadDataWithTableView:(id<KVTableViewProtocol>)tableView isRefresh:(BOOL)isRefresh;
-
-@end
 
 @protocol KVTableViewAdapterProtocol <UITableViewDelegate, UITableViewDataSource>
 
@@ -44,6 +39,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithContext:(id _Nullable)context;
 
+- (void)update:(KVListAdapterInfo *)info;
 - (void)updateWithData:(NSArray * __nullable)data page:(NSInteger)page hasMore:(BOOL)hasMore;
 - (NSInteger)getOffsetPageWithIsRefresh:(BOOL)isRefresh;
 - (NSInteger)page;
@@ -54,9 +50,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol KVTableViewProtocol <NSObject>
 
-@property (copy, nonatomic) void (^ onReloadDataBlock) (UITableView<KVTableViewProtocol> *tableView);
+@property (copy, nonatomic) FBLPromise<KVListAdapterInfo *>* (^ onRefreshBlock) (BOOL isRefresh, NSInteger nextPage, UITableView<KVTableViewProtocol>* tableView);
 
-@property (weak, nonatomic, nullable) id<KVTableViewPresentProtocol> present;
 @property (strong, nonatomic, nullable) id<KVTableViewAdapterProtocol> adapter;
 
 - (void)refreshData:(BOOL)isShowHeaderLoadding;

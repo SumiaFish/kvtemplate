@@ -15,9 +15,8 @@
 
 @implementation KVTableView
 
-@synthesize present = _present;
 @synthesize adapter = _adapter;
-@synthesize onReloadDataBlock = _onReloadDataBlock;
+@synthesize onRefreshBlock = _onRefreshBlock;
 
 - (void)dealloc {
     KVKitLog(@"%@ dealloc~", NSStringFromClass(self.class));
@@ -75,25 +74,33 @@
     }
 }
 
+- (void)reloadData {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [super reloadData];
+    });
+}
+
 // 注意防止被调用两次：header(no refreshing)  ->  -loadData  ->  beginRefreshing  ->  loadData;
 - (void)loadData:(BOOL)isRefresh {
     
     __weak typeof(self) ws = self;
     
-    [[[self.present kv_loadDataWithTableView:self isRefresh:isRefresh] then:^id _Nullable(id  _Nullable value) {
-
-        if (ws.onReloadDataBlock) {
-            ws.onReloadDataBlock(ws);
-        } else {
+    if (self.onRefreshBlock) {
+        [[self.onRefreshBlock(isRefresh, [self.adapter getOffsetPageWithIsRefresh:isRefresh], self) then:^id _Nullable(KVListAdapterInfo * _Nullable value) {
+            
             [ws reloadData];
-        }
-
-        return value;
+            
+            return value;
+            
+        }] catch:^(NSError * _Nonnull error) {
+            [ws displayRefreshCompoent:NO isRefresh:isRefresh];
+            
+        }];
         
-    }] always:^{
+    } else {
         [ws displayRefreshCompoent:NO isRefresh:isRefresh];
         
-    }];
+    }
 }
 
 - (void)displayRefreshCompoent:(BOOL)isShow isRefresh:(BOOL)isRefresh {

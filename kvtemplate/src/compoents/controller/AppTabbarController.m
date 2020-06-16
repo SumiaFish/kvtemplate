@@ -56,7 +56,7 @@
     }
     self.viewControllers = vcs;
     
-    [MyThemes conf];
+    [AppThemes conf];
 }
 
 /*

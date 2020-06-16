@@ -44,16 +44,16 @@ static NSMutableDictionary *KVThemeThemes = nil;
 }
 
 + (void)switchNight:(BOOL)isToNight {
-    [self switchTo:isToNight ? MyThemesTypeNight : MyThemesTypeRed];
+    [self switchTo:isToNight ? AppThemesTypeNight : AppThemesTypeRed];
 }
 
 + (BOOL)isNight {
-    return (int)ThemeManager.currentThemeIndex == MyThemesTypeNight;
+    return (int)ThemeManager.currentThemeIndex == AppThemesTypeNight;
 }
 
 + (void)restoreLastTheme {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    MyThemesType type = (int)[defaults integerForKey:self.lastThemeIndexKey];
+    AppThemesType type = (int)[defaults integerForKey:self.lastThemeIndexKey];
     [self switchTo:type];
 }
 

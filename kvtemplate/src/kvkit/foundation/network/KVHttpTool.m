@@ -80,6 +80,7 @@
     _semaphore = dispatch_semaphore_create(1);
     _queue = [[NSOperationQueue alloc] init];
     _queue.maxConcurrentOperationCount = 1;
+    _info = [[KVHttpToolInfos alloc] init];
     //
     self.method(KVHttpTool_GET);
     self.headers(nil);
@@ -119,7 +120,7 @@
 - (void)impSend {
     [self lock];
     // 默认只允许send一次
-    if (self.queue) {
+    if (self.queue.operationCount > 0) {
         KVKitLog(@"只允许send一次");
         [self unlock];
         return;

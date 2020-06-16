@@ -7,14 +7,16 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "KVTableViewProtocol.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface HomePresent : NSObject
-<KVTableViewPresentProtocol, KVCollectionViewPresentProtocol>
 
 @property (strong, nonatomic, readonly) NSArray<NSArray<NSNumber *> *> *data;
+
+- (FBLPromise *)loadData:(NSInteger)page isRefresh:(BOOL)isRefresh;
+
+- (FBLPromise *)loadCacheData:(NSInteger)page isRefresh:(BOOL)isRefresh;
 
 @end
 

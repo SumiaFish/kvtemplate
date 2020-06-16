@@ -47,6 +47,10 @@
     self.hasMore = NO;
 }
 
+- (void)update:(KVListAdapterInfo *)info {
+    [self updateWithData:info.data page:info.page hasMore:info.hasMore];
+}
+
 - (void)updateWithData:(NSArray *)data page:(NSInteger)page hasMore:(BOOL)hasMore {
     self.data = data;
     if (hasMore) {

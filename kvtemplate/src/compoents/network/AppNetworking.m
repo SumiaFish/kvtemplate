@@ -12,11 +12,19 @@
 
 @implementation NSError (AppNetwork)
 
+static void* AppNetworkErrorFromKey;
+
+- (void)setErrFrom:(AppNetworkErrorFrom)errFrom {
+    objc_setAssociatedObject(self, AppNetworkErrorFromKey, [NSNumber numberWithInteger:errFrom], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (AppNetworkErrorFrom)errFrom {
+    return ((NSNumber *)objc_getAssociatedObject(self, AppNetworkErrorFromKey)).integerValue;
+}
+
 @end
 
 @interface AppNetworking ()
-
-@property (strong, nonatomic, readwrite) KVHttpToolInfos *info;
 
 // 请求成功回调：默认 nil
 @property (copy, nonatomic, readwrite) KVHttpTool* _Nullable (^ success) (void (^ _Nullable successBlock)(id _Nullable responseObject));
@@ -34,12 +42,10 @@ static AppNetworkingToastShowMode AppNetworkingToastShowModeVar = AppNetworkingT
 {
     KVHttpTool* _Nullable (^ _success) (void (^ _Nullable successBlock)(id _Nullable responseObject));
     KVHttpTool* _Nullable (^ _failure) (void (^ _Nullable failureBlock)(NSError * _Nullable error));
-    KVHttpToolInfos *_info;
 }
 
 @dynamic success;
 @dynamic failure;
-@dynamic info;
 
 
 + (void)setToast:(id<KVToastViewProtocol>)toast {
@@ -72,14 +78,6 @@ static AppNetworkingToastShowMode AppNetworkingToastShowModeVar = AppNetworkingT
     return _toastShowMode;
 }
 
-- (void)setInfo:(KVHttpToolInfos *)info {
-    _info = info;
-}
-
-- (KVHttpToolInfos *)info {
-    return _info;
-}
-
 - (KVHttpTool * _Nullable (^)(void (^ _Nullable)(id _Nullable)))success {
     if (!_success) {
         __weak typeof(self) ws = self;
@@ -110,7 +108,15 @@ static AppNetworkingToastShowMode AppNetworkingToastShowModeVar = AppNetworkingT
             [ws lock];
             __strong typeof(ws) ss = ws;
             ws.info.failureBlock = ^(NSError * _Nullable error) {
-                obj? obj(error): nil;
+
+                [error setErrFrom:(AppNetworkErrorFrom_Client)];
+                NSString *fotmatString = @"请求失败，请检查网络配置信息是否正确";
+                NSMutableDictionary<NSString *, id> *dict = [NSMutableDictionary dictionaryWithDictionary:error.userInfo];
+                dict[NSLocalizedDescriptionKey] = fotmatString;
+                
+                NSError *newErr = [NSError errorWithDomain:error.domain code:error.code userInfo:dict];
+                
+                obj? obj(newErr): nil;
                 if (ss.toastShowMode == AppNetworkingToastShowMode_OnFailed ||
                     ss.toastShowMode == AppNetworkingToastShowMode_All) {
                     [ss.toast show:error.localizedDescription];
@@ -130,6 +136,11 @@ static AppNetworkingToastShowMode AppNetworkingToastShowModeVar = AppNetworkingT
     
     if (!responseObject) {
         return nil;
+    }
+    
+    NSError *error = nil;
+    if (error) {
+        [error setErrFrom:(AppNetworkErrorFrom_Business)];
     }
     
     return nil;

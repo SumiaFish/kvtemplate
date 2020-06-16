@@ -24,11 +24,11 @@ typedef NS_ENUM(NSInteger, KVTableViewShowLoaddingMode) {
 
 @property (assign, nonatomic) KVTableViewShowLoaddingMode showLoaddingMode;
 
-@property (weak, nonatomic, readonly) UITableView<KVTableViewPresentProtocol> *tableView;
+@property (weak, nonatomic, readonly) UITableView<KVTableViewProtocol> *tableView;
 
 @property (weak, nonatomic, readonly) UICollectionView<KVCollectionViewProtocol> *collectionView;
 
-+ (instancetype)viewWithKVTableView:(UITableView<KVTableViewPresentProtocol> *)tableView;
++ (instancetype)viewWithKVTableView:(UITableView<KVTableViewProtocol> *)tableView;
 
 + (instancetype)viewWithKVCollectionView:(UICollectionView<KVCollectionViewProtocol> *)collectionView;
 

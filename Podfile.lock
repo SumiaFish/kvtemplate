@@ -17,10 +17,15 @@ PODS:
   - Aspects (1.4.1)
   - CTMediator (32)
   - DZNEmptyDataSet (1.8.1)
+  - HDCollectionView (0.6.6):
+    - HDListViewDiffer
+    - Yoga (~> 1.9.0)
+  - HDListViewDiffer (0.2.0)
   - MJRefresh (3.4.1)
   - PromisesObjC (1.2.8)
   - SwiftTheme (0.5.2)
   - Toast (4.0.0)
+  - Yoga (1.9.0)
   - YYCache (1.0.4)
 
 DEPENDENCIES:
@@ -28,6 +33,7 @@ DEPENDENCIES:
   - Aspects
   - CTMediator
   - DZNEmptyDataSet
+  - HDCollectionView
   - MJRefresh
   - PromisesObjC
   - SwiftTheme
@@ -40,10 +46,13 @@ SPEC REPOS:
     - Aspects
     - CTMediator
     - DZNEmptyDataSet
+    - HDCollectionView
+    - HDListViewDiffer
     - MJRefresh
     - PromisesObjC
     - SwiftTheme
     - Toast
+    - Yoga
     - YYCache
 
 SPEC CHECKSUMS:
@@ -51,12 +60,15 @@ SPEC CHECKSUMS:
   Aspects: 7595ba96a6727a58ebcbfc954497fc5d2fdde546
   CTMediator: 10f2c387be0ab2061b75b88c86f9903eedba1ce8
   DZNEmptyDataSet: 9525833b9e68ac21c30253e1d3d7076cc828eaa7
+  HDCollectionView: 7d6735d4580180a012af5b88c70d919159bdcb68
+  HDListViewDiffer: f1ab8168cfbaddcb93fd57aebeb03a98e7612c46
   MJRefresh: 3153c59a363159092c08b2177ec3a7d09f90bfaf
   PromisesObjC: c119f3cd559f50b7ae681fa59dc1acd19173b7e6
   SwiftTheme: 8b02c479bb4441b2b6790ac126e961b1b6fb0932
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
+  Yoga: aaae8abea68951f60bee05f6277d3eed90bb91bb
   YYCache: 8105b6638f5e849296c71f331ff83891a4942952
 
-PODFILE CHECKSUM: b23caaeb33f316809c6142096937ba4a36ce3907
+PODFILE CHECKSUM: 2f6a88a6da239c805cb2771972749c3894bafd41
 
 COCOAPODS: 1.9.1

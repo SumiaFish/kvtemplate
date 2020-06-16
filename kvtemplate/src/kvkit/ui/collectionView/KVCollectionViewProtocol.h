@@ -10,17 +10,12 @@
 
 #import <UIKit/UIKit.h>
 
+#import "KVListAdapterInfo.h"
+
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol KVCollectionViewPresentProtocol;
 @protocol KVCollectionViewAdapterProtocol;
 @protocol KVCollectionViewProtocol;
-
-@protocol KVCollectionViewPresentProtocol <NSObject>
-
-- (FBLPromise *)kv_loadDataWithCollectionView:(id<KVCollectionViewProtocol>)collectionView isRefresh:(BOOL)isRefresh;
-
-@end
 
 @protocol KVCollectionViewAdapterProtocol <UICollectionViewDelegateFlowLayout, UICollectionViewDataSource>
 
@@ -43,6 +38,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithContext:(id _Nullable)context;
 
+- (void)update:(KVListAdapterInfo *)info;
 - (void)updateWithData:(NSArray * __nullable)data page:(NSInteger)page hasMore:(BOOL)hasMore;
 - (NSInteger)getOffsetPageWithIsRefresh:(BOOL)isRefresh;
 - (NSInteger)page;
@@ -53,9 +49,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol KVCollectionViewProtocol <NSObject>
 
-@property (copy, nonatomic) void (^ onReloadDataBlock) (UICollectionView<KVCollectionViewProtocol>* collectionView);
+@property (copy, nonatomic) FBLPromise<KVListAdapterInfo *>* (^ onRefreshBlock) (BOOL isRefresh, NSInteger nextPage, UICollectionView<KVCollectionViewProtocol>* collectionView);
 
-@property (weak, nonatomic, nullable) id<KVCollectionViewPresentProtocol> present;
 @property (strong, nonatomic, nullable) id<KVCollectionViewAdapterProtocol> adapter;
 
 - (void)refreshData:(BOOL)isShowHeaderLoadding;

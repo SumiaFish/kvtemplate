@@ -25,6 +25,8 @@ target 'kvtemplate' do
   pod "Aspects"
   
   pod 'DZNEmptyDataSet'
+  
+  pod 'HDCollectionView'
 
   target 'kvtemplateTests' do
     inherit! :search_paths

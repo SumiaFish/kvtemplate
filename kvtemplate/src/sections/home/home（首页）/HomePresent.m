@@ -22,89 +22,73 @@
     kLog(@"%@ dealloc~", NSStringFromClass(self.class));
 }
 
-- (FBLPromise *)kv_loadDataWithCollectionView:(id<KVCollectionViewProtocol>)collectionView isRefresh:(BOOL)isRefresh {
-    
+- (FBLPromise *)loadData:(NSInteger)page isRefresh:(BOOL)isRefresh {
     return [FBLPromise async:^(FBLPromiseFulfillBlock  _Nonnull fulfill, FBLPromiseRejectBlock  _Nonnull reject) {
         
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            sleep(3);
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                
-                NSError *err = [NSError errorWithDomain:@"kv" code:-1 userInfo:@{NSLocalizedDescriptionKey: @"请求出错"}];
-                if ([collectionView.adapter getOffsetPageWithIsRefresh:isRefresh]%2 == 1) {
-                    err = nil;
-                }
-                
-                if (err) {
-                    reject(err);
-                    return;
-                }
-                
-                NSInteger newPage = [collectionView.adapter getOffsetPageWithIsRefresh:isRefresh];
-                BOOL hasMore = newPage <= 5;
-                if (isRefresh) {
-                    [self.mtData removeAllObjects];
-                }
-                if (hasMore) {
-                    NSMutableArray *items = NSMutableArray.array;
-                    for (NSInteger i = 0; i < 20; i++) {
-                        [items addObject:@(i)];
-                    }
-                    [self.mtData addObject:items];
-                }
+        [AppNetworking request:@"https://www.baidu.com"]
+        .responseSerialization(KVHttpToolResponseSerialization_JSON)
+        .cacheMate(KVHttpToolCacheMate_Url)
+        .success(^(id  _Nullable responseObject) {
 
-                [collectionView.adapter updateWithData:self.data page:newPage hasMore:hasMore];
-                fulfill(nil);
-                
-            });
+            // test begin
+            NSError *err = nil;// [NSError errorWithDomain:@"kv" code:-1 userInfo:@{NSLocalizedDescriptionKey: @"请求出错"}];
+            if (page%2 == 1) {
+                err = nil;
+            }
+            if (err) {
+                reject(err);
+                return;
+            }
+            // test end
             
-        });
+            
+            BOOL hasMore = page <= 5;
+            if (isRefresh) {
+                [self.mtData removeAllObjects];
+            }
+            if (hasMore) {
+                NSMutableArray *items = NSMutableArray.array;
+                for (NSInteger i = 0; i < 20; i++) {
+                    [items addObject:@(i)];
+                }
+                [self.mtData addObject:items];
+            }
+
+            fulfill([KVListAdapterInfo infoWithData:self.data page:page hasMore:hasMore]);
+            
+        })
+        .failure(^(NSError * _Nullable error) {
+            
+            reject(error);
+            
+        }).send();
+        
+        
         
     }];
-    
 }
 
-- (FBLPromise *)kv_loadDataWithTableView:(id<KVTableViewProtocol>)tableView isRefresh:(BOOL)isRefresh {
+- (FBLPromise *)loadCacheData:(NSInteger)page isRefresh:(BOOL)isRefresh {
     
     return [FBLPromise async:^(FBLPromiseFulfillBlock  _Nonnull fulfill, FBLPromiseRejectBlock  _Nonnull reject) {
         
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            sleep(3);
+        [KVHttpToolCache.share responseObjectWithCacheType:(KVHttpToolCacheMate_Url) url:@"https://www.baidu.com" headers:nil params:nil complete:^(NSData * _Nullable data) {
             
-            dispatch_async(dispatch_get_main_queue(), ^{
-                
-                NSError *err = [NSError errorWithDomain:@"kv" code:-1 userInfo:@{NSLocalizedDescriptionKey: @"请求出错"}];
-                if ([tableView.adapter getOffsetPageWithIsRefresh:isRefresh]%2 == 1) {
-                    err = nil;
+            BOOL hasMore = page <= 5;
+            if (isRefresh) {
+                [self.mtData removeAllObjects];
+            }
+            if (hasMore) {
+                NSMutableArray *items = NSMutableArray.array;
+                for (NSInteger i = 0; i < 20; i++) {
+                    [items addObject:@(i)];
                 }
-                
-                if (err) {
-                    reject(err);
-                    return;
-                }
-                
-                NSInteger newPage = [tableView.adapter getOffsetPageWithIsRefresh:isRefresh];
-                BOOL hasMore = newPage <= 5;
-                if (isRefresh) {
-                    [self.mtData removeAllObjects];
-                }
-                if (hasMore) {
-                    NSMutableArray *items = NSMutableArray.array;
-                    for (NSInteger i = 0; i < 20; i++) {
-                        [items addObject:@(i)];
-                    }
-                    [self.mtData addObject:items];
-                }
-                
-                self.data = NSMutableArray.array;
-                
-                [tableView.adapter updateWithData:self.data page:newPage hasMore:hasMore];
-                fulfill(nil);
-                
-            });
+                [self.mtData addObject:items];
+            }
+
+            fulfill([KVListAdapterInfo infoWithData:self.data page:page hasMore:hasMore]);
             
-        });
+        }];
         
     }];
     

@@ -14,11 +14,9 @@
 
 @dynamic adapter;
 
-@dynamic present;
+@dynamic onRefreshBlock;
 
-@dynamic onReloadDataBlock;
-
-+ (instancetype)KVCollectionViewWithPresent:(id<KVCollectionViewPresentProtocol>)present adapter:(id<KVCollectionViewAdapterProtocol>)adapter layout:(nonnull UICollectionViewFlowLayout *)layout {
++ (instancetype)KVCollectionViewWithAdapter:(id<KVCollectionViewAdapterProtocol> _Nullable)adapter layout:(UICollectionViewFlowLayout *)layout {
     
     KVCollectionView *view = [[KVCollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
 
@@ -26,7 +24,6 @@
     [view useDefaultFooter];
     
     view.adapter = adapter;
-    view.present = present;
     
     return view;
 }
@@ -39,20 +36,12 @@
     return self.kv.adapter;;
 }
 
-- (void)setPresent:(id<KVCollectionViewPresentProtocol>)present {
-    self.kv.present = present;
+- (void)setOnRefreshBlock:(FBLPromise<KVListAdapterInfo *> * _Nonnull (^)(BOOL, NSInteger, UICollectionView<KVCollectionViewProtocol> * _Nonnull))onRefreshBlock {
+    self.kv.onRefreshBlock = onRefreshBlock;
 }
 
-- (id<KVCollectionViewPresentProtocol>)present {
-    return self.kv.present;
-}
-
-- (void)setOnReloadDataBlock:(void (^)(UICollectionView<KVCollectionViewProtocol> * _Nonnull))onReloadDataBlock {
-    self.kv.onReloadDataBlock = onReloadDataBlock;
-}
-
-- (void (^)(UICollectionView<KVCollectionViewProtocol> * _Nonnull))onReloadDataBlock {
-    return self.kv.onReloadDataBlock;
+- (FBLPromise<KVListAdapterInfo *> * _Nonnull (^)(BOOL, NSInteger, UICollectionView<KVCollectionViewProtocol> * _Nonnull))onRefreshBlock {
+    return self.kv.onRefreshBlock;
 }
 
 - (void)refreshData:(BOOL)isShowHeaderLoadding {

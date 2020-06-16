@@ -1,16 +1,16 @@
 //
-//  MyThemes.m
+//  AppThemes.m
 //  SwiftTheme
 //
 //  Created by Gesen on 16/5/26.
 //  Copyright © 2016年 Gesen. All rights reserved.
 //
 
-#import "MyThemes.h"
+#import "AppThemes.h"
 
-@implementation MyThemes
+@implementation AppThemes
 
-+ (void)switchTo:(MyThemesType)type {
++ (void)switchTo:(AppThemesType)type {
     [ThemeManager setThemeWithIndex:type];
 }
 
@@ -23,16 +23,16 @@
 }
 
 + (void)switchNight:(BOOL)isToNight {
-    [self switchTo:isToNight ? MyThemesTypeNight : MyThemesTypeRed];
+    [self switchTo:isToNight ? AppThemesTypeNight : AppThemesTypeRed];
 }
 
 + (BOOL)isNight {
-    return (int)ThemeManager.currentThemeIndex == MyThemesTypeNight;
+    return (int)ThemeManager.currentThemeIndex == AppThemesTypeNight;
 }
 
 + (void)restoreLastTheme {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    MyThemesType type = (int)[defaults integerForKey:self.lastThemeIndexKey];
+    AppThemesType type = (int)[defaults integerForKey:self.lastThemeIndexKey];
     [self switchTo:type];
 }
 
@@ -45,7 +45,7 @@
     
     ThemeManager.animationDuration = 0;
     
-    [MyThemes restoreLastTheme];
+    [AppThemes restoreLastTheme];
        
        // status bar
        

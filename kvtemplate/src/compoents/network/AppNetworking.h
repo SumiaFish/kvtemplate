@@ -25,7 +25,18 @@ typedef NS_ENUM(NSInteger, AppNetworkingToastShowMode) {
     AppNetworkingToastShowMode_All = 3,
 };
 
+
+typedef NS_ENUM(NSInteger, AppNetworkErrorFrom) {
+    AppNetworkErrorFrom_Undefine,
+    AppNetworkErrorFrom_Client,
+    AppNetworkErrorFrom_Business,
+};
+
 @interface NSError (AppNetwork)
+
+//@property (assign, nonatomic) AppNetworkErrorFrom errFrom;
+
+- (AppNetworkErrorFrom)errFrom;
 
 @end
 

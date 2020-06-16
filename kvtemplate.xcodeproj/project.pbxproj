@@ -13,11 +13,8 @@
 		0422A81D24962057004FE1D5 /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0422A81C24962057004FE1D5 /* DetailViewController.m */; };
 		0422A821249620DB004FE1D5 /* CTMediator+Router.m in Sources */ = {isa = PBXBuildFile; fileRef = 0422A820249620DB004FE1D5 /* CTMediator+Router.m */; };
 		0422A824249620EC004FE1D5 /* CTMediator+Detail.m in Sources */ = {isa = PBXBuildFile; fileRef = 0422A823249620EC004FE1D5 /* CTMediator+Detail.m */; };
-		0422A8292496492C004FE1D5 /* MyThemes.m in Sources */ = {isa = PBXBuildFile; fileRef = 0422A8282496492C004FE1D5 /* MyThemes.m */; };
+		0422A8292496492C004FE1D5 /* AppThemes.m in Sources */ = {isa = PBXBuildFile; fileRef = 0422A8282496492C004FE1D5 /* AppThemes.m */; };
 		0422A82D24964A75004FE1D5 /* KVThemeMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 0422A82C24964A75004FE1D5 /* KVThemeMap.m */; };
-		0422A8322496506E004FE1D5 /* Red.json in Resources */ = {isa = PBXBuildFile; fileRef = 0422A82F2496506E004FE1D5 /* Red.json */; };
-		0422A8332496506E004FE1D5 /* Night.json in Resources */ = {isa = PBXBuildFile; fileRef = 0422A8302496506E004FE1D5 /* Night.json */; };
-		0422A8342496506E004FE1D5 /* Yellow.json in Resources */ = {isa = PBXBuildFile; fileRef = 0422A8312496506E004FE1D5 /* Yellow.json */; };
 		0422A83624968B06004FE1D5 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0422A83524968B06004FE1D5 /* SceneDelegate.m */; };
 		043A38EC2477CE7F00FFC960 /* UIView+KVState.m in Sources */ = {isa = PBXBuildFile; fileRef = 043A38EB2477CE7F00FFC960 /* UIView+KVState.m */; };
 		044EF8D82477D153007F2CB6 /* KVHud.m in Sources */ = {isa = PBXBuildFile; fileRef = 044EF8D72477D153007F2CB6 /* KVHud.m */; };
@@ -67,6 +64,7 @@
 		04E51EB62497CF5300B59181 /* KVCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E51EB52497CF5300B59181 /* KVCollectionView.m */; };
 		04E51EBA2497D14A00B59181 /* KVCollectionViewAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E51EB92497D14A00B59181 /* KVCollectionViewAdapter.m */; };
 		04E51EBD2497D33700B59181 /* UICollectionView+KVCollectionViewProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E51EBC2497D33700B59181 /* UICollectionView+KVCollectionViewProtocol.m */; };
+		04E51ECA2498E55E00B59181 /* KVListAdapterInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E51EC92498E55E00B59181 /* KVListAdapterInfo.m */; };
 		2F5695BBB2BCD2C876B6CA4B /* Pods_kvtemplateTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D08409416198747B4D09A66B /* Pods_kvtemplateTests.framework */; };
 		3D17287909FE42D4E2FA0092 /* Pods_kvtemplate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37C03827A0F330876CB317AF /* Pods_kvtemplate.framework */; };
 		D62D71C15E20B2037451AB76 /* Pods_kvtemplate_kvtemplateUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFA9D26535CA6B8139DC717C /* Pods_kvtemplate_kvtemplateUITests.framework */; };
@@ -102,14 +100,10 @@
 		0422A820249620DB004FE1D5 /* CTMediator+Router.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "CTMediator+Router.m"; sourceTree = "<group>"; };
 		0422A822249620EC004FE1D5 /* CTMediator+Detail.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CTMediator+Detail.h"; sourceTree = "<group>"; };
 		0422A823249620EC004FE1D5 /* CTMediator+Detail.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "CTMediator+Detail.m"; sourceTree = "<group>"; };
-		0422A8262496492B004FE1D5 /* Global.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Global.h; sourceTree = "<group>"; };
-		0422A8272496492B004FE1D5 /* MyThemes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyThemes.h; sourceTree = "<group>"; };
-		0422A8282496492C004FE1D5 /* MyThemes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyThemes.m; sourceTree = "<group>"; };
+		0422A8272496492B004FE1D5 /* AppThemes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppThemes.h; sourceTree = "<group>"; };
+		0422A8282496492C004FE1D5 /* AppThemes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppThemes.m; sourceTree = "<group>"; };
 		0422A82B24964A75004FE1D5 /* KVThemeMap.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KVThemeMap.h; sourceTree = "<group>"; };
 		0422A82C24964A75004FE1D5 /* KVThemeMap.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KVThemeMap.m; sourceTree = "<group>"; };
-		0422A82F2496506E004FE1D5 /* Red.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Red.json; sourceTree = "<group>"; };
-		0422A8302496506E004FE1D5 /* Night.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Night.json; sourceTree = "<group>"; };
-		0422A8312496506E004FE1D5 /* Yellow.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Yellow.json; sourceTree = "<group>"; };
 		0422A83524968B06004FE1D5 /* SceneDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SceneDelegate.m; sourceTree = "<group>"; };
 		0422A83724968B2B004FE1D5 /* SceneDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneDelegate.h; sourceTree = "<group>"; };
 		043A38EA2477CE7F00FFC960 /* UIView+KVState.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIView+KVState.h"; sourceTree = "<group>"; };
@@ -217,6 +211,8 @@
 		04E51EB92497D14A00B59181 /* KVCollectionViewAdapter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KVCollectionViewAdapter.m; sourceTree = "<group>"; };
 		04E51EBB2497D33700B59181 /* UICollectionView+KVCollectionViewProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UICollectionView+KVCollectionViewProtocol.h"; sourceTree = "<group>"; };
 		04E51EBC2497D33700B59181 /* UICollectionView+KVCollectionViewProtocol.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UICollectionView+KVCollectionViewProtocol.m"; sourceTree = "<group>"; };
+		04E51EC82498E55E00B59181 /* KVListAdapterInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KVListAdapterInfo.h; sourceTree = "<group>"; };
+		04E51EC92498E55E00B59181 /* KVListAdapterInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KVListAdapterInfo.m; sourceTree = "<group>"; };
 		0D32C6FFADBA6601939A87F6 /* Pods-kvtemplate-kvtemplateUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-kvtemplate-kvtemplateUITests.debug.xcconfig"; path = "Target Support Files/Pods-kvtemplate-kvtemplateUITests/Pods-kvtemplate-kvtemplateUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		37C03827A0F330876CB317AF /* Pods_kvtemplate.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_kvtemplate.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4064FF0390EA78F4D5679892 /* Pods-kvtemplateTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-kvtemplateTests.debug.xcconfig"; path = "Target Support Files/Pods-kvtemplateTests/Pods-kvtemplateTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -293,13 +289,6 @@
 			path = "UIViewController+Alert";
 			sourceTree = "<group>";
 		};
-		0422A7BC24954DC0004FE1D5 /* mediator */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = mediator;
-			sourceTree = "<group>";
-		};
 		0422A7C324955A54004FE1D5 /* NSObject+WeakProperty */ = {
 			isa = PBXGroup;
 			children = (
@@ -307,13 +296,6 @@
 				0422A7C624955A96004FE1D5 /* NSObject+WeakProperty.m */,
 			);
 			path = "NSObject+WeakProperty";
-			sourceTree = "<group>";
-		};
-		0422A81524961448004FE1D5 /* toast */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = toast;
 			sourceTree = "<group>";
 		};
 		0422A81924962024004FE1D5 /* home（首页） */ = {
@@ -350,10 +332,8 @@
 		0422A8252496490E004FE1D5 /* theme */ = {
 			isa = PBXGroup;
 			children = (
-				0422A82E2496506E004FE1D5 /* Json */,
-				0422A8262496492B004FE1D5 /* Global.h */,
-				0422A8272496492B004FE1D5 /* MyThemes.h */,
-				0422A8282496492C004FE1D5 /* MyThemes.m */,
+				0422A8272496492B004FE1D5 /* AppThemes.h */,
+				0422A8282496492C004FE1D5 /* AppThemes.m */,
 			);
 			path = theme;
 			sourceTree = "<group>";
@@ -365,16 +345,6 @@
 				0422A82C24964A75004FE1D5 /* KVThemeMap.m */,
 			);
 			path = theme;
-			sourceTree = "<group>";
-		};
-		0422A82E2496506E004FE1D5 /* Json */ = {
-			isa = PBXGroup;
-			children = (
-				0422A82F2496506E004FE1D5 /* Red.json */,
-				0422A8302496506E004FE1D5 /* Night.json */,
-				0422A8312496506E004FE1D5 /* Yellow.json */,
-			);
-			path = Json;
 			sourceTree = "<group>";
 		};
 		0422A83E2496BAC0004FE1D5 /* categary */ = {
@@ -395,13 +365,6 @@
 				04609810246C515400BA6FD5 /* NSObject+WeakObserve.m */,
 			);
 			path = "NSObject+WeakObserve";
-			sourceTree = "<group>";
-		};
-		045D5D2A247EAE5200C22452 /* alert */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = alert;
 			sourceTree = "<group>";
 		};
 		0460977E246C31A600BA6FD5 = {
@@ -537,7 +500,6 @@
 			children = (
 				04E51EB32497CF3500B59181 /* collectionView */,
 				0422A82A24964A3C004FE1D5 /* theme */,
-				045D5D2A247EAE5200C22452 /* alert */,
 				046097E0246C323E00BA6FD5 /* toast */,
 				04E51EA32497A66800B59181 /* emptyData */,
 				0422A7B32495479F004FE1D5 /* stateView */,
@@ -616,10 +578,8 @@
 		046097F5246C323E00BA6FD5 /* compoents */ = {
 			isa = PBXGroup;
 			children = (
-				0422A8252496490E004FE1D5 /* theme */,
 				0422A81E249620C8004FE1D5 /* router */,
-				0422A81524961448004FE1D5 /* toast */,
-				0422A7BC24954DC0004FE1D5 /* mediator */,
+				0422A8252496490E004FE1D5 /* theme */,
 				049FA92D248BD06E003B61BD /* controller */,
 				046097F6246C323E00BA6FD5 /* tableView */,
 				046097F9246C323E00BA6FD5 /* network */,
@@ -731,6 +691,8 @@
 				04E51EB72497CF7F00B59181 /* KVCollectionViewProtocol.h */,
 				04E51EBB2497D33700B59181 /* UICollectionView+KVCollectionViewProtocol.h */,
 				04E51EBC2497D33700B59181 /* UICollectionView+KVCollectionViewProtocol.m */,
+				04E51EC82498E55E00B59181 /* KVListAdapterInfo.h */,
+				04E51EC92498E55E00B59181 /* KVListAdapterInfo.m */,
 			);
 			path = collectionView;
 			sourceTree = "<group>";
@@ -870,11 +832,8 @@
 				04609802246C323E00BA6FD5 /* KVDefaultStateView.xib in Resources */,
 				04609797246C31AB00BA6FD5 /* Assets.xcassets in Resources */,
 				04E51EB22497C11700B59181 /* AppEmptyDataView.xib in Resources */,
-				0422A8322496506E004FE1D5 /* Red.json in Resources */,
 				04609795246C31A600BA6FD5 /* Main.storyboard in Resources */,
-				0422A8332496506E004FE1D5 /* Night.json in Resources */,
 				045D5D29247E9DA000C22452 /* AppStateView.xib in Resources */,
-				0422A8342496506E004FE1D5 /* Yellow.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1009,6 +968,7 @@
 				046097FE246C323E00BA6FD5 /* KVTableViewAdapter.m in Sources */,
 				0460981D246D49EC00BA6FD5 /* KVHttpToolInfos.m in Sources */,
 				045D5D27247E9D9700C22452 /* AppStateView.m in Sources */,
+				04E51ECA2498E55E00B59181 /* KVListAdapterInfo.m in Sources */,
 				0422A7B824954CD4004FE1D5 /* UIViewController+SimpleAlert.m in Sources */,
 				04E51EB62497CF5300B59181 /* KVCollectionView.m in Sources */,
 				049FA92A248BCE1C003B61BD /* ChannelViewController.m in Sources */,
@@ -1026,7 +986,7 @@
 				04E51EB02497C10E00B59181 /* AppEmptyDataView.m in Sources */,
 				04E51E9F24975D5000B59181 /* NSData+Encrypt.m in Sources */,
 				045D5D20247E7B9500C22452 /* UIView+Context.m in Sources */,
-				0422A8292496492C004FE1D5 /* MyThemes.m in Sources */,
+				0422A8292496492C004FE1D5 /* AppThemes.m in Sources */,
 				04609807246C323F00BA6FD5 /* KVHttpTool.m in Sources */,
 				044EF8DB2477D1F0007F2CB6 /* KVBaseStateView.m in Sources */,
 				04609806246C323F00BA6FD5 /* KVHttpTool+MISC.m in Sources */,
@@ -1219,6 +1179,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = B49630D0448590691B6B4CB2 /* Pods-kvtemplate.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/kvtemplate/src/global/pch/pch.pch";
@@ -1238,6 +1199,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 60E9EAC16295C0EE9FD0F7E7 /* Pods-kvtemplate.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/kvtemplate/src/global/pch/pch.pch";
@@ -1297,6 +1259,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 0D32C6FFADBA6601939A87F6 /* Pods-kvtemplate-kvtemplateUITests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = kvtemplateUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1315,6 +1278,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 8C483880CB027192F0362F3D /* Pods-kvtemplate-kvtemplateUITests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = kvtemplateUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (

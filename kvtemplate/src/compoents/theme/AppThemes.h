@@ -1,5 +1,5 @@
 //
-//  MyThemes.h
+//  AppThemes.h
 //  SwiftTheme
 //
 //  Created by Gesen on 16/5/26.
@@ -39,15 +39,15 @@
 #define globalBarTintColorPicker [ThemeColorPicker pickerWithColors: @[@"#01040D", @"#FFF"]]
 
 typedef enum {
-    MyThemesTypeRed = 0,
-//    MyThemesTypeYellow,
-//    MyThemesTypeBlue,
-    MyThemesTypeNight
-} MyThemesType;
+    AppThemesTypeRed = 0,
+//    AppThemesTypeYellow,
+//    AppThemesTypeBlue,
+    AppThemesTypeNight
+} AppThemesType;
 
-@interface MyThemes : NSObject
+@interface AppThemes : NSObject
 
-+ (void)switchTo:(MyThemesType)type;
++ (void)switchTo:(AppThemesType)type;
 + (void)switchToNext;
 + (void)switchNight:(BOOL)isToNight;
 

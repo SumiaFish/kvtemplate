@@ -94,6 +94,8 @@ typedef struct {
                 }
                 //
                 [self sendSuccessTask:filtterResponseObject];
+                //
+                [self cacheTask:filtterResponseObject];
             }];
         } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
             [KVHttpTool todoInGlobalDefaultQueue:^{
@@ -126,6 +128,8 @@ typedef struct {
                 }
                 //
                 [self sendSuccessTask:filtterResponseObject];
+                //
+                [self cacheTask:filtterResponseObject];
             }];
         } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
             [KVHttpTool todoInGlobalDefaultQueue:^{
@@ -243,17 +247,23 @@ typedef struct {
     KVHttpToolCacheMate cacheMate = info.cacheMate;
     id<KVHttpToolCacheProtocol> cacheDelegate = info.cacheDelegate;
     
-    if (cacheMate != KVHttpToolCacheMate_Undefine) {
-        // 做缓存
-        NSData *data = nil;
-        if (responseSerialization == KVHttpToolResponseSerialization_Data) {
-            data = originalResponse;
-        } else {
-            data = originalResponse? [NSJSONSerialization dataWithJSONObject:originalResponse options:(NSJSONWritingPrettyPrinted) error:nil]: nil;
-        }
-        if (data) {
-            [cacheDelegate cache:(cacheMate) url:url headers:headers params:params data:data];
-        }
+    if (!cacheDelegate) {
+        return;
+    }
+    
+    if (cacheMate == KVHttpToolCacheMate_Undefine) {
+        return;
+    }
+    
+    // 做缓存
+    NSData *data = nil;
+    if (responseSerialization == KVHttpToolResponseSerialization_Data) {
+        data = originalResponse;
+    } else {
+        data = originalResponse? [NSJSONSerialization dataWithJSONObject:originalResponse options:(NSJSONWritingPrettyPrinted) error:nil]: nil;
+    }
+    if (data) {
+        [cacheDelegate cache:(cacheMate) url:url headers:headers params:params data:data];
     }
 }
 

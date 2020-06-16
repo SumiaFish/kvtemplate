@@ -14,7 +14,7 @@
 #import "AppEmptyDataView.h"
 
 @interface DetailViewController ()
-<KVUIViewDisplayDelegate, KVTableViewPresentProtocol, KVCollectionViewPresentProtocol>
+<KVUIViewDisplayDelegate>
 
 @property (strong, nonatomic) HomePresent *homePresent;
 
@@ -46,6 +46,8 @@
 //    [self.tableView refreshData:YES];
     
     [self.collectionView refreshData:YES];
+    
+//     [self.hdCollectionView refreshData:YES];
 
 }
 
@@ -68,34 +70,37 @@
     }
 }
 
-- (FBLPromise *)kv_loadDataWithTableView:(id<KVTableViewProtocol>)tableView isRefresh:(BOOL)isRefresh {
-    if (tableView == self.tableView) {
-        __weak typeof(self) ws = self;
-        [self.tableView showInfo:KVStateViewInfo.loaddingInfo];
-        return [[[self.homePresent kv_loadDataWithTableView:tableView isRefresh:isRefresh] then:^id _Nullable(id  _Nullable value) {
-            [ws.tableView showInfo:KVStateViewInfo.succInfo];
-            [ws.tableView reloadEmptyView];
-            return value;
-        }] catch:^(NSError * _Nonnull error) {
-            [ws.tableView showInfo:[KVStateViewInfo errorInfo:error]];
-        }];
-    }
-    return nil;
+- (FBLPromise *)loadTableViewData:(NSInteger)page isRefresh:(BOOL)isRefresh {
+    __weak typeof(self) ws = self;
+    [self.tableView showInfo:KVStateViewInfo.loaddingInfo];
+    return [[[self.homePresent loadData:page isRefresh:isRefresh] then:^id _Nullable(id  _Nullable value) {
+        [ws.tableView.adapter update:value];
+        [ws.tableView showInfo:KVStateViewInfo.succInfo];
+        [ws.tableView reloadEmptyView];
+        return value;
+    }] catch:^(NSError * _Nonnull error) {
+        [ws.tableView showInfo:[KVStateViewInfo errorInfo:error]];
+    }];
 }
 
-- (FBLPromise *)kv_loadDataWithCollectionView:(id<KVCollectionViewProtocol>)collectionView isRefresh:(BOOL)isRefresh {
-    if (collectionView == self.collectionView) {
-        __weak typeof(self) ws = self;
-        [self.collectionView showInfo:KVStateViewInfo.loaddingInfo];
-        return [[[self.homePresent kv_loadDataWithCollectionView:collectionView isRefresh:isRefresh] then:^id _Nullable(id  _Nullable value) {
-            [ws.collectionView showInfo:KVStateViewInfo.succInfo];
-            [ws.collectionView reloadEmptyView];
+- (FBLPromise *)loadCollectionViewData:(NSInteger)page isRefresh:(BOOL)isRefresh {
+    
+    __weak typeof(self) ws = self;
+    [self.collectionView showInfo:KVStateViewInfo.loaddingInfo];
+    return [[[self.homePresent loadData:page isRefresh:isRefresh] then:^id _Nullable(id  _Nullable value) {
+        [ws.collectionView.adapter update:value];
+        [ws.collectionView showInfo:KVStateViewInfo.succInfo];
+        [ws.collectionView reloadEmptyView];
+        return value;
+    }] catch:^(NSError * _Nonnull error) {
+        [ws.collectionView showInfo:[KVStateViewInfo errorInfo:error]];
+        //
+        [[ws.homePresent loadCacheData:page isRefresh:isRefresh] then:^id _Nullable(id  _Nullable value) {
+            [ws.collectionView.adapter update:value];
+            [ws.collectionView reloadData];
             return value;
-        }] catch:^(NSError * _Nonnull error) {
-            [ws.collectionView showInfo:[KVStateViewInfo errorInfo:error]];
         }];
-    }
-    return nil;
+    }];
 }
 
 - (UIButton *)button {
@@ -152,7 +157,10 @@
             [ws selecteIndex: indexPath.row];
         };
 
-        _tableView = [UITableView KVTableViewWithPresent:self adapter:adapter];
+        _tableView = [UITableView KVTableViewWithAdapter:adapter];
+        _tableView.onRefreshBlock = ^FBLPromise<KVListAdapterInfo *> * _Nonnull(BOOL isRefresh, NSInteger nextPage, UITableView<KVTableViewProtocol> * _Nonnull tableView) {
+            return [ws loadTableViewData:nextPage isRefresh:isRefresh];
+        };
         _tableView.displayContext = self;
         [self.view addSubview:_tableView];
         _tableView.frame = self.view.bounds;
@@ -161,7 +169,7 @@
         
         [_tableView registerHeaderFooterClazz:@{@"header": UITableViewHeaderFooterView.class}];
         
-        AppStateView *stateView = [AppStateView viewWithKVTableView:(UITableView<KVTableViewPresentProtocol> *)_tableView];
+        AppStateView *stateView = [AppStateView viewWithKVTableView:(UITableView<KVTableViewProtocol> *)_tableView];
         [_tableView setStateView:stateView andMoveTo:AppDelegate.window];
         
         AppEmptyDataView *emptyView = [AppEmptyDataView view];
@@ -234,7 +242,7 @@
         };
         
         adapter.onRenderItemSizeBlock = ^CGSize(UICollectionView<KVCollectionViewProtocol> * _Nonnull collectionView, NSIndexPath * _Nonnull indexPath) {
-            return CGSizeMake(collectionView.bounds.size.width/2, collectionView.bounds.size.width/2);
+            return CGSizeMake(collectionView.bounds.size.width/5, collectionView.bounds.size.width/5);
         };
         
         adapter.onSelecteItemBlock = ^(UICollectionView<KVCollectionViewProtocol> * _Nonnull collectionView, NSIndexPath * _Nonnull indexPath) {
@@ -245,8 +253,12 @@
         layout.sectionInset = UIEdgeInsetsZero;
         layout.minimumLineSpacing = 0;
         layout.minimumInteritemSpacing = 0;
+        layout.sectionHeadersPinToVisibleBounds = YES;
         
-        _collectionView = [UICollectionView KVCollectionViewWithPresent:self adapter:adapter layout:layout];
+        _collectionView = [UICollectionView KVCollectionViewWithAdapter:adapter layout:layout];
+        _collectionView.onRefreshBlock = ^FBLPromise<KVListAdapterInfo *> * _Nonnull(BOOL isRefresh, NSInteger nextPage, UICollectionView<KVCollectionViewProtocol> * _Nonnull collectionView) {
+            return [ws loadCollectionViewData:nextPage isRefresh:isRefresh];
+        };
         _collectionView.displayContext = self;
         [self.view addSubview:_collectionView];
         _collectionView.frame = self.view.bounds;

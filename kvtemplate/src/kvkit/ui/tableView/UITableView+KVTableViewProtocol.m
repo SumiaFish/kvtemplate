@@ -14,11 +14,7 @@
 
 @dynamic adapter;
 
-@dynamic present;
-
-@dynamic onReloadDataBlock;
-
-+ (instancetype)KVTableViewWithPresent:(id<KVTableViewPresentProtocol>)present adapter:(id<KVTableViewAdapterProtocol>)adapter {
++ (instancetype)KVTableViewWithAdapter:(id<KVTableViewAdapterProtocol> _Nullable)adapter {
     
     KVTableView *view = [[KVTableView alloc] initWithFrame:CGRectZero style:(UITableViewStylePlain)];
      
@@ -28,7 +24,6 @@
     [view useDefaultFooter];
     
     view.adapter = adapter;
-    view.present = present;
     
     return view;
 }
@@ -41,20 +36,12 @@
     return self.kv.adapter;;
 }
 
-- (void)setPresent:(id<KVTableViewPresentProtocol>)present {
-    self.kv.present = present;
+- (void)setOnRefreshBlock:(FBLPromise<KVListAdapterInfo *> * _Nonnull (^)(BOOL, NSInteger, UITableView<KVTableViewProtocol> * _Nonnull))onRefreshBlock {
+    self.kv.onRefreshBlock = onRefreshBlock;
 }
 
-- (id<KVTableViewPresentProtocol>)present {
-    return self.kv.present;
-}
-
-- (void)setOnReloadDataBlock:(void (^)(UITableView<KVTableViewProtocol> * _Nonnull))onReloadDataBlock {
-    self.kv.onReloadDataBlock = onReloadDataBlock;
-}
-
-- (void (^)(UITableView<KVTableViewProtocol> * _Nonnull))onReloadDataBlock {
-    return self.kv.onReloadDataBlock;
+- (FBLPromise<KVListAdapterInfo *> * _Nonnull (^)(BOOL, NSInteger, UITableView<KVTableViewProtocol> * _Nonnull))onRefreshBlock {
+    return self.kv.onRefreshBlock;
 }
 
 - (void)refreshData:(BOOL)isShowHeaderLoadding {

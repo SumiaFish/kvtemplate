@@ -113,8 +113,8 @@
 }
 
 - (void)switchThemeAction {
-    [MyThemes switchToNext];
-    [MyThemes saveLastTheme];
+    [AppThemes switchToNext];
+    [AppThemes saveLastTheme];
 }
 
 - (UIButton *)button {

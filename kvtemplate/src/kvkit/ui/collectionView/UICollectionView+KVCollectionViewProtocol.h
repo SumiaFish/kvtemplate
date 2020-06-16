@@ -12,14 +12,12 @@
 
 #import "KVCollectionViewProtocol.h"
 
-#import "KVCollectionViewAdapter.h"
-
 NS_ASSUME_NONNULL_BEGIN
 
 @interface UICollectionView (KVCollectionViewProtocol)
 <KVCollectionViewProtocol>
 
-+ (instancetype)KVCollectionViewWithPresent:(id<KVCollectionViewPresentProtocol> _Nullable)present adapter:(id<KVCollectionViewAdapterProtocol> _Nullable)adapter layout:(UICollectionViewFlowLayout *)layout;
++ (instancetype)KVCollectionViewWithAdapter:(id<KVCollectionViewAdapterProtocol> _Nullable)adapter layout:(UICollectionViewFlowLayout *)layout;
 
 - (void)registerCellNib:(NSDictionary<NSString *, NSString *> *)cellNibs;
 
