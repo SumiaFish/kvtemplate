@@ -57,6 +57,12 @@
     self.viewControllers = vcs;
     
     [AppThemes conf];
+    
+    [AppNetworking listenNetStateChange:^(KVNetStatus status) {
+        if (status == KVNetStatus_NotReachable) {
+            [self simpleAlert:@"网络不通!"];
+        }
+    }];
 }
 
 /*

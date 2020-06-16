@@ -21,6 +21,21 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
+@interface KVHttpUploadOpration : KVHttpOpration
+
+/** 待上传文件路径 */
+@property (copy, nonatomic, readonly, nullable) NSString *filePath;
+
+//@property (copy, nonatomic, readonly, nullable) NSString *name;
+@property (copy, nonatomic, readonly, nullable) NSString *fileName;
+@property (copy, nonatomic, readonly, nullable) NSString *mimeType;
+
+- (instancetype)initWithUrl:(NSString *)url info:(KVHttpToolInfos *)info NS_UNAVAILABLE;;
+
+- (instancetype)initWithUrl:(NSString *)url info:(KVHttpToolInfos *)info filePath:(NSString *)filePath name:(NSString * _Nonnull)name fileName:(NSString * _Nonnull)fileName mimeType:(NSString * _Nonnull)mimeType;
+
+@end
+
 @interface KVHttpDownloadOpration : KVHttpOpration
 
 @property (strong, nonatomic, readonly) NSURL *fileURL;

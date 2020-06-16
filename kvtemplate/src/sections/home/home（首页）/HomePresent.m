@@ -23,6 +23,17 @@
 }
 
 - (FBLPromise *)loadData:(NSInteger)page isRefresh:(BOOL)isRefresh {
+    
+    AppNetworking *appn = [AppNetworking upload:@"https://www.baidu.com" filePath:[NSBundle.mainBundle pathForResource:@"unnamed.jpg" ofType:nil] name:@"image" fileName:@"test.image" mimeType:@"application/image"];
+    
+    appn.success(^(id  _Nullable responseObject) {
+        kLog(@"responseObject: %@", [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding]);
+    })
+    .failure(^(NSError * _Nullable error) {
+        kLog(@"error: %@", error.localizedDescription);
+    })
+    .send();
+    
     return [FBLPromise async:^(FBLPromiseFulfillBlock  _Nonnull fulfill, FBLPromiseRejectBlock  _Nonnull reject) {
         
         [AppNetworking request:@"https://www.baidu.com"]

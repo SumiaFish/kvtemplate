@@ -8,6 +8,8 @@
 
 #import <objc/runtime.h>
 
+#import <AFNetworking/AFNetworking.h>
+
 #import "NSObject+WeakObserve.h"
 
 #import "KVHttpTool.h"
@@ -316,81 +318,35 @@
 @interface _KVHttpUpload : KVHttpTool
 
 @property (copy, nonatomic, readwrite) NSString *filePath;
+@property (copy, nonatomic, readwrite) NSString *name;
+@property (copy, nonatomic, readwrite) NSString *fileName;
+@property (copy, nonatomic, readwrite) NSString *mimeType;
 
 @end
 
 @implementation _KVHttpUpload
 
-@dynamic filePath;
-
-+ (instancetype)upload:(NSString *)url filePath:(NSString *)filePath {
++ (instancetype)upload:(NSString *)url filePath:(NSString *)filePath name:(NSString * _Nonnull)name fileName:(NSString * _Nonnull)fileName mimeType:(NSString * _Nonnull)mimeType {
     _KVHttpUpload *upload = [super request:url];
     upload.filePath = filePath;
+    upload.name = name;
+    upload.fileName = fileName;
+    upload.mimeType = mimeType;
     return upload;
 }
 
+
 - (void)impSend {
-    
-//    [self lock];
-//
-//    // 开始发起请求
-//
-//    NSString *url = self.url;
-//    NSString *filePath = self.filePath;
-//
-//    KVHttpToolInfos *info = self.info;
-//    KVHttpToolMethod method = KVHttpTool_POST; //info.method; // 上传只能POST
-//    NSDictionary *params = info.params;
-//    NSDictionary *headers = info.headers;
-//    KVHttpToolResponseSerialization responseSerialization = info.responseSerialization;
-//    BOOL serializationToJSON = info.serializationToJSON;
-//    void (^ progressBlock)(NSProgress *progress) = info.progressBlock;
-//    void (^ successBlock)(id _Nullable responseObject) = info.successBlock;
-//    void (^ failureBlock)(NSError * _Nullable error) = info.failureBlock;
-//
-//
-//    // 检测文件是否存在
-//    BOOL isDirectory = NO;
-//    BOOL isExecutableFileAtPath = [[NSFileManager defaultManager] fileExistsAtPath:filePath isDirectory:&isDirectory];
-//    if (!isExecutableFileAtPath) {
-//        NSError *error = [NSError errorWithDomain:url code:-1 userInfo:@{NSLocalizedDescriptionKey: @"文件不存在"}];
-//        failureBlock? failureBlock(error): nil;
-//        unlockBlock();
-//        return;
-//    }
-    
-//    // 拷贝到一个新目录
-//    if (![self createTmpFile:filePath]) {
-//        NSError *error = [NSError errorWithDomain:url code:-1 userInfo:@{NSLocalizedDescriptionKey: @"无法拷贝待上传文件"}];
-//        failureBlock? failureBlock(error): nil;
-//        unlockBlock();
-//        return;
-//    }
-    
+    [self lock];
+    // 默认只允许send一次
+    if (self.queue.operationCount > 0) {
+        KVKitLog(@"只允许send一次");
+        [self unlock];
+        return;
+    }
+    [self.queue addOperation:[[KVHttpUploadOpration alloc] initWithUrl:self.url info:self.info filePath:self.filePath name:self.name fileName:self.fileName mimeType:self.mimeType]];
+    [self unlock];
    
-}
-
-//- (void)kv_receiveWeakObserveValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
-//    if ([object isKindOfClass:NSURLSessionTask.class] &&
-//        object == self.task) {
-//        if (self.task.state == NSURLSessionTaskStateCanceling) {
-//            [self clearTmpFile];
-//        } else if (self.task.state == NSURLSessionTaskStateCompleted) {
-//            [self clearTmpFile];
-//        }
-//    }
-//}
-
-- (void)clearTmpFile {
-    
-}
-
-- (BOOL)createTmpFile:(NSString *)fromPath {
-    return YES;
-}
-
-+ (NSString *)uploadDirectory {
-    return @"";
 }
 
 @end
@@ -398,12 +354,49 @@
 @implementation KVHttpTool (Upload)
 
 @dynamic filePath;
+@dynamic name;
+@dynamic fileName;
+@dynamic mimeType;
 
-+ (instancetype)upload:(NSString *)url filePath:(NSString *)filePath {
-    return [_KVHttpUpload upload:url filePath:filePath];
++ (instancetype)upload:(NSString *)url filePath:(NSString *)filePath name:(NSString * _Nonnull)name fileName:(NSString * _Nonnull)fileName mimeType:(NSString * _Nonnull)mimeType {
+    return [_KVHttpUpload upload:url filePath:filePath name:name fileName:fileName mimeType:mimeType];
+}
+
+- (void)setFilePath:(NSString * _Nullable)filePath {
+    self.upload.filePath = filePath;
 }
 
 - (NSString *)filePath {
+    return self.upload.filePath;
+}
+
+- (void)setFileName:(NSString * _Nullable)fileName {
+    self.upload.fileName = fileName;
+}
+
+- (NSString *)fileName {
+    return self.upload.fileName;
+}
+
+- (void)setName:(NSString * _Nullable)name {
+    self.upload.name = name;
+}
+
+- (NSString *)name {
+    return self.upload.name;
+}
+
+- (void)setMimeType:(NSString * _Nullable)mimeType {
+    self.upload.mimeType = mimeType;
+}
+
+- (NSString *)mimeType {
+    return self.upload.mimeType;
+}
+- (_KVHttpUpload *)upload {
+    if ([self isKindOfClass:_KVHttpUpload.class]) {
+        return (_KVHttpUpload *)self;
+    }
     return nil;
 }
 
@@ -469,7 +462,55 @@
 }
 
 - (KVHttpTool * _Nullable (^)(void (^ _Nullable)(NSURL * _Nullable)))downloadSuccess {
+    return self.download.downloadSuccess;
+}
+
+- (_KVHttpDownload *)download {
+    id res = self;
+    if ([res isKindOfClass:_KVHttpDownload.class]) {
+        return res;
+    }
     return nil;
+}
+
+@end
+
+@implementation KVHttpTool (NetStatus)
+
++ (void)listenNetStateChange:(void (^) (KVNetStatus status))block {
+    AFNetworkReachabilityManager *manager = [AFNetworkReachabilityManager sharedManager];
+    /*
+    AFNetworkReachabilityStatusUnknown          = -1, 未知
+    AFNetworkReachabilityStatusNotReachable     = 0,  没有网络
+    AFNetworkReachabilityStatusReachableViaWWAN = 1,  蜂窝流量
+    AFNetworkReachabilityStatusReachableViaWiFi = 2,  无线
+    */
+    // 监听网络状态的变化
+    [manager setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
+        switch (status) {
+            case AFNetworkReachabilityStatusUnknown:
+                KVKitLog(@"未知网络");
+                block? block(KVNetStatus_Unknown): nil;
+                break;
+            case AFNetworkReachabilityStatusNotReachable:
+                KVKitLog(@"没有网络");
+                block? block(KVNetStatus_NotReachable): nil;
+                break;
+            case AFNetworkReachabilityStatusReachableViaWWAN:
+                KVKitLog(@"数据网络");
+                block? block(KVNetStatus_ReachableViaWWAN): nil;
+                break;
+            case AFNetworkReachabilityStatusReachableViaWiFi:
+                KVKitLog(@"无线网络");
+                block? block(KVNetStatus_ReachableViaWiFi): nil;
+                break;
+
+            default:
+                break;
+        }
+    }];
+    // 开启
+    [manager startMonitoring];
 }
 
 @end

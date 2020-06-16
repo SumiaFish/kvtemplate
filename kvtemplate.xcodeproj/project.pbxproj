@@ -65,6 +65,8 @@
 		04E51EBA2497D14A00B59181 /* KVCollectionViewAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E51EB92497D14A00B59181 /* KVCollectionViewAdapter.m */; };
 		04E51EBD2497D33700B59181 /* UICollectionView+KVCollectionViewProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E51EBC2497D33700B59181 /* UICollectionView+KVCollectionViewProtocol.m */; };
 		04E51ECA2498E55E00B59181 /* KVListAdapterInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E51EC92498E55E00B59181 /* KVListAdapterInfo.m */; };
+		04E51ECE2498FCE900B59181 /* NSObject+Propertys.m in Sources */ = {isa = PBXBuildFile; fileRef = 04E51ECD2498FCE800B59181 /* NSObject+Propertys.m */; };
+		04E51ED02499103300B59181 /* unnamed.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 04E51ECF2499103300B59181 /* unnamed.jpg */; };
 		2F5695BBB2BCD2C876B6CA4B /* Pods_kvtemplateTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D08409416198747B4D09A66B /* Pods_kvtemplateTests.framework */; };
 		3D17287909FE42D4E2FA0092 /* Pods_kvtemplate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37C03827A0F330876CB317AF /* Pods_kvtemplate.framework */; };
 		D62D71C15E20B2037451AB76 /* Pods_kvtemplate_kvtemplateUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFA9D26535CA6B8139DC717C /* Pods_kvtemplate_kvtemplateUITests.framework */; };
@@ -213,6 +215,9 @@
 		04E51EBC2497D33700B59181 /* UICollectionView+KVCollectionViewProtocol.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UICollectionView+KVCollectionViewProtocol.m"; sourceTree = "<group>"; };
 		04E51EC82498E55E00B59181 /* KVListAdapterInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KVListAdapterInfo.h; sourceTree = "<group>"; };
 		04E51EC92498E55E00B59181 /* KVListAdapterInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KVListAdapterInfo.m; sourceTree = "<group>"; };
+		04E51ECC2498FCE800B59181 /* NSObject+Propertys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+Propertys.h"; sourceTree = "<group>"; };
+		04E51ECD2498FCE800B59181 /* NSObject+Propertys.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+Propertys.m"; sourceTree = "<group>"; };
+		04E51ECF2499103300B59181 /* unnamed.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = unnamed.jpg; sourceTree = "<group>"; };
 		0D32C6FFADBA6601939A87F6 /* Pods-kvtemplate-kvtemplateUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-kvtemplate-kvtemplateUITests.debug.xcconfig"; path = "Target Support Files/Pods-kvtemplate-kvtemplateUITests/Pods-kvtemplate-kvtemplateUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		37C03827A0F330876CB317AF /* Pods_kvtemplate.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_kvtemplate.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4064FF0390EA78F4D5679892 /* Pods-kvtemplateTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-kvtemplateTests.debug.xcconfig"; path = "Target Support Files/Pods-kvtemplateTests/Pods-kvtemplateTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -352,6 +357,7 @@
 			children = (
 				0422A83F2496BB87004FE1D5 /* NSObject+WeakObserve */,
 				0422A7B524954ADF004FE1D5 /* UIVIew+Context */,
+				04E51ECB2498FCC800B59181 /* NSObject+Propertys */,
 				0422A7C324955A54004FE1D5 /* NSObject+WeakProperty */,
 				0422A7B924954CF4004FE1D5 /* UIViewController+Alert */,
 			);
@@ -396,6 +402,7 @@
 				04609790246C31A600BA6FD5 /* ViewController.h */,
 				04609791246C31A600BA6FD5 /* ViewController.m */,
 				04609793246C31A600BA6FD5 /* Main.storyboard */,
+				04E51ECF2499103300B59181 /* unnamed.jpg */,
 				04609796246C31AB00BA6FD5 /* Assets.xcassets */,
 				04609798246C31AB00BA6FD5 /* LaunchScreen.storyboard */,
 				0460979B246C31AB00BA6FD5 /* Info.plist */,
@@ -697,6 +704,15 @@
 			path = collectionView;
 			sourceTree = "<group>";
 		};
+		04E51ECB2498FCC800B59181 /* NSObject+Propertys */ = {
+			isa = PBXGroup;
+			children = (
+				04E51ECC2498FCE800B59181 /* NSObject+Propertys.h */,
+				04E51ECD2498FCE800B59181 /* NSObject+Propertys.m */,
+			);
+			path = "NSObject+Propertys";
+			sourceTree = "<group>";
+		};
 		4A191CC8EBB995D7E8440881 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -828,6 +844,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				04E51ED02499103300B59181 /* unnamed.jpg in Resources */,
 				0460979A246C31AB00BA6FD5 /* LaunchScreen.storyboard in Resources */,
 				04609802246C323E00BA6FD5 /* KVDefaultStateView.xib in Resources */,
 				04609797246C31AB00BA6FD5 /* Assets.xcassets in Resources */,
@@ -969,6 +986,7 @@
 				0460981D246D49EC00BA6FD5 /* KVHttpToolInfos.m in Sources */,
 				045D5D27247E9D9700C22452 /* AppStateView.m in Sources */,
 				04E51ECA2498E55E00B59181 /* KVListAdapterInfo.m in Sources */,
+				04E51ECE2498FCE900B59181 /* NSObject+Propertys.m in Sources */,
 				0422A7B824954CD4004FE1D5 /* UIViewController+SimpleAlert.m in Sources */,
 				04E51EB62497CF5300B59181 /* KVCollectionView.m in Sources */,
 				049FA92A248BCE1C003B61BD /* ChannelViewController.m in Sources */,

@@ -26,6 +26,16 @@ typedef struct {
 
 @end
 
+@interface KVHttpUploadOpration ()
+
+/** 待上传文件路径 */
+@property (copy, nonatomic, readwrite) NSString *filePath;
+//@property (copy, nonatomic, readwrite) NSString *name;
+@property (copy, nonatomic, readwrite) NSString *fileName;
+@property (copy, nonatomic, readwrite) NSString *mimeType;
+
+@end
+
 @implementation KVHttpOpration
 {
     NSProgress *_progress;
@@ -467,6 +477,112 @@ typedef struct {
 - (AFHTTPSessionManager *)manager {
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     return manager;
+}
+
+@end
+
+@implementation KVHttpUploadOpration
+
+- (instancetype)initWithUrl:(NSString *)url info:(KVHttpToolInfos *)info filePath:(NSString *)filePath name:(NSString * _Nonnull)name fileName:(NSString * _Nonnull)fileName mimeType:(NSString * _Nonnull)mimeType {
+    if (self = [super initWithUrl:url info:info]) {
+        self.filePath = filePath;
+        self.name = name;
+        self.fileName = fileName;
+        self.mimeType = mimeType;
+    }
+    return self;
+}
+
+- (void)todo {
+    //文件是否存在
+    BOOL isExist = [[NSFileManager defaultManager] fileExistsAtPath:self.filePath];
+    if (isExist == NO) {
+        [self sendFailedTask:[NSError errorWithDomain:@"" code:-1 userInfo:@{NSLocalizedDescriptionKey: @"文件不存在"}]];
+        return;
+    }
+    if(isExist){
+        //2.获取文件大小
+        NSDictionary * attributes = [[NSFileManager defaultManager] attributesOfItemAtPath:self.filePath error:NULL];
+        // size : bit
+        unsigned long long size = [[attributes objectForKey:NSFileSize] longLongValue];
+        
+        // 100M
+        unsigned long long maxSize = 1024 * 1024 * 100;
+        
+        if (size > maxSize) {
+            KVKitLog(@"不支持上传超过%@M的文件", @(maxSize/1024/1024));
+            [self sendFailedTask:[NSError errorWithDomain:@"" code:-1 userInfo:@{NSLocalizedDescriptionKey: @"不支持大文件上传"}]];
+            return;
+        }
+        
+    }
+    
+    NSError *readFileErr = nil;
+    NSData *data = [NSData dataWithContentsOfFile:self.filePath options:0 error:&readFileErr];
+    if (readFileErr) {
+        KVKitLog(@"读取文件失败");
+        [self sendFailedTask:[NSError errorWithDomain:@"" code:-1 userInfo:@{NSLocalizedDescriptionKey: @"无法读取文件"}]];
+        return;
+    }
+    
+    //
+    NSString *url = self.url;
+    
+    KVHttpToolInfos *info = self.info;
+//    KVHttpToolMethod method = info.method;
+    NSDictionary *params = info.params;
+    NSDictionary *headers = info.headers;
+    KVHttpToolResponseSerialization responseSerialization = info.responseSerialization;
+    
+    AFHTTPSessionManager *manager = [self manager];
+    manager.responseSerializer = ({
+        AFHTTPResponseSerializer *res = [AFHTTPResponseSerializer serializer];
+        if (responseSerialization == KVHttpToolResponseSerialization_JSON) {
+            res = [AFJSONResponseSerializer serializer];
+        }
+        res;
+    });
+    
+    // 调用manager, 这里只能用post
+    [manager POST:url parameters:params headers:headers constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+        [formData appendPartWithFormData:data name:self.name];
+    } progress:^(NSProgress * _Nonnull uploadProgress) {
+        [self sendProgressTask:uploadProgress];
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        [KVHttpTool todoInGlobalDefaultQueue:^{
+            //
+            [self logTask:responseObject error:nil];
+            //
+            KVHttpOprationFilterResult result = {};
+            [self filterTask:responseObject result:&result];
+            NSError *error = result.error;
+            id filtterResponseObject = result.responseObject;
+            if (error) {
+                [self sendFailedTask:error];
+                //
+                [self sendLoadCacheDataSuccessTask];
+                return;
+            }
+            //
+            [self sendSuccessTask:filtterResponseObject];
+            //
+            [self cacheTask:filtterResponseObject];
+        }];
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        [KVHttpTool todoInGlobalDefaultQueue:^{
+            //
+            [self logTask:nil error:error];
+            //
+            [self sendFailedTask:error];
+            //
+            [self sendLoadCacheDataSuccessTask];
+        }];
+    }];
+    
+    if (self.task) {
+        [self.task kv_addWeakObserve:self keyPath:NSStringFromSelector(@selector(state)) options:(NSKeyValueObservingOptionNew) context:nil];
+    }
+    
 }
 
 @end

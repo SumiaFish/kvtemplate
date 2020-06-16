@@ -33,6 +33,14 @@ typedef NS_ENUM(NSInteger, KVHttpToolResponseSerialization) {
     KVHttpToolResponseSerialization_JSON,
 };
 
+/** 网络状态 */
+typedef NS_ENUM(NSInteger, KVNetStatus) {
+    KVNetStatus_Unknown          = -1, // 未知
+    KVNetStatus_NotReachable     = 0,  // 没有网络
+    KVNetStatus_ReachableViaWWAN = 1,  // 蜂窝流量
+    KVNetStatus_ReachableViaWiFi = 2,  // 无线
+};
+
 /** upload Infp */
 typedef struct {
     NSData *data;

@@ -93,10 +93,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 /** 待上传文件路径 */
 @property (copy, nonatomic, readonly, nullable) NSString *filePath;
+@property (copy, nonatomic, readonly, nullable) NSString *name;
+@property (copy, nonatomic, readonly, nullable) NSString *fileName;
+@property (copy, nonatomic, readonly, nullable) NSString *mimeType;
 
 //+ (instancetype)request:(NSString *)url __attribute__((unavailable("请使用upload:filePath")));
 
-+ (instancetype)upload:(NSString *)url filePath:(NSString *)filePath;
++ (instancetype)upload:(NSString *)url filePath:(NSString *)filePath name:(NSString * _Nonnull)name fileName:(NSString * _Nonnull)fileName mimeType:(NSString * _Nonnull)mimeType;
 
 @end
 
@@ -106,6 +109,12 @@ NS_ASSUME_NONNULL_BEGIN
 @property (copy, nonatomic, readonly) KVHttpTool* _Nullable (^ success) (void (^ _Nullable successBlock)(NSURL * _Nullable fileURL));
 
 + (instancetype)download:(NSString *)url;
+
+@end
+
+@interface KVHttpTool (NetStatus)
+
++ (void)listenNetStateChange:(void (^) (KVNetStatus status))block;
 
 @end
 
